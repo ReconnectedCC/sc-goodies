@@ -18,11 +18,13 @@
     "MobEntityAccessor",
     "PlayerEntityMixin",
     "ShulkerAccessor",
-    "ShulkerBoxBlockEntityAccessor"
+    "ShulkerBoxBlockEntityAccessor",
+    "StairsBlockMixin"
   ],
   "client": [
     "client.BipedEntityModelMixin",
     "client.ClientPlayerEntityMixin",
+    "client.ClientPlayNetworkHandlerMixin",
     "client.PlayerEntityModelAccessor",
     "client.PlayerEntityRendererMixin"
   ],

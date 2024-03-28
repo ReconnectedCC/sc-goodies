@@ -20,6 +20,7 @@ import io.sc3.goodies.ironstorage.IronStorageVariant
 import io.sc3.goodies.itemframe.GlassItemFrameEntityRenderer
 import io.sc3.goodies.itemmagnet.ItemMagnetHotkey
 import io.sc3.goodies.nature.ScTree
+import io.sc3.goodies.seats.SeatEntityRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
@@ -71,6 +72,7 @@ object ScGoodiesClient : ClientModInitializer {
       out.accept(ModelIdentifier(ModId("glass_item_frame_back"), "inventory"))
     }
     EntityRendererRegistry.register(Registration.ModEntities.glassItemFrameEntity, ::GlassItemFrameEntityRenderer)
+    EntityRendererRegistry.register(Registration.ModEntities.seatEntity, ::SeatEntityRenderer)
   }
 
   private fun registerIronChestRenderer(variant: IronStorageVariant) {

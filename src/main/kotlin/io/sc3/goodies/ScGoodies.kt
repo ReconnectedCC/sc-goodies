@@ -1,5 +1,6 @@
 package io.sc3.goodies
 
+import io.sc3.goodies.seats.Seats
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
@@ -15,5 +16,6 @@ object ScGoodies : ModInitializer {
     log.info("sc-goodies initializing")
 
     Registration.init()
+    Seats.init()
   }
 }

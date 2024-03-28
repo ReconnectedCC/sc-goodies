@@ -32,6 +32,7 @@ import io.sc3.goodies.misc.*
 import io.sc3.goodies.nature.ScGrass
 import io.sc3.goodies.nature.ScSaplingGenerator
 import io.sc3.goodies.nature.ScTree
+import io.sc3.goodies.seats.SeatEntity
 import io.sc3.goodies.shark.DyedSharkItem
 import io.sc3.goodies.shark.SpecialSharkItem
 import io.sc3.goodies.shark.SpecialSharkType
@@ -479,6 +480,14 @@ object Registration {
     val glassItemFrameEntity: EntityType<GlassItemFrameEntity> = register(ENTITY_TYPE, ModId("glass_item_frame"),
       FabricEntityTypeBuilder.create(SpawnGroup.MISC, ::GlassItemFrameEntity)
         .dimensions(EntityDimensions.changing(0.5f, 0.5f))
+        .trackRangeChunks(10)
+        .trackedUpdateRate(Integer.MAX_VALUE)
+        .forceTrackedVelocityUpdates(false)
+        .build())
+
+    val seatEntity: EntityType<SeatEntity> = register(ENTITY_TYPE, ModId("seat"),
+      FabricEntityTypeBuilder.create(SpawnGroup.MISC, ::SeatEntity)
+        .dimensions(EntityDimensions.fixed(0.125f, 0.125f))
         .trackRangeChunks(10)
         .trackedUpdateRate(Integer.MAX_VALUE)
         .forceTrackedVelocityUpdates(false)

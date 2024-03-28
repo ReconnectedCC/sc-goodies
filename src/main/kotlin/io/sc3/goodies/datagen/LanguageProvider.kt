@@ -40,11 +40,11 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
   )
 
   override fun generateTranslations(builder: TranslationBuilder) {
-    builder.add("itemGroup.sc-goodies.main", "SwitchCraft Goodies")
-    builder.add("category.sc-goodies", "SwitchCraft Goodies") // Keybind category
+    builder.add("itemGroup.$modId.main", "SwitchCraft Goodies")
+    builder.add("category.$modId", "SwitchCraft Goodies") // Keybind category
 
     // Iron Chests and Shulkers
-    builder.add("block.sc-goodies.storage.desc", "Capable of storing up to %s stacks of items.")
+    builder.add("block.$modId.storage.desc", "Capable of storing up to %s stacks of items.")
 
     IronStorageVariant.values().forEach { variant ->
       builder.add(variant.chestBlock, "${variant.humanName} Chest")
@@ -119,7 +119,7 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
     builder.sub(im, "Magnet blocked (magnet item frame is nearby)", "blocked_item_frame")
     builder.sub(im, "Level %s (%s block radius)", "level")
     builder.sub(im, "Charge: %s/%s", "charge")
-    builder.add("key.sc-goodies.toggle_item_magnet", "Toggle Item Magnet")
+    builder.add("key.$modId.toggle_item_magnet", "Toggle Item Magnet")
 
     // Elytra
     DyedElytraItem.dyedElytraItems
@@ -196,6 +196,11 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
     // Amethyst Slabs and Stairs
     builder.add(AmethystExtras.slabBlock, "Amethyst Slab")
     builder.add(AmethystExtras.stairsBlock, "Amethyst Stairs")
+
+    // Seats
+    builder.add("block.$modId.seat.occupied.unknown", "This seat is occupied")
+    builder.add("block.$modId.seat.occupied.player", "This seat is occupied by %s")
+    builder.add("block.$modId.seat.mount", "Press %1\$s to stand up")
   }
 
   private fun TranslationBuilder.sub(item: Item, value: String, sub: String = "desc") {
