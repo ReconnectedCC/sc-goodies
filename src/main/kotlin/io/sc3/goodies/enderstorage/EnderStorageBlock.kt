@@ -138,7 +138,7 @@ class EnderStorageBlock(
             return ActionResult.FAIL
           }
 
-          be.frequency = frequency.copy(owner = null)
+          be.frequency = frequency.copy(owner = null, ownerName = null)
           be.computerChangesEnabled = false
           return ActionResult.SUCCESS
         } else if (!stack.isEmpty && stack.isOf(DIAMOND)) {

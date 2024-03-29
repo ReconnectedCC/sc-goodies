@@ -4,8 +4,8 @@ import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ScGoodies.modId
 import io.sc3.goodies.util.UuidSerializer
 import io.sc3.library.ext.optCompound
+import io.sc3.library.ext.putOptString
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.minecraft.item.BlockItem
@@ -45,8 +45,10 @@ data class Frequency(
 
   fun toNbt(): NbtCompound {
     val nbt = NbtCompound()
-    if (owner != null) nbt.putUuid("owner", owner)
-    if (ownerName != null) nbt.putString("ownerName", ownerName)
+    if (owner != null) {
+      nbt.putUuid("owner", owner)
+      nbt.putOptString("ownerName", ownerName)
+    }
     nbt.putByte("left", left.id.toByte())
     nbt.putByte("middle", middle.id.toByte())
     nbt.putByte("right", right.id.toByte())

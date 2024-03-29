@@ -29,7 +29,11 @@ object EnderStorageMethods : GenericPeripheral {
   @JvmStatic
   fun getOwner(be: EnderStorageBlockEntity): MethodResult {
     val freq = be.frequency
-    return MethodResult.of(freq.owner?.toString(), freq.ownerName)
+    return if (freq.personal) {
+      MethodResult.of(freq.owner?.toString(), freq.ownerName)
+    } else {
+      MethodResult.of(null, null)
+    }
   }
 
   @LuaFunction(mainThread = true)
