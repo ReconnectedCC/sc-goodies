@@ -1,15 +1,25 @@
 package io.sc3.goodies.datagen.recipes.handlers
 
+import io.sc3.goodies.Registration.ModItems
+import io.sc3.goodies.ScGoodies.ModId
+import io.sc3.goodies.datagen.recipes.ModifiedEnderStorageRecipe
+import io.sc3.library.recipe.RecipeHandler
+import io.sc3.library.recipe.specialRecipe
 import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items.*
 import net.minecraft.recipe.book.RecipeCategory
-import io.sc3.goodies.Registration.ModItems
-import io.sc3.library.recipe.RecipeHandler
+import net.minecraft.registry.Registries.RECIPE_SERIALIZER
+import net.minecraft.registry.Registry
 import java.util.function.Consumer
 
 object EnderStorageRecipes : RecipeHandler {
+  override fun registerSerializers() {
+    // Dye/diamond/emerald recipe
+    Registry.register(RECIPE_SERIALIZER, ModId("modify_ender_storage"), ModifiedEnderStorageRecipe.recipeSerializer)
+  }
+
   override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
     // Ender Storage
     ShapedRecipeJsonBuilder
@@ -24,5 +34,8 @@ object EnderStorageRecipes : RecipeHandler {
       .input('E', ENDER_PEARL)
       .criterion("has_chest", RecipeProvider.conditionsFromItem(CHEST))
       .offerTo(exporter)
+
+    // Dye/diamond/emerald recipe
+    specialRecipe(exporter, ModifiedEnderStorageRecipe.recipeSerializer)
   }
 }

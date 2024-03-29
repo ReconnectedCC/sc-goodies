@@ -385,7 +385,7 @@ object Registration {
     val barrelHammer = rItem("barrel_hammer", BarrelHammerItem(itemSettings()
       .maxDamage(64)))
 
-    val enderStorage = rItem(ModBlocks.enderStorage, ::BlockItem, itemSettings())
+    val enderStorage = rItem(ModBlocks.enderStorage, ::EnderStorageItem, itemSettings())
 
     val hoverBoots = niceDyeOrder.associateWith {
       rItem("hover_boots_${it.getName()}", HoverBootsItem(it, itemSettings().maxCount(1)))

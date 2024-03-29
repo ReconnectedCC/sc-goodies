@@ -82,11 +82,16 @@ class EnderStorageBlockEntityRenderer(
 
     private fun easeOutCubic(x: Float) = 1.0f - (1.0f - x).pow(3)
 
-    fun renderChest(matrices: MatrixStack,
-                    vertexConsumers: VertexConsumerProvider,
-                    facing: Direction, progress: Float,
-                    frequency: Frequency,
-                    computerChangesEnabled: Boolean, light: Int, overlay: Int) {
+    fun renderChest(
+      matrices: MatrixStack,
+      vertexConsumers: VertexConsumerProvider,
+      facing: Direction, progress: Float,
+      frequency: Frequency,
+      computerChangesEnabled: Boolean,
+      light: Int,
+      overlay: Int,
+      personal: Boolean = frequency.personal
+    ) {
       matrices.push()
 
       matrices.translate(0.5, 0.5, 0.5)
@@ -104,7 +109,7 @@ class EnderStorageBlockEntityRenderer(
       }
 
       // Base chest
-      val latch = if (frequency.personal) {
+      val latch = if (personal) {
         if (computerChangesEnabled) latchAutomated else latchPersonal
       } else {
         latchNormal

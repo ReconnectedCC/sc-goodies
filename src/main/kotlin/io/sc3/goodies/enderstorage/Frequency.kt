@@ -2,6 +2,7 @@ package io.sc3.goodies.enderstorage
 
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ScGoodies.modId
+import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
 import io.sc3.goodies.util.UuidSerializer
 import io.sc3.library.ext.optCompound
 import io.sc3.library.ext.putOptString
@@ -145,8 +146,8 @@ data class Frequency(
 
     fun fromStack(stack: ItemStack): Frequency? {
       // Get the frequency either from the item's direct NBT, or its BlockEntity NBT tag (creative pick)
-      val frequencyNbt = stack.getSubNbt("frequency")
-        ?: BlockItem.getBlockEntityNbt(stack)?.optCompound("frequency")
+      val frequencyNbt = stack.getSubNbt(NBT_FREQUENCY)
+        ?: BlockItem.getBlockEntityNbt(stack)?.optCompound(NBT_FREQUENCY)
       return fromNbt(frequencyNbt ?: return null)
     }
   }

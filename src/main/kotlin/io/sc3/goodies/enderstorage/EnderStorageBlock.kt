@@ -17,7 +17,9 @@ import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
@@ -291,8 +293,8 @@ class EnderStorageBlock(
     // Add the NBT data prior to the description lines
     val nbt = BlockItem.getBlockEntityNbt(stack)
     if (nbt != null) {
-      if (nbt.contains("frequency", COMPOUND)) {
-        val frequency = Frequency.fromNbt(nbt.getCompound("frequency"))
+      if (nbt.contains(NBT_FREQUENCY, COMPOUND)) {
+        val frequency = Frequency.fromNbt(nbt.getCompound(NBT_FREQUENCY))
 
         // Frequency: White, White, White
         tooltip.add(frequency.toText())
@@ -300,6 +302,12 @@ class EnderStorageBlock(
         // Public, or Owner: <name>
         if (frequency.personal) {
           tooltip.add(translatable("$translationKey.owner_name", frequency.ownerName ?: "Unknown"))
+        } else if (nbt.getBoolean(NBT_TEMP_CRAFTING_PERSONAL) && world is ClientWorld) {
+          // Add the local player's name if this is the temporary crafting stage (hovering over the result item in the
+          // workbench, for a chest that was personal)
+          MinecraftClient.getInstance().player?.let { player ->
+            tooltip.add(translatable("$translationKey.owner_name", player.gameProfile.name))
+          }
         } else {
           tooltip.add(translatable("$translationKey.public"))
         }
@@ -318,20 +326,24 @@ class EnderStorageBlock(
   }
 
   companion object {
+    const val NBT_FREQUENCY = "frequency"
+    const val NBT_COMPUTER_CHANGES_ENABLED = "computerChangesEnabled"
+    const val NBT_TEMP_CRAFTING_PERSONAL = "tempCraftingPersonal"
+
     val facing: DirectionProperty = HorizontalFacingBlock.FACING
 
     private val chestShape = createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
-    val latchBoxes = Direction.values().associateWith {
+    val latchBoxes = Direction.entries.associateWith {
       Box(7.0, 7.0, 15.0, 9.0, 11.0, 16.0).rotateTowards(it.opposite) // Opposite to match the renderer
     }
     val buttonBoxes = (0 until 3).associateWith { i ->
-      Direction.values().associateWith {
+      Direction.entries.associateWith {
         val x = 4.0 + (i * 3.0)
         Box(x, 14.0, 6.0, x + 2.0, 15.0, 10.0).rotateTowards(it.opposite)
       }
     }
 
-    private val shapes = Direction.values().associateWith {
+    private val shapes = Direction.entries.associateWith {
       val subShapes = mutableListOf<VoxelShape>()
       subShapes.add(latchBoxes[it]!!.toDiv16VoxelShape())
       (0 until 3)

@@ -1,5 +1,8 @@
 package io.sc3.goodies.enderstorage
 
+import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_COMPUTER_CHANGES_ENABLED
+import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
+import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_TEMP_CRAFTING_PERSONAL
 import io.sc3.goodies.util.BaseBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -36,14 +39,14 @@ abstract class FrequencyBlockEntity(
 
   override fun readNbt(nbt: NbtCompound) {
     super.readNbt(nbt)
-    frequency = Frequency.fromNbt(nbt.getCompound("frequency"), world?.server)
-    computerChangesEnabled = nbt.getBoolean("computerChangesEnabled")
+    frequency = Frequency.fromNbt(nbt.getCompound(NBT_FREQUENCY), world?.server)
+    computerChangesEnabled = nbt.getBoolean(NBT_COMPUTER_CHANGES_ENABLED)
   }
 
   override fun writeNbt(nbt: NbtCompound) {
     super.writeNbt(nbt)
-    nbt.put("frequency", frequency.toNbt())
-    nbt.putBoolean("computerChangesEnabled", computerChangesEnabled)
+    nbt.put(NBT_FREQUENCY, frequency.toNbt())
+    nbt.putBoolean(NBT_TEMP_CRAFTING_PERSONAL, computerChangesEnabled)
   }
 
   override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
