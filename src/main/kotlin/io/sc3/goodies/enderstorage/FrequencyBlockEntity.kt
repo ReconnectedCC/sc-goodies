@@ -46,7 +46,7 @@ abstract class FrequencyBlockEntity(
   override fun writeNbt(nbt: NbtCompound) {
     super.writeNbt(nbt)
     nbt.put(NBT_FREQUENCY, frequency.toNbt())
-    nbt.putBoolean(NBT_TEMP_CRAFTING_PERSONAL, computerChangesEnabled)
+    nbt.putBoolean(NBT_COMPUTER_CHANGES_ENABLED, computerChangesEnabled)
   }
 
   override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
