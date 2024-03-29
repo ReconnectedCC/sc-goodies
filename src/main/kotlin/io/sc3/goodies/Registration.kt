@@ -487,7 +487,7 @@ object Registration {
 
     val seatEntity: EntityType<SeatEntity> = register(ENTITY_TYPE, ModId("seat"),
       FabricEntityTypeBuilder.create(SpawnGroup.MISC, ::SeatEntity)
-        .dimensions(EntityDimensions.fixed(0.125f, 0.125f))
+        .dimensions(EntityDimensions.fixed(0.125f, 0.0f))
         .trackRangeChunks(10)
         .trackedUpdateRate(Integer.MAX_VALUE)
         .forceTrackedVelocityUpdates(false)

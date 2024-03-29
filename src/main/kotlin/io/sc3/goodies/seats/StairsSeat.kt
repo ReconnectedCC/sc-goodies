@@ -35,6 +35,6 @@ object StairsSeat : SeatBlock {
   override fun getSeatPos(world: World, pos: BlockPos, state: BlockState): Vec3d {
     // Slightly offset the player forwards
     val facingVector = state.get(StairsBlock.FACING).opposite.vector
-    return pos.toCenterPos().add(facingVector.x * 0.25, -0.3, facingVector.z * 0.25)
+    return pos.toCenterPos().add(facingVector.x * 0.25, 0.0, facingVector.z * 0.25)
   }
 }
