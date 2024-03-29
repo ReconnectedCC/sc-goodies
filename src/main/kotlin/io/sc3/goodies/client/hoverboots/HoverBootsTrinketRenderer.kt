@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.DyeColor
 
 object HoverBootsTrinketRenderer : TrinketRenderer {
-  private val textures = DyeColor.values().associateWith {
+  private val textures = DyeColor.entries.associateWith {
     ModId("textures/entity/hover_boots/hover_boots_${it.getName()}.png")
   }
 

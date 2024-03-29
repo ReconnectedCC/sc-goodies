@@ -36,11 +36,11 @@ class IronShulkerBlockEntityRenderer(
   }
 
   companion object {
-    private val undyedTextures = IronStorageVariant.values()
+    private val undyedTextures = IronStorageVariant.entries
       .associateWith { ModId("textures/entity/shulker/${it.shulkerId}.png") }
     
-    private val dyedTextures = IronStorageVariant.values().associateWith { variant ->
-      DyeColor.values().associateWith { ModId("textures/entity/shulker/${variant.shulkerId}_${it.getName()}.png") }
+    private val dyedTextures = IronStorageVariant.entries.associateWith { variant ->
+      DyeColor.entries.associateWith { ModId("textures/entity/shulker/${variant.shulkerId}_${it.getName()}.png") }
     }
     
     private val modelData by lazy {

@@ -13,7 +13,7 @@ import net.minecraft.util.DyeColor
 fun dyeArg(name: String): RequiredArgumentBuilder<ServerCommandSource, String>
   = argument(name, word())
   .suggests { _, builder ->
-    CommandSource.suggestMatching(DyeColor.values().map { it.getName() }, builder)
+    CommandSource.suggestMatching(DyeColor.entries.map { it.getName() }, builder)
     builder.buildFuture()
   }
 

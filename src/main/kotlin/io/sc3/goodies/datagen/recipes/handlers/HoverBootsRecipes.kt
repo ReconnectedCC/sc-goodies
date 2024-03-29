@@ -39,7 +39,7 @@ object HoverBootsRecipes : RecipeHandler {
 
     val hoverBootsIngredient = ofItems(*ModItems.hoverBoots.values.toTypedArray())
 
-    DyeColor.values().forEach { color ->
+    DyeColor.entries.forEach { color ->
       log.info("Generating recipe for ${color.name} hover boots")
       ShapelessRecipeJsonBuilder
         .create(RecipeCategory.TOOLS, ModItems.hoverBoots[color]!!, 1)

@@ -27,21 +27,21 @@ class ItemTagProvider(
   override fun configure(arg: RegistryWrapper.WrapperLookup) {
     // Concrete
     getOrCreateTagBuilder(CONCRETE)
-      .add(*DyeColor.values().map { Identifier("${it.getName()}_concrete") }.toTypedArray())
+      .add(*DyeColor.entries.map { Identifier("${it.getName()}_concrete") }.toTypedArray())
 
     // Elytra
     getOrCreateTagBuilder(ScGoodiesItemTags.ELYTRA)
       .add(Items.ELYTRA)
       .apply {
         DyedElytraItem.dyedElytraItems.values.forEach { add(it) }
-        SpecialElytraType.values().forEach { add(it.item) }
+        SpecialElytraType.entries.forEach { add(it.item) }
       }
 
     // Sharks
     getOrCreateTagBuilder(ScGoodiesItemTags.SHARK)
       .apply {
         DyedSharkItem.dyedSharkItems.values.forEach { add(it) }
-        SpecialSharkType.values().forEach { add(it.item) }
+        SpecialSharkType.entries.forEach { add(it.item) }
       }
 
     // Shulkers
@@ -62,7 +62,7 @@ class ItemTagProvider(
     val ironStorage = getOrCreateTagBuilder(ScGoodiesItemTags.ANY_IRON_STORAGE)
       .addTag(ScGoodiesItemTags.ANY_IRON_SHULKER_BOX)
 
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       ironStorage
         .add(variant.chestItem)
         .add(variant.barrelItem)

@@ -46,7 +46,7 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
     // Iron Chests and Shulkers
     builder.add("block.$modId.storage.desc", "Capable of storing up to %s stacks of items.")
 
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       builder.add(variant.chestBlock, "${variant.humanName} Chest")
       builder.add(variant.shulkerBlock, "${variant.humanName} Shulker Box")
       variant.dyedShulkerBlocks.forEach { (color, block) ->
@@ -55,7 +55,7 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
       builder.add(variant.barrelBlock, "${variant.humanName} Barrel")
     }
 
-    IronStorageUpgrade.values().forEach { upgrade ->
+    IronStorageUpgrade.entries.forEach { upgrade ->
       val from = upgrade.from?.humanName ?: "Vanilla"
       val to = upgrade.to.humanName
 
@@ -124,7 +124,7 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
     // Elytra
     DyedElytraItem.dyedElytraItems
       .forEach { (color, item) -> builder.add(item, "${colorNames[color]} Elytra") }
-    SpecialElytraType.values()
+    SpecialElytraType.entries
       .forEach { builder.add(it.item, "${it.humanName} Elytra") }
 
     // Sharks
@@ -133,7 +133,7 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
       // Include the accent-less name in the description too, to make it easier to search for in REI.
       builder.sub(item, "A soft toy shark, also known as a BLÅHAJ (Blahaj).", "desc")
     }
-    SpecialSharkType.values().forEach {
+    SpecialSharkType.entries.forEach {
       builder.add(it.item, "${it.humanName} Soft Toy Shark")
       builder.sub(it.item, "A soft toy shark, also known as a BLÅHAJ (Blahaj).", "desc")
     }

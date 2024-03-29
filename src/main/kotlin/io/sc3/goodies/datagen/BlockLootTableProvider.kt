@@ -27,7 +27,7 @@ class BlockLootTableProvider(out: FabricDataOutput) : FabricBlockLootTableProvid
   private val saplingDropChance = floatArrayOf(0.05f, 0.0625f, 0.084f, 0.1f)
 
   override fun generate() {
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       with (variant) {
         val type = shulkerBlockEntityType
 
@@ -36,7 +36,7 @@ class BlockLootTableProvider(out: FabricDataOutput) : FabricBlockLootTableProvid
 
         registerIronShulkerDrops(type, shulkerBlock) // Undyed shulker
 
-        DyeColor.values().forEach { color ->
+        DyeColor.entries.forEach { color ->
           val block = dyedShulkerBlocks[color]
             ?: throw IllegalStateException("Shulker block for variant=$this color=$color is null")
           registerIronShulkerDrops(type, block)

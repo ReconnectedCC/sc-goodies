@@ -87,7 +87,7 @@ class EnderStorageScreen(
   companion object {
     val enderStorageTex = ModId("textures/gui/container/ender_storage.png")
 
-    private val wool = DyeColor.values().associateWith {
+    private val wool = DyeColor.entries.associateWith {
       Identifier("textures/block/${it.getName()}_wool.png")
     }
   }

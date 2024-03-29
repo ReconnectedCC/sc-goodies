@@ -35,11 +35,11 @@ import java.util.*
 class ModelProvider(out: FabricDataOutput) : FabricModelProvider(out) {
   override fun generateBlockStateModels(gen: BlockStateModelGenerator) {
     // Register block models for each iron chest variant
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       registerIronChest(gen, variant)
 
       registerIronShulker(gen, variant) // Undyed shulker
-      DyeColor.values().forEach { registerIronShulker(gen, variant, it) }
+      DyeColor.entries.forEach { registerIronShulker(gen, variant, it) }
 
       // Barrel
       registerIronBarrel(gen, variant)
@@ -68,7 +68,7 @@ class ModelProvider(out: FabricDataOutput) : FabricModelProvider(out) {
 
   override fun generateItemModels(gen: ItemModelGenerator) {
     // Iron Storage upgrades
-    IronStorageUpgrade.values().forEach { upgrade ->
+    IronStorageUpgrade.entries.forEach { upgrade ->
       log.info("Registering item model for $upgrade storage upgrade")
       gen.register(upgrade.upgradeItem, GENERATED)
     }
@@ -98,13 +98,13 @@ class ModelProvider(out: FabricDataOutput) : FabricModelProvider(out) {
     // Dyed + Special Elytra
     DyedElytraItem.dyedElytraItems.values
       .forEach { gen.register(it, GENERATED) }
-    SpecialElytraType.values()
+    SpecialElytraType.entries
       .forEach { gen.register(it.item, GENERATED) }
 
     // Dyed + Special Sharks
     DyedSharkItem.dyedSharkItems.values
       .forEach { registerShark(gen, it, it.color.getName()) }
-    SpecialSharkType.values()
+    SpecialSharkType.entries
       .forEach { registerShark(gen, it.item, it.type) }
   }
 

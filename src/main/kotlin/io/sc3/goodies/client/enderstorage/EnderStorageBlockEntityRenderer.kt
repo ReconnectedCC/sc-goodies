@@ -38,7 +38,7 @@ class EnderStorageBlockEntityRenderer(
   companion object {
     private val texture = ModId("textures/entity/chest/ender_storage.png")
     private val layer = RenderLayer.getEntityCutout(texture)
-    private val wool = DyeColor.values().associateWith {
+    private val wool = DyeColor.entries.associateWith {
       Identifier("textures/block/${it.getName()}_wool.png")
     }
 

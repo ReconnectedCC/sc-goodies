@@ -40,7 +40,7 @@ object ScGoodiesClient : ClientModInitializer {
     log.info("sc-goodies client initializing")
 
     // Iron Chests
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       registerIronChestRenderer(variant)
       registerIronShulkerRenderer(variant) // Accounts for both dyed and undyed shulkers
     }
@@ -90,7 +90,7 @@ object ScGoodiesClient : ClientModInitializer {
         { IronShulkerBlockEntityRenderer(variant) }
 
       BuiltinItemRendererRegistry.INSTANCE.register(shulkerBlock, IronShulkerItemRenderer(this, null))
-      DyeColor.values().forEach { color ->
+      DyeColor.entries.forEach { color ->
         BuiltinItemRendererRegistry.INSTANCE.register(dyedShulkerBlocks[color]!!, IronShulkerItemRenderer(this, color))
       }
 

@@ -48,7 +48,7 @@ object SharkRecipes : RecipeHandler {
     }
 
     // Special sharks
-    SpecialSharkType.values().forEach { type ->
+    SpecialSharkType.entries.forEach { type ->
       require(type.recipeColors.size == 5) { "Special shark recipe colors must have 5 elements" }
 
       ShapedRecipeJsonBuilder

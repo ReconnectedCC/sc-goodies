@@ -26,7 +26,7 @@ object IronShulkerCauldronBehavior {
   }
 
   internal fun registerBehavior() {
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       variant.dyedShulkerItems.values.forEach {
         WATER_CAULDRON_BEHAVIOR[it] = cleanShulker
       }

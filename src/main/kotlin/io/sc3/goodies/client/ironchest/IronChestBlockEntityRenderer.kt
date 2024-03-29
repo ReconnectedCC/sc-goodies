@@ -39,7 +39,7 @@ class IronChestBlockEntityRenderer(private val block: IronChestBlock) : BlockEnt
   companion object {
     private fun easeOutCubic(x: Float) = 1.0f - (1.0f - x).pow(3)
 
-    private val textures = IronStorageVariant.values()
+    private val textures = IronStorageVariant.entries
       .associateWith { ModId("textures/entity/chest/${it.chestId}.png") }
 
     private val modelData by lazy {

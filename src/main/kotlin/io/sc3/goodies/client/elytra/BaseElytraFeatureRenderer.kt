@@ -25,7 +25,7 @@ class BaseElytraFeatureRenderer(
   ctx: FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>,
   loader: EntityModelLoader
 ) : FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>(ctx) {
-  private val dyedTextures = DyeColor.values().associateWith {
+  private val dyedTextures = DyeColor.entries.associateWith {
     ModId("textures/entity/elytra/elytra_${it.getName()}.png")
   }
 

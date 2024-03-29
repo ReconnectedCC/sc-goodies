@@ -28,7 +28,7 @@ class BlockTagProvider(
     val pickaxeBlocks = mutableListOf<Block>(ModBlocks.enderStorage)
     val leafBlocks = mutableListOf<Block>()
 
-    IronStorageVariant.values().forEach {
+    IronStorageVariant.entries.forEach {
       pickaxeBlocks.add(it.chestBlock)
       pickaxeBlocks.add(it.shulkerBlock)
       pickaxeBlocks.addAll(it.dyedShulkerBlocks.values)

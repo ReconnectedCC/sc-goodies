@@ -25,7 +25,7 @@ object ElytraRecipes : RecipeHandler {
 
   override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
     // Dyed Elytra
-    DyeColor.values().forEach { color ->
+    DyeColor.entries.forEach { color ->
       val elytra = DyedElytraItem.dyedElytraItems[color]!!
       ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, elytra)
         .input(ScGoodiesItemTags.ELYTRA)
@@ -35,7 +35,7 @@ object ElytraRecipes : RecipeHandler {
     }
 
     // Special Elytra
-    SpecialElytraType.values().forEach { type ->
+    SpecialElytraType.entries.forEach { type ->
       ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, type.item)
         .input(ScGoodiesItemTags.ELYTRA)
         .apply { type.recipeColors.forEach { input(DyeItem.byColor(it)) } }

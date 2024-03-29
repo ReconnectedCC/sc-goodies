@@ -103,7 +103,7 @@ object Registration {
     listOf(ModBlocks, ModItems, ModBlockEntities, ModScreens, ModEntities, ModDamageSources)
 
     // Iron Chests and Shulkers
-    IronStorageVariant.values().forEach { variant ->
+    IronStorageVariant.entries.forEach { variant ->
       registerIronChest(variant)
 
       registerIronShulker(variant) // Undyed shulker
@@ -115,7 +115,7 @@ object Registration {
       registerIronBarrel(variant)
     }
 
-    IronStorageUpgrade.values().forEach { upgrade ->
+    IronStorageUpgrade.entries.forEach { upgrade ->
       rItem("${upgrade.itemName}_chest_upgrade", IronStorageUpgradeItem(upgrade, itemSettings()))
     }
 
@@ -134,14 +134,14 @@ object Registration {
     // Dyed + Special Elytra
     niceDyeOrder
       .forEach { rItem("elytra_${it.getName()}", DyedElytraItem(it, elytraSettings())) }
-    SpecialElytraType.values()
+    SpecialElytraType.entries
       .forEach { rItem("elytra_${it.type}", SpecialElytraItem(it, elytraSettings())) }
     ElytraCauldronBehavior.registerBehavior()
 
     // Dyed + Special Sharks
     niceDyeOrder
       .forEach { rItem("shark_${it.getName()}", DyedSharkItem(it, itemSettings())) }
-    SpecialSharkType.values()
+    SpecialSharkType.entries
       .forEach { rItem("shark_${it.type}", SpecialSharkItem(it, itemSettings())) }
 
     // Concrete Slabs and Stairs
