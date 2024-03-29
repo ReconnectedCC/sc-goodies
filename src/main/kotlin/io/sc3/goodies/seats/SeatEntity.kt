@@ -53,8 +53,7 @@ class SeatEntity : Entity {
       if (passenger == null
         || passenger.world != world
         || !passenger.pos.isInRange(pos, 2.0)
-        || !passenger.isAlive
-        || passenger.isSneaking) {
+        || !passenger.isAlive) {
         passenger?.stopRiding()
         discard()
         return
