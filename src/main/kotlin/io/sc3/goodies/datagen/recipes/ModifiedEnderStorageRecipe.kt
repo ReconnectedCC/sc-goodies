@@ -20,7 +20,6 @@ import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 
 class ModifiedEnderStorageRecipe(id: Identifier, category: CraftingRecipeCategory) : SpecialCraftingRecipe(id, category) {
@@ -139,19 +138,6 @@ class ModifiedEnderStorageRecipe(id: Identifier, category: CraftingRecipeCategor
     // Write the new NBT to the item
     BlockItem.setBlockEntityNbt(result, Registration.ModBlockEntities.enderStorage, nbt)
     return result
-  }
-
-  override fun getRemainder(inv: RecipeInputInventory): DefaultedList<ItemStack> {
-    val out = DefaultedList.ofSize(inv.size(), ItemStack.EMPTY)
-
-    for (i in 0 until inv.size()) {
-      val stack = inv.getStack(i)
-      if (diamond.test(stack) || emerald.test(stack)) {
-        out[i] = stack.copy() // Don't consume the diamond or emerald
-      }
-    }
-
-    return out
   }
 
   override fun fits(w: Int, h: Int) = w >= 3 && h >= 2
