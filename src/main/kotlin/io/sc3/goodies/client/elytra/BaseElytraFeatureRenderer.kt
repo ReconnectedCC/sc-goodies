@@ -4,6 +4,7 @@ import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.elytra.BaseElytraItem
 import io.sc3.goodies.elytra.DyedElytraItem
 import io.sc3.goodies.elytra.SpecialElytraItem
+import io.sc3.library.ext.event
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.render.OverlayTexture
 import net.minecraft.client.render.RenderLayer
@@ -31,30 +32,37 @@ class BaseElytraFeatureRenderer(
 
   private val elytra = ElytraEntityModel<AbstractClientPlayerEntity>(loader.getModelPart(EntityModelLayers.ELYTRA))
 
-  private fun elytraTexture(item: BaseElytraItem): Identifier = when (item) {
-    is SpecialElytraItem -> item.type.modelTexture
-    is DyedElytraItem -> dyedTextures[item.color]!!
-    else -> MissingSprite.getMissingSpriteId()
-  }
+  private fun elytraTexture(player: AbstractClientPlayerEntity, item: BaseElytraItem): Identifier =
+    ELYTRA_TEXTURE_EVENT.invoker().invoke(player, item) ?: when (item) {
+      is SpecialElytraItem -> item.type.modelTexture
+      is DyedElytraItem -> dyedTextures[item.color]!!
+      else -> MissingSprite.getMissingSpriteId()
+    }
 
   override fun render(matrices: MatrixStack, consumers: VertexConsumerProvider, light: Int,
-                      entity: AbstractClientPlayerEntity, limbAngle: Float, limbDistance: Float, tickDelta: Float,
+                      player: AbstractClientPlayerEntity, limbAngle: Float, limbDistance: Float, tickDelta: Float,
                       animationProgress: Float, headYaw: Float, headPitch: Float) {
-    val stack = entity.getEquippedStack(EquipmentSlot.CHEST)
+    val stack = player.getEquippedStack(EquipmentSlot.CHEST)
     val item = stack.item
     if (item !is BaseElytraItem) return
 
-    val tex = elytraTexture(item)
+    val tex = elytraTexture(player, item)
 
     matrices.push()
     matrices.translate(0.0, 0.0, 0.125)
 
     contextModel.copyStateTo(elytra)
-    elytra.setAngles(entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch)
+    elytra.setAngles(player, limbAngle, limbDistance, animationProgress, headYaw, headPitch)
 
     val consumer = getArmorGlintConsumer(consumers, RenderLayer.getArmorCutoutNoCull(tex), false, stack.hasGlint())
     elytra.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f)
 
     matrices.pop()
+  }
+
+  companion object {
+    val ELYTRA_TEXTURE_EVENT = event<(player: AbstractClientPlayerEntity, item: BaseElytraItem) -> Identifier?> { cb ->
+      { entity, item -> cb.firstNotNullOfOrNull { it(entity, item) }}
+    }
   }
 }
