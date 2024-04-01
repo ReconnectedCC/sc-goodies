@@ -60,6 +60,8 @@ object EnderStorageProvider {
     private val blockEntities = mutableSetOf<EnderStorageBlockEntity>()
     var viewerCount = 0
 
+    private var dirtyIterating = false
+
     override fun clear() {
       items.clear()
     }
@@ -90,10 +92,16 @@ object EnderStorageProvider {
       state.markDirty()
 
       synchronized(blockEntities) {
-        blockEntities.forEach {
-          if (!it.isRemoved) {
-            it.markDirty()
+        try {
+          dirtyIterating = true
+
+          blockEntities.forEach {
+            if (!it.isRemoved) {
+              it.markDirty()
+            }
           }
+        } finally {
+          dirtyIterating = false
         }
       }
     }
@@ -129,6 +137,7 @@ object EnderStorageProvider {
 
     fun addBlockEntity(be: EnderStorageBlockEntity) {
       checkOnThread()
+      checkNotDirtyIterating()
       synchronized(blockEntities) {
         blockEntities.add(be)
       }
@@ -136,6 +145,7 @@ object EnderStorageProvider {
 
     fun removeBlockEntity(be: EnderStorageBlockEntity) {
       checkOnThread()
+      checkNotDirtyIterating()
       synchronized(blockEntities) {
         blockEntities.remove(be)
       }
@@ -152,6 +162,12 @@ object EnderStorageProvider {
       if (!server.isOnThread && !server.isStopping) {
         // Don't throw an exception here, but log it, so we can track down the cause later
         log.error("EnderStorageInventory blockEntities accessed off-thread!", RuntimeException())
+      }
+    }
+
+    private fun checkNotDirtyIterating() {
+      if (dirtyIterating) {
+        log.error("EnderStorageInventory blockEntities accessed while dirty-iterating!", RuntimeException())
       }
     }
   }
