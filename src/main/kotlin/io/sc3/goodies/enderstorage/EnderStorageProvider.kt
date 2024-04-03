@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.collection.DefaultedList
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentHashMap
 
 object EnderStorageProvider {
   private val log = LoggerFactory.getLogger("ScGoodies/EnderStorageProvider")!!
@@ -57,10 +58,16 @@ object EnderStorageProvider {
   class EnderStorageInventory(private val server: MinecraftServer) : Inventory {
     val items: DefaultedList<ItemStack> = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY)
 
-    private val blockEntities = mutableSetOf<EnderStorageBlockEntity>()
+    /**
+     * Use a concurrent hash set here. Even though this is only ever accessed on the server thread, it's still possible
+     * for a call to `markDirty` to load adjacent chunks (during `updateComparators`, even though there's guards against
+     * chunk loading in there?!). This would cause a CME if the adjacent chunk had an Ender Storage in it, which would
+     * call [EnderStorageBlockEntity]'s BLOCK_ENTITY_LOAD, and in turn add a block entity to this list while it's being
+     * iterated over. The concurrent set will only operate on a snapshot of the data, so worst case, a comparator just
+     * might not get updated correctly during a chunk load.
+     */
+    private val blockEntities = ConcurrentHashMap.newKeySet<EnderStorageBlockEntity>()
     var viewerCount = 0
-
-    private var dirtyIterating = false
 
     override fun clear() {
       items.clear()
@@ -90,18 +97,9 @@ object EnderStorageProvider {
     override fun markDirty() {
       checkOnThread()
       state.markDirty()
-
-      synchronized(blockEntities) {
-        try {
-          dirtyIterating = true
-
-          blockEntities.forEach {
-            if (!it.isRemoved) {
-              it.markDirty()
-            }
-          }
-        } finally {
-          dirtyIterating = false
+      blockEntities.forEach {
+        if (!it.isRemoved) {
+          it.markDirty()
         }
       }
     }
@@ -124,50 +122,33 @@ object EnderStorageProvider {
 
     fun updateViewers() {
       checkOnThread()
-
-      synchronized(blockEntities) {
-        blockEntities.forEach {
-          if (!it.isRemoved) {
-            it.updateViewerCount()
-            it.world?.scheduleBlockTick(it.pos, it.cachedState.block, 5)
-          }
+      blockEntities.forEach {
+        if (!it.isRemoved) {
+          it.updateViewerCount()
+          it.world?.scheduleBlockTick(it.pos, it.cachedState.block, 5)
         }
       }
     }
 
     fun addBlockEntity(be: EnderStorageBlockEntity) {
       checkOnThread()
-      checkNotDirtyIterating()
-      synchronized(blockEntities) {
-        blockEntities.add(be)
-      }
+      blockEntities.add(be)
     }
 
     fun removeBlockEntity(be: EnderStorageBlockEntity) {
       checkOnThread()
-      checkNotDirtyIterating()
-      synchronized(blockEntities) {
-        blockEntities.remove(be)
-      }
+      blockEntities.remove(be)
     }
 
     fun snapshotBlockEntities(): Set<EnderStorageBlockEntity> {
       checkOnThread()
-      synchronized(blockEntities) {
-        return blockEntities.toSet()
-      }
+      return blockEntities.toSet()
     }
 
     private fun checkOnThread() {
       if (!server.isOnThread && !server.isStopping) {
         // Don't throw an exception here, but log it, so we can track down the cause later
         log.error("EnderStorageInventory blockEntities accessed off-thread!", RuntimeException())
-      }
-    }
-
-    private fun checkNotDirtyIterating() {
-      if (dirtyIterating) {
-        log.error("EnderStorageInventory blockEntities accessed while dirty-iterating!", RuntimeException())
       }
     }
   }
