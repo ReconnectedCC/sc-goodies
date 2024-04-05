@@ -7,7 +7,10 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.block.Blocks
 import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.LightmapTextureManager
+import net.minecraft.client.render.LightmapTextureManager.MAX_LIGHT_COORDINATE
 import net.minecraft.client.render.OverlayTexture
+import net.minecraft.client.render.OverlayTexture.DEFAULT_UV
 import net.minecraft.client.render.TexturedRenderLayers
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BannerBlockEntityRenderer
@@ -61,7 +64,11 @@ class GlassItemFrameEntityRenderer(
     matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0f - entity.yaw))
 
     val stack = entity.heldItemStack
-    val light = if (entity.dataTracker.get(GlassItemFrameEntity.isGlowingFrame)) 0xF000F0 else originalLight
+    val light = if (entity.dataTracker.get(GlassItemFrameEntity.isGlowingFrame)) {
+      MAX_LIGHT_COORDINATE
+    } else {
+      originalLight
+    }
 
     // Glass Item Frame background model
     if (stack.isEmpty) {
@@ -71,7 +78,7 @@ class GlassItemFrameEntityRenderer(
       val model = blockRenderManager.models.modelManager.getModel(modelId)
       val buffer = consumers.getBuffer(TexturedRenderLayers.getEntityCutout())
       blockRenderManager.modelRenderer.render(matrices.peek(), buffer, null, model,
-        1.0f, 1.0f, 1.0f, light, OverlayTexture.DEFAULT_UV)
+        1.0f, 1.0f, 1.0f, light, DEFAULT_UV)
 
       matrices.pop()
     } else {
@@ -124,7 +131,7 @@ class GlassItemFrameEntityRenderer(
         matrices.push()
         matrices.translate(0.0001f, -0.5001f, 0.05f)
         matrices.scale(0.799999f, 0.399999f, 0.5f)
-        BannerBlockEntityRenderer.renderCanvas(matrices, consumers, light, OverlayTexture.DEFAULT_UV, bannerModel,
+        BannerBlockEntityRenderer.renderCanvas(matrices, consumers, light, DEFAULT_UV, bannerModel,
           ModelLoader.BANNER_BASE, true, patterns)
         matrices.pop()
       } else {
@@ -138,7 +145,7 @@ class GlassItemFrameEntityRenderer(
         }
 
         matrices.scale(0.5f, 0.5f, 0.5f)
-        itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices,
+        itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, light, DEFAULT_UV, matrices,
           consumers, entity.world, entity.id)
       }
     }
