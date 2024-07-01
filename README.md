@@ -33,6 +33,7 @@ SwitchCraft server in the style of many older mods. Highly opinionated.
 - Soft Toy Sharks, based on the model and texture from the [Blåhaj Mod](https://github.com/hibiii/Blahaj/tree/main) by
   hibi (licensed under The Unlicense). Available in the 16 dye colors, as well as a special one.
 - Stair Chairs
+- Stair Wrench
   
 ![Player holding a soft toy shark](img/shark1.png)
 ![Collection of soft toy sharks](img/shark2.png)
