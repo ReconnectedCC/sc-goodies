@@ -63,6 +63,11 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
       builder.sub(upgrade.upgradeItem, "Upgrade $from chests, barrels, or shulker boxes to\n$to chests, barrels, or shulker boxes.")
     }
 
+    builder.add(ModItems.stairWrench, "Stair Wrench")
+    builder.sub(ModItems.stairWrench, "Mode: %s", "mode")
+    builder.sub(ModItems.stairWrench, "Use on stairs to cycle through property values.\nUse while sneaking to cycle through the property to manipulate.")
+    builder.sub(ModItems.stairWrench, "Invalid property: %s", "invalid")
+
     builder.add(ModItems.barrelHammer, "Barrel Hammer")
     builder.sub(ModItems.barrelHammer, "Use while sneaking to convert chests into barrels and vice versa.\nAlso works on Iron, Gold and Diamond Chests and Barrels.")
     builder.add("death.attack.$modId.barrel_hammer", "%s was bonked by %s")
