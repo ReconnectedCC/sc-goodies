@@ -46,6 +46,8 @@ class BlockTagProvider(
 
     pickaxeBlocks.add(AmethystExtras.slabBlock)
     pickaxeBlocks.add(AmethystExtras.stairsBlock)
+    slabBlocks.add(AmethystExtras.slabBlock)
+    stairBlocks.add(AmethystExtras.stairsBlock)
     getOrCreateTagBuilder(BlockTags.CRYSTAL_SOUND_BLOCKS)
       .add(AmethystExtras.slabBlock, AmethystExtras.stairsBlock)
 
