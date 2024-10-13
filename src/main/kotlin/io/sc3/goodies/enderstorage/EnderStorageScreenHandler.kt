@@ -8,6 +8,7 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.math.BlockPos
+import com.mojang.serialization.MapCodec
 
 class EnderStorageScreenHandler(
   syncId: Int,
@@ -18,6 +19,8 @@ class EnderStorageScreenHandler(
   val frequency: Frequency,
   val state: FrequencyState
 ) : ChestScreenHandler(syncId, playerInv, inv, ModScreens.enderStorage, rows = 3, yStart = 35, playerYStart = 49) {
+  val CODEC: MapCodec<EnderStorageScreenHandler> = createCodec(::EnderStorageScreenHandler)
+
   constructor(syncId: Int, playerInv: PlayerInventory, buf: PacketByteBuf) :
     this(
       syncId,
@@ -28,6 +31,9 @@ class EnderStorageScreenHandler(
       FrequencyState.fromPacket(buf)
     )
 
+  fun getCodec(): MapCodec<EnderStorageScreenHandler> {
+    CODEC
+  }
   override fun onClosed(player: PlayerEntity) {
     super.onClosed(player)
 

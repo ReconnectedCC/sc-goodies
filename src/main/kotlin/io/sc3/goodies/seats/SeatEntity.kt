@@ -5,6 +5,7 @@ import io.sc3.library.ext.putNullableUuid
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.data.DataTracker
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
@@ -33,7 +34,7 @@ class SeatEntity : Entity {
   /**
    * The player sitting pose is halfway through their height, so subtract a bit more to align them with the SeatEntity.
    */
-  override fun getMountedHeightOffset() = -0.3
+  fun getMountedHeightOffset() = -0.3
 
   override fun tick() {
     super.tick()
@@ -61,7 +62,6 @@ class SeatEntity : Entity {
     }
   }
 
-  override fun initDataTracker() {}
 
   override fun readCustomDataFromNbt(nbt: NbtCompound) {
     ownerUuid = nbt.optUuid("Owner")
@@ -70,4 +70,6 @@ class SeatEntity : Entity {
   override fun writeCustomDataToNbt(nbt: NbtCompound) {
     nbt.putNullableUuid("Owner", ownerUuid)
   }
+
+  override fun initDataTracker(builder: DataTracker.Builder) { }
 }

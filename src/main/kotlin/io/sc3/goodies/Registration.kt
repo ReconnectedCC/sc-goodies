@@ -30,7 +30,6 @@ import io.sc3.goodies.itemmagnet.MAGNET_MAX_DAMAGE
 import io.sc3.goodies.itemmagnet.ToggleItemMagnetPacket
 import io.sc3.goodies.misc.*
 import io.sc3.goodies.nature.ScGrass
-import io.sc3.goodies.nature.ScSaplingGenerator
 import io.sc3.goodies.nature.ScTree
 import io.sc3.goodies.seats.SeatEntity
 import io.sc3.goodies.shark.DyedSharkItem
@@ -42,7 +41,6 @@ import io.sc3.goodies.util.BaseItem
 import io.sc3.goodies.util.niceDyeOrder
 import io.sc3.library.networking.registerServerReceiver
 import io.sc3.library.recipe.RecipeHandler
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
@@ -55,6 +53,7 @@ import net.minecraft.block.AbstractBlock.ContextPredicate
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
@@ -363,7 +362,7 @@ object Registration {
 
     private fun registerSapling(name: String, mapColor: MapColor): ScTree {
       val feature = RegistryKey.of(CONFIGURED_FEATURE, ModId("${name}_tree"))
-      val sapling = rBlock("${name}_sapling", SaplingBlock(ScSaplingGenerator(feature), saplingSettings(mapColor)))
+      val sapling = rBlock("${name}_sapling", SaplingBlock(SaplingGenerator("${name}_sapling", Optional.of(feature), Optional.of(feature), Optional.of(feature)), saplingSettings(mapColor)))
       val leaves = rBlock("${name}_leaves", LeavesBlock(leavesSettings(mapColor)))
       val potted = rBlock("potted_${name}_sapling", FlowerPotBlock(sapling, potSettings()))
       val saplingItem = rItem(sapling, ::BlockItem, itemSettings())
@@ -403,8 +402,9 @@ object Registration {
       .maxCount(1)
       .rarity(UNCOMMON)))
 
-    val salami = rItem("salami", BaseItem(itemSettings().food(FoodComponent.Builder()
-      .hunger(3)
+    val salami = rItem("salami", BaseItem(itemSettings().food(
+      FoodComponent.Builder()
+      .nutrition(3)
       .saturationModifier(1.2f)
       .alwaysEdible()
       .snack()
@@ -422,7 +422,7 @@ object Registration {
     val iceCreamMelon = rIceCreamItem("icecream_melon")
     val iceCreamBeetroot = rIceCreamItem("icecream_beetroot")
     val iceCreamSundae = rIceCreamItem("icecream_sundae", FoodComponent.Builder()
-      .hunger(7)
+      .nutrition(7)
       .saturationModifier(8.0f)
       .alwaysEdible()
       .build())
@@ -455,20 +455,20 @@ object Registration {
       items.add(item)
       return item
     }
+    
+    fun itemSettings(): Item.Settings = Item.Settings()
 
-    fun itemSettings(): FabricItemSettings = FabricItemSettings()
-
-    fun elytraSettings(): FabricItemSettings = itemSettings()
+    fun elytraSettings(): Item.Settings = itemSettings()
       .maxDamage(432)
       .rarity(UNCOMMON)
-      .equipmentSlot { EquipmentSlot.CHEST }
+      .equipmentSlot { _, _ -> EquipmentSlot.CHEST}
   }
 
   object ModBlockEntities {
     val enderStorage = rBlockEntity("ender_storage", ModBlocks.enderStorage, factory = ::EnderStorageBlockEntity)
 
     fun <T : BlockEntity> rBlockEntity(name: String, vararg block: Block,
-                                       factory: (BlockPos, BlockState) -> T): BlockEntityType<T> {
+                                      factory: (BlockPos, BlockState) -> T): BlockEntityType<T> {
       val blockEntityType = FabricBlockEntityTypeBuilder.create(factory, *block).build()
       return register(BLOCK_ENTITY_TYPE, ModId(name), blockEntityType)
     }
@@ -476,9 +476,8 @@ object Registration {
 
   object ModScreens {
     val enderStorage: ScreenHandlerType<EnderStorageScreenHandler> =
-      register(SCREEN_HANDLER, ModId("ender_storage"), ExtendedScreenHandlerType(::EnderStorageScreenHandler))
+      register(SCREEN_HANDLER, ModId("ender_storage"), ExtendedScreenHandlerType<>(::EnderStorageScreenHandler))
   }
-
   object ModEntities {
     val glassItemFrameEntity: EntityType<GlassItemFrameEntity> = register(ENTITY_TYPE, ModId("glass_item_frame"),
       FabricEntityTypeBuilder.create(SpawnGroup.MISC, ::GlassItemFrameEntity)

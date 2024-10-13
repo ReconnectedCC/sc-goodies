@@ -6,7 +6,7 @@ plugins {
   kotlin("jvm").version(kotlinVersion)
   kotlin("plugin.serialization").version(kotlinVersion)
 
-  id("fabric-loom") version "1.6-SNAPSHOT"
+  id("fabric-loom") version "1.8-SNAPSHOT"
   id("maven-publish")
   id("signing")
   id("com.modrinth.minotaur") version "2.+"
@@ -48,9 +48,9 @@ group = mavenGroup
 
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
-    jvmTarget = "17"
-    apiVersion = "1.9"
-    languageVersion = "1.9"
+    jvmTarget = "21"
+    apiVersion = "2.0"
+    languageVersion = "2.0"
   }
 }
 
@@ -96,6 +96,7 @@ repositories {
     // Cardinal Components API (dependency of Trinkets)
     content {
       includeGroup("dev.onyxstudios.cardinal-components-api")
+      includeGroup("org.ladysnake.cardinal-components-api")
     }
   }
 
@@ -104,6 +105,7 @@ repositories {
       includeModule("me.lucko", "fabric-permissions-api")
     }
   }
+    mavenCentral()
 }
 
 dependencies {
@@ -146,6 +148,7 @@ dependencies {
   implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", kotlinSerializationVersion)
 
   modImplementation(include("io.sc3", "sc-text", scTextVersion))
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks {
@@ -282,4 +285,7 @@ publishing {
       }
     }
   }
+}
+kotlin {
+    jvmToolchain(21)
 }

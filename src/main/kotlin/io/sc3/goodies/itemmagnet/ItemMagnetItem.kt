@@ -13,7 +13,9 @@ import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.decoration.ItemFrameEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
@@ -36,14 +38,14 @@ const val MAGNET_XP_MULTIPLIER = 16
 class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
   override fun hasGlint(stack: ItemStack) = stackEnabled(stack)
 
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-    super.appendTooltip(stack, world, tooltip, context)
+  override fun appendTooltip(stack: ItemStack, context: Item.TooltipContext, tooltip: List<Text>, type: TooltipType) {
+    super.appendTooltip(stack, context,tooltip,type)
     // Show the level and enabled status before the description.
 
     // Only show the enabled status if it is equipped in the trinket slot.
     val enabled = stackEnabled(stack)
     if (world?.isClient == true) {
-      addEnabledTooltip(stack, tooltip, enabled)
+      addEnabledTooltip(stack, tooltip.toMutableList(), enabled)
 
       // If the magnet is blocked, add the reason
       stackBlocked(stack)?.let {
@@ -56,7 +58,7 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
       tooltip.add(translatable("$translationKey.level", level, radius(level)))
     }
 
-    Tooltips.addDescLines(tooltip, getTranslationKey(stack))
+    Tooltips.addDescLines(tooltip.toMutableList(), getTranslationKey(stack))
   }
 
   private fun addEnabledTooltip(stack: ItemStack, tooltip: MutableList<Text>, enabled: Boolean) {

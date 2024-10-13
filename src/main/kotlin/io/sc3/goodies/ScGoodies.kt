@@ -10,7 +10,7 @@ object ScGoodies : ModInitializer {
   internal val log = LoggerFactory.getLogger("ScGoodies")!!
 
   internal const val modId = "sc-goodies"
-  internal fun ModId(value: String) = Identifier(modId, value)
+  internal fun ModId(value: String) = Identifier.of(modId, value)
 
   override fun onInitialize() {
     log.info("sc-goodies initializing")

@@ -44,7 +44,6 @@ enum class IronStorageUpgrade(
 
       val newBe = world.getBlockEntity(pos) as LootableContainerBlockEntity
       newBe.customName = customName
-
       // Copy the items to the new inventory
       for (i in 0 until size) {
         newBe.setStack(i, contents[i])

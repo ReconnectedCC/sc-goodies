@@ -15,6 +15,7 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.sound.SoundEvents.BLOCK_SHULKER_BOX_CLOSE
 import net.minecraft.sound.SoundEvents.BLOCK_SHULKER_BOX_OPEN
 import net.minecraft.text.Text
@@ -51,18 +52,18 @@ class IronShulkerBlockEntity(
 
   override fun getContainerName(): Text = translatable(cachedState.block.translationKey)
 
-  override fun readNbt(nbt: NbtCompound) {
-    super.readNbt(nbt)
+  override fun readNbt(nbt: NbtCompound?, registryLookup: RegistryWrapper.WrapperLookup?) {
+    super.readNbt(nbt, registryLookup)
     inv = DefaultedList.ofSize(variant.size, ItemStack.EMPTY)
     if (!deserializeLootTable(nbt)) {
       Inventories.readNbt(nbt, inv)
     }
   }
 
-  override fun writeNbt(nbt: NbtCompound) {
-    super.writeNbt(nbt)
+  override fun writeNbt(nbt: NbtCompound?, registryLookup: RegistryWrapper.WrapperLookup?) {
+    super.writeNbt(nbt, registryLookup)
     if (!serializeLootTable(nbt)) {
-      Inventories.writeNbt(nbt, inv)
+      Inventories.writeNbt(nbt, inv, registryLookup)
     }
   }
 

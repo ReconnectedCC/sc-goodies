@@ -7,10 +7,11 @@ import net.minecraft.block.Block.FORCE_STATE
 import net.minecraft.block.Block.NOTIFY_LISTENERS
 import net.minecraft.block.BlockState
 import net.minecraft.block.StairsBlock
-import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.property.Property
@@ -29,11 +30,11 @@ class StairWrenchItem(settings: Settings) : BaseItem(settings) {
   private val properties = listOf(StairsBlock.FACING, StairsBlock.HALF, StairsBlock.SHAPE)
   private val fallbackProperty = properties.first()
 
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+  override fun appendTooltip(stack: ItemStack, context: Item.TooltipContext, tooltip: List<Text>, type: TooltipType) {
     // For a fresh item (crafting result, REI, etc.), show the first property as the default mode
     val mode = stack.orCreateNbt.optString("Property") ?: fallbackProperty.name
     tooltip.add(translatable("$translationKey.mode", mode).color(GRAY))
-    super.appendTooltip(stack, world, tooltip, context)
+    super.appendTooltip(stack, context,tooltip,type)
   }
 
   override fun useOnBlock(context: ItemUsageContext): ActionResult {

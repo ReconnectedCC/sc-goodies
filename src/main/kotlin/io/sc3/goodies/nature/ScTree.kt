@@ -28,11 +28,11 @@ data class ScTree(
   )
 
   fun registerTreeLoot() {
-    TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3) {
-      TradeOffers.SellItemFactory(sapling.asItem(), 6, 1, 15)
-    }
+    TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3) { fac ->
+      fac.add(TradeOffers.SellItemFactory(sapling.asItem(), 6, 1, 15))
+    };
 
-    LootTableEvents.MODIFY.register { _, _, id, builder, _ ->
+    LootTableEvents.MODIFY.register { id, builder, _ ->
       val weight = lootWeights[id] ?: return@register
       val entry = ItemEntry.builder(sapling)
         .weight(weight)

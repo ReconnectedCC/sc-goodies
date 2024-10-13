@@ -4,16 +4,16 @@ import io.sc3.goodies.ScGoodies.modId
 import io.sc3.goodies.util.BaseItem
 import io.sc3.library.Tooltips.addDescLines
 import net.minecraft.block.entity.LootableContainerBlockEntity
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
 import net.minecraft.util.ActionResult.PASS
 import net.minecraft.util.ActionResult.SUCCESS
 import net.minecraft.util.Formatting.GRAY
-import net.minecraft.world.World
 
 class IronStorageUpgradeItem(
   private val upgrade: IronStorageUpgrade,
@@ -57,9 +57,8 @@ class IronStorageUpgradeItem(
     ctx.stack.decrement(1)
     return SUCCESS
   }
-
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+  override fun appendTooltip(stack: ItemStack, context: Item.TooltipContext, tooltip: List<Text>, type: TooltipType) {
     // Don't call super, we don't want the default .desc implementation
-    addDescLines(tooltip, getTranslationKey(stack), extraLines = tooltipExtra)
+    addDescLines(tooltip.toMutableList(), getTranslationKey(stack), extraLines = tooltipExtra)
   }
 }

@@ -23,7 +23,6 @@ abstract class ChestScreenHandler(
 
   init {
     checkSize(inv, size)
-
     inv.onOpen(playerInv.player)
 
     // Chest slots

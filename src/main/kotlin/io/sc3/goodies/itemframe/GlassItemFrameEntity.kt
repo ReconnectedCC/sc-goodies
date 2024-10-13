@@ -16,6 +16,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.server.network.EntityTrackerEntry
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -36,9 +37,9 @@ class GlassItemFrameEntity : ItemFrameEntity {
   constructor(type: EntityType<out GlassItemFrameEntity>, world: World, pos: BlockPos, facing: Direction) :
     super(type, world, pos, facing)
 
-  override fun initDataTracker() {
-    super.initDataTracker()
-    dataTracker.startTracking(isGlowingFrame, false)
+  override fun initDataTracker(builder: DataTracker.Builder?) {
+    builder!!.add(isGlowingFrame, true)
+    super.initDataTracker(builder)
   }
 
   override fun interact(player: PlayerEntity, hand: Hand): ActionResult {
@@ -50,7 +51,7 @@ class GlassItemFrameEntity : ItemFrameEntity {
 
       if (be != null && be is Inventory) { // TODO: Replace with tag?
         val behindBlock = world.getBlockState(behind)
-        val result = behindBlock.onUse(world, player, hand, BlockHitResult(pos, facing, behind, true))
+        val result = behindBlock.onUse(world, player, BlockHitResult(pos, facing, behind, true))
         if (result.isAccepted) return result
       }
     }
@@ -71,8 +72,8 @@ class GlassItemFrameEntity : ItemFrameEntity {
     nbt.putBoolean("isGlowingFrame", dataTracker.get(isGlowingFrame))
   }
 
-  override fun createSpawnPacket(): Packet<ClientPlayPacketListener> =
-    EntitySpawnS2CPacket(this, facing.id, decorationBlockPos)
+  override fun createSpawnPacket(entityTrackerEntry: EntityTrackerEntry?): Packet<ClientPlayPacketListener>? =
+    EntitySpawnS2CPacket(this, facing.id, blockPos)
 
   override fun getAsItemStack(): ItemStack = if (dataTracker.get(isGlowingFrame)) {
     ItemStack(ModItems.glowGlassItemFrame)
