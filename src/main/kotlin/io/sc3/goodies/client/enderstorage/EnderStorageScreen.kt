@@ -75,7 +75,7 @@ class EnderStorageScreen(
   }
 
   override fun render(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-    renderBackground(ctx)
+    renderBackground(ctx, mouseX, mouseY, delta)
     super.render(ctx, mouseX, mouseY, delta)
     drawMouseoverTooltip(ctx, mouseX, mouseY)
   }

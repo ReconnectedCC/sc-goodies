@@ -21,7 +21,7 @@ class EnderStorageNameWidget(
   private val textWidth = tr.getWidth(text).toFloat()
   private val scroller = ScrollingText(textWidth - NAME_WIDTH)
 
-  override fun renderButton(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+  override fun renderWidget(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
     // If the text is too long, scroll it. Pause scrolling if the user is hovering over the widget
     if (textWidth > NAME_WIDTH && !isHovered) {
       scroller.update(delta)
@@ -33,7 +33,7 @@ class EnderStorageNameWidget(
     ctx.disableScissor()
   }
 
-  override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+  override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
     scroller.mouseScrolled(amount)
     return true
   }

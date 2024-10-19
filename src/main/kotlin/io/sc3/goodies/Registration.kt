@@ -363,7 +363,7 @@ object Registration {
 
     private fun registerSapling(name: String, mapColor: MapColor): ScTree {
       val feature = RegistryKey.of(CONFIGURED_FEATURE, ModId("${name}_tree"))
-      val sapling = rBlock("${name}_sapling", SaplingBlock(ScSaplingGenerator(feature), saplingSettings(mapColor)))
+      val sapling = rBlock("${name}_sapling", SaplingBlock(SaplingGenerator("${name}_sapling", Optional.of(feature), Optional.of(feature), Optional.of(feature)), saplingSettings(mapColor)))
       val leaves = rBlock("${name}_leaves", LeavesBlock(leavesSettings(mapColor)))
       val potted = rBlock("potted_${name}_sapling", FlowerPotBlock(sapling, potSettings()))
       val saplingItem = rItem(sapling, ::BlockItem, itemSettings())

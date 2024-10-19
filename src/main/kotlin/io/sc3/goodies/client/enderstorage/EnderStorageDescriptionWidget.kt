@@ -24,7 +24,7 @@ class EnderStorageDescriptionWidget(
   private val scrollHeight = tr.fontHeight * (multilineText.count() - MAX_LINES)
   private val scroller = ScrollingText(scrollHeight.toFloat())
 
-  override fun renderButton(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+  override fun renderWidget(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float)  {
     // If there's no text, don't render anything
     if (multilineText.count() == 0) return
 
@@ -34,12 +34,9 @@ class EnderStorageDescriptionWidget(
     }
 
     // Draw the background
-    ctx.drawNineSlicedTexture(
+    ctx.drawGuiTexture(
       enderStorageTex,
       x, y,
-      width, height,
-      SLICE_SIZE, SLICE_SIZE,
-      BAR_WIDTH, BAR_HEIGHT,
       4, 185
     )
 
@@ -55,7 +52,7 @@ class EnderStorageDescriptionWidget(
     ctx.disableScissor()
   }
 
-  override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+  override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
     scroller.mouseScrolled(amount)
     return true
   }

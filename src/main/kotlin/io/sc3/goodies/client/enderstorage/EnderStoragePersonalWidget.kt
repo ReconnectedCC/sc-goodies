@@ -35,7 +35,7 @@ class EnderStoragePersonalWidget(
     tooltip = Tooltip.of(text)
   }
 
-  override fun renderButton(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+  override fun renderWidget(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
     val iconX = if (personal) PERSONAL_ICON_X else PUBLIC_ICON_X
     ctx.drawTexture(enderStorageTex, x, y, iconX, 0, width, height)
   }
