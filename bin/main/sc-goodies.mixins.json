@@ -1,0 +1,34 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.sc3.goodies.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AnvilScreenHandlerMixin",
+    "BarrelBlockEntityAccessor",
+    "EnderDragonEntityMixin",
+    "EndermiteEntityMixin",
+    "EnderPearlEntityMixin",
+    "ExperienceOrbEntityMixin",
+    "ForgingScreenHandlerAccessor",
+    "ItemEntityMixin",
+    "ItemStackMixin",
+    "LivingEntityAccessor",
+    "LivingEntityMixin",
+    "MobEntityAccessor",
+    "PlayerEntityMixin",
+    "ShulkerAccessor",
+    "ShulkerBoxBlockEntityAccessor",
+    "StairsBlockMixin"
+  ],
+  "client": [
+    "client.BipedEntityModelMixin",
+    "client.ClientPlayerEntityMixin",
+    "client.ClientPlayNetworkHandlerMixin",
+    "client.PlayerEntityModelAccessor",
+    "client.PlayerEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
