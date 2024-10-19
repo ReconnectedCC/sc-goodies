@@ -121,3 +121,4 @@ run/
 #       it causes way too many issues with PRs, and sometimes it's better to just clear the cache before datagenning
 #       anyway.
 src/generated/resources/.cache
+bin
