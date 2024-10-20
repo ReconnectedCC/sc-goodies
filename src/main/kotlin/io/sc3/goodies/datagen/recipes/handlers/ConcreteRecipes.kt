@@ -1,16 +1,15 @@
 package io.sc3.goodies.datagen.recipes.handlers
 
 import io.sc3.goodies.ScGoodiesItemTags.CONCRETE
-import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.RecipeProvider.*
 import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.book.RecipeCategory
 import io.sc3.goodies.misc.ConcreteExtras
 import io.sc3.library.recipe.RecipeHandler
-import java.util.function.Consumer
+import net.minecraft.data.server.recipe.RecipeExporter
 
 object ConcreteRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Concrete Slabs and Stairs
     ConcreteExtras.colors.values.forEach {
       createSlabRecipe(RecipeCategory.BUILDING_BLOCKS, it.slabBlock, ofItems(it.baseBlock))

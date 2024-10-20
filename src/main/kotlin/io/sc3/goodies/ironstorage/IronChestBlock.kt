@@ -1,5 +1,7 @@
 package io.sc3.goodies.ironstorage
 
+import com.mojang.serialization.MapCodec
+import io.sc3.goodies.ScGoodies.checkTypeForTicker
 import io.sc3.goodies.ScGoodies.modId
 import io.sc3.goodies.util.BaseBlockWithEntity
 import io.sc3.library.WaterloggableBlock
@@ -86,7 +88,16 @@ class IronChestBlock(
     player.incrementStat(openStat)
     return ActionResult.CONSUME
   }
+  val CODEC: MapCodec<IronChestBlock> = createCodec { settings: Settings ->
+    IronChestBlock(
+      settings,
+      variant
+    )
+  }
 
+  override fun getCodec(): MapCodec<out BlockWithEntity> {
+    return CODEC
+  }
   override fun createScreenHandlerFactory(state: BlockState, world: World,
                                           pos: BlockPos): NamedScreenHandlerFactory? {
     val be = world.getBlockEntity(pos) as? IronChestBlockEntity ?: return null
@@ -102,7 +113,7 @@ class IronChestBlock(
     type: BlockEntityType<T>
   ): BlockEntityTicker<T>? {
     if (!world.isClient) return null
-    return checkType(type, variant.chestBlockEntityType, IronChestBlockEntity.Companion::clientTick)
+    return checkTypeForTicker(type, variant.chestBlockEntityType, IronChestBlockEntity.Companion::clientTick)
   }
 
   override fun hasComparatorOutput(state: BlockState) = true

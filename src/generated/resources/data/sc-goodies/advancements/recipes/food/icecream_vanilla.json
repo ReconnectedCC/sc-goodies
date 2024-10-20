@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_snowball",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_snowball"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:icecream_vanilla"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

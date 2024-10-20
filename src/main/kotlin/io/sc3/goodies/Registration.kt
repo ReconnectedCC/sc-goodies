@@ -30,7 +30,6 @@ import io.sc3.goodies.itemmagnet.MAGNET_MAX_DAMAGE
 import io.sc3.goodies.itemmagnet.ToggleItemMagnetPacket
 import io.sc3.goodies.misc.*
 import io.sc3.goodies.nature.ScGrass
-import io.sc3.goodies.nature.ScSaplingGenerator
 import io.sc3.goodies.nature.ScTree
 import io.sc3.goodies.seats.SeatEntity
 import io.sc3.goodies.shark.DyedSharkItem

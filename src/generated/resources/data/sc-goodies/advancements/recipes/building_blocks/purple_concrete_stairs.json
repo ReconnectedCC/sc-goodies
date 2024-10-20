@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_concrete",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_concrete"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:purple_concrete_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

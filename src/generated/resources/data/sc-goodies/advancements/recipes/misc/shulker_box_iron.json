@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_shulker_box",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_shulker_box"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:shulker_box_iron"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

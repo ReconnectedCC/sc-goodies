@@ -30,15 +30,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_chest",
-      "has_iron_chest",
-      "has_the_recipe"
+      "has_iron_chest"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:barrel_hammer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

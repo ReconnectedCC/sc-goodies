@@ -4,16 +4,15 @@ import io.sc3.goodies.Registration.ModItems.glassItemFrame
 import io.sc3.goodies.Registration.ModItems.glowGlassItemFrame
 import io.sc3.library.recipe.RecipeHandler
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
-import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.Items.*
 import net.minecraft.recipe.book.RecipeCategory
-import java.util.function.Consumer
 
 object ItemFrameRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Glass Item Frame
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, glassItemFrame)

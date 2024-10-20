@@ -2,23 +2,19 @@ package io.sc3.goodies.datagen.recipes.handlers
 
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.library.recipe.RecipeHandler
-import net.minecraft.data.server.recipe.RecipeJsonProvider
-import net.minecraft.data.server.recipe.RecipeProvider
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
+import net.minecraft.data.server.recipe.*
 import net.minecraft.item.Item
 import net.minecraft.item.Items.*
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries
-import java.util.function.Consumer
 
 object IceCreamRecipes : RecipeHandler {
   private fun iceCreamRecipe(
     ingredientA: Ingredient,
     ingredientB: Ingredient,
     makes: Item,
-    exporter: Consumer<RecipeJsonProvider>
+    exporter: RecipeExporter
   ) {
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.FOOD, makes)
@@ -44,7 +40,7 @@ object IceCreamRecipes : RecipeHandler {
       .offerTo(exporter, Registries.ITEM.getId(makes.asItem()).path + "_from_vanilla")
   }
 
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Ice Cream
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.FOOD, ModItems.iceCreamVanilla)

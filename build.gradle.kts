@@ -63,9 +63,10 @@ repositories {
   }
 
   maven {
-    url = uri("https://repo.lem.sh/releases")
+    url = uri("https://repo.sad.ovh/releases")
     content {
-      includeGroup("io.sc3")
+      includeModule("io.sc3", "sc-library")
+      includeModule("io.sc3", "sc-text")
     }
   }
 
@@ -89,6 +90,12 @@ repositories {
     content {
       includeModule("dev.emi", "trinkets")
       includeGroup("com.terraformersmc")
+    }
+  }
+
+  maven("https://maven.nucleoid.xyz") {
+    content {
+      includeGroup("eu.pb4")
     }
   }
 

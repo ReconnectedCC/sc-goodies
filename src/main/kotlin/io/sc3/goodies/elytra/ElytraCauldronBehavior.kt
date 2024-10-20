@@ -24,7 +24,7 @@ object ElytraCauldronBehavior {
 
   internal fun registerBehavior() {
     (DyedElytraItem.dyedElytraItems.values + SpecialElytraType.entries.map { it.item }).forEach {
-      WATER_CAULDRON_BEHAVIOR[it] = cleanElytra
+      WATER_CAULDRON_BEHAVIOR.map[it] = cleanElytra
     }
   }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_chest",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chest"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:diamond_chest_with_gold_chest"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

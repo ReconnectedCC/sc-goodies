@@ -2,7 +2,6 @@ package io.sc3.goodies.enderstorage
 
 import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_COMPUTER_CHANGES_ENABLED
 import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_TEMP_CRAFTING_PERSONAL
 import io.sc3.goodies.util.BaseBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState

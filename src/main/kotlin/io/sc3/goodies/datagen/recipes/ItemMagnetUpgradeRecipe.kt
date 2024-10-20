@@ -11,14 +11,12 @@ import net.minecraft.recipe.ShapelessRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 
 class ItemMagnetUpgradeRecipe(
-  id: Identifier,
   category: CraftingRecipeCategory = CraftingRecipeCategory.EQUIPMENT
 ) : ShapelessRecipe(
-  id, "itemMagnetUpgrade", category,
+   "itemMagnetUpgrade", category,
   ItemStack(ModItems.itemMagnet), DefaultedList.copyOf(
     Ingredient.EMPTY, // Defaulted item
     ofItems(ModItems.itemMagnet),
@@ -27,11 +25,11 @@ class ItemMagnetUpgradeRecipe(
   )
 ) {
   override fun craft(inv: RecipeInputInventory, manager: DynamicRegistryManager): ItemStack {
-    val output = getOutput(manager)
+    val output = getResult(manager)
 
     for (i in 0 until inv.size()) {
       val stack: ItemStack = inv.getStack(i)
-      if (stack.item !is ItemMagnetItem || stack.item !== output.item) {
+      if (stack.item !is ItemMagnetItem) {
         continue
       }
 

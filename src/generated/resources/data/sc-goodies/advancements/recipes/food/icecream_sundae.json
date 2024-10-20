@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_icecream_vanilla",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_icecream_vanilla"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:icecream_sundae"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,7 +1,6 @@
 package io.sc3.goodies.datagen.recipes.handlers
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
-import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items.CHEST
@@ -9,10 +8,10 @@ import net.minecraft.recipe.book.RecipeCategory
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ironstorage.IronStorageVariant
 import io.sc3.library.recipe.RecipeHandler
-import java.util.function.Consumer
+import net.minecraft.data.server.recipe.RecipeExporter
 
 object IronChestRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Iron Chest
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, IronStorageVariant.IRON.chestBlock)

@@ -9,11 +9,19 @@ import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
 class EnderStorageItem(block: Block, settings: Settings) : BlockItem(block, settings) {
+  override fun onCraft(stack: ItemStack, world: World) {
+    craft(stack, world, null)
+  }
+
+  override fun onCraftByPlayer(stack: ItemStack, world: World, player: PlayerEntity?) {
+    craft(stack, world, player)
+  }
+
   /**
    * If `wasPersonal` was set, set this player to the new owner of the chest.
    * @see io.sc3.goodies.datagen.recipes.ModifiedEnderStorageRecipe
    */
-  override fun onCraft(stack: ItemStack, world: World, player: PlayerEntity?) {
+  fun craft(stack: ItemStack, world: World, player: PlayerEntity?) {
     val nbt = getBlockEntityNbt(stack) ?: return
 
     val wasPersonal = nbt.getBoolean(NBT_TEMP_CRAFTING_PERSONAL)

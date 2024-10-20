@@ -1,5 +1,8 @@
 package io.sc3.goodies.enderstorage
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ScGoodies.modId
 import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
@@ -18,6 +21,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Formatting
+import net.minecraft.util.Uuids
 import java.util.*
 
 @Serializable
@@ -31,6 +35,7 @@ data class Frequency(
   val middle: DyeColor = DyeColor.WHITE,
   val right : DyeColor = DyeColor.WHITE
 ) {
+
   val personal
     get() = owner != null
 
@@ -109,7 +114,21 @@ data class Frequency(
     return result
   }
 
+  fun getCodec(): MapCodec<Frequency> {
+    return CODEC
+  }
+
   companion object {
+    val CODEC: MapCodec<Frequency> = RecordCodecBuilder.mapCodec { i ->
+      i.group(
+        Uuids.CODEC.optionalFieldOf("owner", null).forGetter(Frequency::owner),
+        Codec.STRING.optionalFieldOf("ownerName", null).forGetter(Frequency::ownerName),
+        DyeColor.CODEC.fieldOf("left").forGetter(Frequency::left),
+        DyeColor.CODEC.fieldOf("middle").forGetter(Frequency::middle),
+        DyeColor.CODEC.fieldOf("right").forGetter(Frequency::right)
+      ).apply(i, ::Frequency)
+    }
+
     private val json = Json {
       ignoreUnknownKeys = true
     }

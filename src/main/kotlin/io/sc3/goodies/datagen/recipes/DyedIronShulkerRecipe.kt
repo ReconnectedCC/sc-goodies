@@ -13,10 +13,9 @@ import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.DyeColor
-import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
-class DyedIronShulkerRecipe(id: Identifier, category: CraftingRecipeCategory) : SpecialCraftingRecipe(id, category) {
+class DyedIronShulkerRecipe(category: CraftingRecipeCategory) : SpecialCraftingRecipe(category) {
   private val ironShulker = fromTag(ScGoodiesItemTags.ANY_IRON_SHULKER_BOX)
   private val dye = fromTag(DYES)
 

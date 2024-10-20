@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_glow_item_frame",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_glow_item_frame"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:glow_glass_item_frame_alternate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

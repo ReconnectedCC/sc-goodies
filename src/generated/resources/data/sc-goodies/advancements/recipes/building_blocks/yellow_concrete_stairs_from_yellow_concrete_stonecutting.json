@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_yellow_concrete",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_yellow_concrete"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:yellow_concrete_stairs_from_yellow_concrete_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

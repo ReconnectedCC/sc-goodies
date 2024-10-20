@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_diamond_boots",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_diamond_boots"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:hover_boots_dyed_red"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

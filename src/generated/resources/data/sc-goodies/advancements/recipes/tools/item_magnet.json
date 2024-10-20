@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_nether_star",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_nether_star"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:item_magnet"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

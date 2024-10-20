@@ -1,7 +1,9 @@
 package io.sc3.goodies.ironstorage
 
+import com.mojang.serialization.MapCodec
 import io.sc3.goodies.ScGoodies
 import io.sc3.goodies.ScGoodies.ModId
+import io.sc3.goodies.ScGoodies.checkTypeForTicker
 import io.sc3.goodies.util.BaseBlockWithEntity
 import net.fabricmc.fabric.api.util.NbtType.LIST
 import net.fabricmc.fabric.api.util.NbtType.STRING
@@ -38,6 +40,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import net.minecraft.world.WorldView
 
 class IronShulkerBlock(
   settings: Settings,
@@ -81,10 +84,19 @@ class IronShulkerBlock(
     super.onStateReplaced(state, world, pos, newState, moved)
   }
 
-  override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity) {
+  val CODEC: MapCodec<IronShulkerBlock> = createCodec { settings: Settings ->
+    IronShulkerBlock(
+      settings,
+      variant
+    )
+  }
+
+  override fun getCodec(): MapCodec<out BlockWithEntity> {
+    return CODEC
+  }
+  override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity): BlockState {
     val be = world.getBlockEntity(pos) as? IronShulkerBlockEntity ?: run {
-      super.onBreak(world, pos, state, player)
-      return
+      return super.onBreak(world, pos, state, player)
     }
 
     if (!world.isClient && player.isCreative && !be.isEmpty) {
@@ -96,10 +108,10 @@ class IronShulkerBlock(
       itemEntity.setToDefaultPickupDelay()
       world.spawnEntity(itemEntity)
     } else {
-      be.checkLootInteraction(player)
+      be.generateLoot(player)
     }
 
-    super.onBreak(world, pos, state, player)
+    return super.onBreak(world, pos, state, player)
   }
 
   override fun getDroppedStacks(state: BlockState, builder: LootContextParameterSet.Builder): MutableList<ItemStack> {
@@ -115,7 +127,7 @@ class IronShulkerBlock(
     return super.getDroppedStacks(state, builder)
   }
 
-  override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
+  override fun getPickStack(world: WorldView, pos: BlockPos?, state: BlockState?): ItemStack? {
     val stack = super.getPickStack(world, pos, state)
     world.getBlockEntity(pos, variant.shulkerBlockEntityType).ifPresent { it.setStackNbt(stack) }
     return stack
@@ -141,7 +153,7 @@ class IronShulkerBlock(
     state: BlockState,
     type: BlockEntityType<T>
   ): BlockEntityTicker<T>? {
-    return checkType(type, variant.shulkerBlockEntityType, IronShulkerBlockEntity.Companion::tick)
+    return checkTypeForTicker(type, variant.shulkerBlockEntityType, IronShulkerBlockEntity.Companion::tick)
   }
 
   override fun hasComparatorOutput(state: BlockState) = true

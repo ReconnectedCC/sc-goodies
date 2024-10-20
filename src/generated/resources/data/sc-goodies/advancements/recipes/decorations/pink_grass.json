@@ -34,15 +34,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_grass_block",
-      "has_sapling",
-      "has_the_recipe"
+      "has_sapling"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:pink_grass"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

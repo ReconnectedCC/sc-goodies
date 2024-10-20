@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cooked_porkchop",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cooked_porkchop"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:salami_recipe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

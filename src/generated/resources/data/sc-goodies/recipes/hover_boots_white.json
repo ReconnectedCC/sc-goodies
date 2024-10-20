@@ -13,8 +13,8 @@
     },
     "f": {
       "fabric:type": "sc-library:enchantment",
-      "id": "minecraft:feather_falling",
-      "level": 1
+      "enchantment": "minecraft:feather_falling",
+      "minLevel": 1
     },
     "j": {
       "fabric:type": "sc-library:brew",
@@ -29,6 +29,5 @@
   ],
   "result": {
     "item": "sc-goodies:hover_boots_white"
-  },
-  "show_notification": true
+  }
 }

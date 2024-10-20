@@ -81,7 +81,7 @@ object TomeEnchantments {
     val entry = ItemEntry.builder(ModItems.ancientTome)
       .weight(weight)
       .quality(2)
-      .apply { TomeLootFunction(emptyArray()) }
+      .apply { TomeLootFunction(emptyList()) }
       .build()
 
     builder.pool(LootPool.builder()

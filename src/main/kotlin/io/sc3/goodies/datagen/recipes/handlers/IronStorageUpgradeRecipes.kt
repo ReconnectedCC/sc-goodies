@@ -6,16 +6,15 @@ import io.sc3.goodies.ScGoodiesItemTags.ANY_UPGRADABLE_STORAGE
 import io.sc3.goodies.ironstorage.IronStorageUpgrade
 import io.sc3.library.recipe.RecipeHandler
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
-import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromTag
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.tag.ItemTags.PLANKS
 import net.minecraft.registry.tag.ItemTags.WOODEN_SLABS
-import java.util.function.Consumer
 
 object IronStorageUpgradeRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Wood to Iron Storage Upgrade
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, IronStorageUpgrade.VANILLA_IRON.upgradeItem)

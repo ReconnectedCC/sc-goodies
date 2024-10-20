@@ -1,32 +1,28 @@
 package io.sc3.goodies.datagen.recipes
 
-import com.google.gson.JsonObject
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.ironstorage.IronShulkerBlock
 import io.sc3.goodies.ironstorage.IronShulkerItem
+import io.sc3.library.recipe.ExtendedShapedRecipe
 import io.sc3.library.recipe.ShapedRecipeSpec
 import net.minecraft.block.Block
 import net.minecraft.block.ShulkerBoxBlock
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.RawShapedRecipe
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.DyeColor
-import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DefaultedList
 
 class IronShulkerRecipe(
-  id: Identifier,
   group: String,
   category: CraftingRecipeCategory,
-  width: Int,
-  height: Int,
-  ingredients: DefaultedList<Ingredient>,
+  rawShapedRecipe: RawShapedRecipe,
   private val outputItem: ItemStack,
-) : ShapedRecipe(id, group, category, width, height, ingredients, outputItem) {
+) : ExtendedShapedRecipe(group, category, rawShapedRecipe, outputItem) {
 
   override fun craft(inventory: RecipeInputInventory, manager: DynamicRegistryManager): ItemStack {
     val shulkerStack = shulkerItem(inventory)
@@ -73,11 +69,19 @@ class IronShulkerRecipe(
 }
 
 object IronShulkerRecipeSerializer : RecipeSerializer<IronShulkerRecipe> {
-  private fun make(id: Identifier, spec: ShapedRecipeSpec) = IronShulkerRecipe(
-    id, spec.group, spec.category, spec.width, spec.height, spec.ingredients, spec.output
+  private fun make(spec: ShapedRecipeSpec) = IronShulkerRecipe(
+    spec.group, spec.category, spec.rawShapedRecipe, spec.output
   )
-
-  override fun read(id: Identifier, json: JsonObject) = make(id, ShapedRecipeSpec.ofJson(json))
-  override fun read(id: Identifier, buf: PacketByteBuf) = make(id, ShapedRecipeSpec.ofPacket(buf))
+  override fun codec(): Codec<IronShulkerRecipe> {
+    return RecordCodecBuilder.create { instance ->
+      instance.group(
+        Codec.STRING.fieldOf("group").forGetter { r -> r.group },
+        CraftingRecipeCategory.CODEC.fieldOf("category").forGetter { r -> r.category },
+        RawShapedRecipe.CODEC.fieldOf("recipe").forGetter { r -> r.rawShapedRecipe },
+        ItemStack.CODEC.fieldOf("output").forGetter { z -> z.getResult(null) } /*TODO(Pretty damn sure getResult null will crash)*/,
+      ).apply(instance, ::IronShulkerRecipe)
+    }
+  }
+  override fun read(buf: PacketByteBuf) = make(ShapedRecipeSpec.ofPacket(buf))
   override fun write(buf: PacketByteBuf, recipe: IronShulkerRecipe) = ShapedRecipeSpec.ofRecipe(recipe).write(buf)
 }

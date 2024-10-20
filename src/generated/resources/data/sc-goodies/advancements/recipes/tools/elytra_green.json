@@ -13,21 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "sc-goodies:elytra_green"
+        "recipe": "minecraft:elytra_green"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_elytra",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_elytra"
     ]
   ],
   "rewards": {
     "recipes": [
-      "sc-goodies:elytra_green"
+      "minecraft:elytra_green"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_red_concrete",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_red_concrete"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:red_concrete_stairs_from_red_concrete_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

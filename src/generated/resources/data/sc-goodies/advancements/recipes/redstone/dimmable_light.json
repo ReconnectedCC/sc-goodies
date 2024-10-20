@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_lamp",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lamp"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:dimmable_light"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

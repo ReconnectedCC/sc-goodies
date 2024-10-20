@@ -7,9 +7,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.block.Blocks
 import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.LightmapTextureManager.MAX_LIGHT_COORDINATE
-import net.minecraft.client.render.OverlayTexture
 import net.minecraft.client.render.OverlayTexture.DEFAULT_UV
 import net.minecraft.client.render.TexturedRenderLayers
 import net.minecraft.client.render.VertexConsumerProvider

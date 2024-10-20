@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_wool",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_wool"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:shark_cyan"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

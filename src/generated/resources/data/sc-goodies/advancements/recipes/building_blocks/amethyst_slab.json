@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "items",
-      "has_the_recipe"
+      "has_the_recipe",
+      "items"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:amethyst_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

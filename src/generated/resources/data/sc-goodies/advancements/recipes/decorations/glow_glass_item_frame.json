@@ -34,15 +34,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_item_frame",
-      "has_glow_ink_sac",
-      "has_the_recipe"
+      "has_glow_ink_sac"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:glow_glass_item_frame"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

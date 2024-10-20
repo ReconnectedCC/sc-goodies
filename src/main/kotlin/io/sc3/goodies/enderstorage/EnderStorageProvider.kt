@@ -1,12 +1,14 @@
 package io.sc3.goodies.enderstorage
 
 import io.sc3.goodies.ScGoodies.modId
+import net.minecraft.datafixer.DataFixTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.collection.DefaultedList
+import net.minecraft.world.PersistentState
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
@@ -36,8 +38,7 @@ object EnderStorageProvider {
     }
 
     state = server.overworld.persistentStateManager.getOrCreate(
-      { nbt -> EnderStorageState.fromNbt(server, nbt) },
-      this::createState,
+      PersistentState.Type(this::createState, { nbt -> EnderStorageState.fromNbt(server, nbt) }, DataFixTypes.LEVEL),
       "$modId-ender-storage"
     )
 

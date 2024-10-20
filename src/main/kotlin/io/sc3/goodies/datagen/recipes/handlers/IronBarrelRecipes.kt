@@ -4,15 +4,14 @@ import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ironstorage.IronStorageVariant
 import io.sc3.library.recipe.RecipeHandler
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
-import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items.BARREL
 import net.minecraft.recipe.book.RecipeCategory
-import java.util.function.Consumer
 
 object IronBarrelRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Iron Barrel
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, IronStorageVariant.IRON.barrelBlock)

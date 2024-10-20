@@ -56,14 +56,14 @@ class IronChestBlockEntity(
   override fun readNbt(nbt: NbtCompound) {
     super.readNbt(nbt)
     inv = DefaultedList.ofSize(variant.size, ItemStack.EMPTY)
-    if (!deserializeLootTable(nbt)) {
+    if (!super.readLootTable(nbt)) {
       Inventories.readNbt(nbt, inv)
     }
   }
 
   override fun writeNbt(nbt: NbtCompound) {
     super.writeNbt(nbt)
-    if (!serializeLootTable(nbt)) {
+    if (!super.writeLootTable(nbt)) {
       Inventories.writeNbt(nbt, inv)
     }
   }
@@ -71,7 +71,7 @@ class IronChestBlockEntity(
   override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory) =
     IronChestScreenHandler(variant, syncId, playerInventory, this)
 
-  override fun getInvStackList() = inv
+  override fun method_11282() = inv
 
   override fun setInvStackList(list: DefaultedList<ItemStack>) {
     inv = list

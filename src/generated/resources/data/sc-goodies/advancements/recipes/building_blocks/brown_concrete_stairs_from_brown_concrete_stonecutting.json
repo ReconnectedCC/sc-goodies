@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_brown_concrete",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_brown_concrete"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:brown_concrete_stairs_from_brown_concrete_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

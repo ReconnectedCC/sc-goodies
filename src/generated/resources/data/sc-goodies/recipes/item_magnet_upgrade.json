@@ -1,3 +1,4 @@
 {
-  "type": "sc-goodies:item_magnet_upgrade"
+  "type": "sc-goodies:item_magnet_upgrade",
+  "category": "equipment"
 }

@@ -19,10 +19,9 @@ import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
-class ModifiedEnderStorageRecipe(id: Identifier, category: CraftingRecipeCategory) : SpecialCraftingRecipe(id, category) {
+class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraftingRecipe(category) {
   private val enderStorage = ofItems(ModItems.enderStorage)
   private val dye = fromTag(DYES)
   private val diamond = ofItems(Items.DIAMOND)

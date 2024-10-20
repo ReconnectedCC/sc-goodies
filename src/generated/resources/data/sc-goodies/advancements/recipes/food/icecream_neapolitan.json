@@ -46,16 +46,15 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_icecream_vanilla",
       "has_icecream_chocolate",
-      "has_icecream_sweetberry",
-      "has_the_recipe"
+      "has_icecream_sweetberry"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:icecream_neapolitan"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,10 +1,12 @@
 package io.sc3.goodies.ironstorage
 
+import com.mojang.serialization.MapCodec
 import io.sc3.goodies.ScGoodies
 import io.sc3.goodies.util.BaseBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
+import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.LivingEntity
@@ -65,6 +67,17 @@ class IronBarrelBlock(
     world.updateComparators(pos, this)
 
     super.onStateReplaced(state, world, pos, newState, moved)
+  }
+
+  val CODEC: MapCodec<IronBarrelBlock> = createCodec { settings: Settings ->
+    IronBarrelBlock(
+      settings,
+      variant
+    )
+  }
+
+  override fun getCodec(): MapCodec<out BlockWithEntity> {
+    return CODEC
   }
 
   override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {

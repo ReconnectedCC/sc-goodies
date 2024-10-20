@@ -30,15 +30,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_chest",
-      "has_iron_chest",
-      "has_the_recipe"
+      "has_iron_chest"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:gold_diamond_chest_upgrade"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,6 +1,5 @@
 package io.sc3.goodies.datagen.recipes.handlers
 
-import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items.*
@@ -12,14 +11,15 @@ import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.datagen.recipes.ItemMagnetUpgradeRecipe
 import io.sc3.library.recipe.BetterComplexRecipeJsonBuilder
 import io.sc3.library.recipe.RecipeHandler
-import java.util.function.Consumer
+import net.minecraft.data.server.recipe.RecipeExporter
+import net.minecraft.recipe.book.CraftingRecipeCategory
 
 object ItemMagnetRecipes : RecipeHandler {
   override fun registerSerializers() {
     register(RECIPE_SERIALIZER, ModId("item_magnet_upgrade"), ItemMagnetUpgradeRecipe.recipeSerializer)
   }
 
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Item Magnet
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.TOOLS, ModItems.itemMagnet)
@@ -34,7 +34,7 @@ object ItemMagnetRecipes : RecipeHandler {
       .offerTo(exporter)
 
     // Item Magnet Upgrades
-    BetterComplexRecipeJsonBuilder(ModItems.itemMagnet, ItemMagnetUpgradeRecipe.recipeSerializer)
+    BetterComplexRecipeJsonBuilder<ItemMagnetUpgradeRecipe>(ModItems.itemMagnet, ItemMagnetUpgradeRecipe(CraftingRecipeCategory.EQUIPMENT))
       .criterion("has_item_magnet", conditionsFromItem(ModItems.itemMagnet))
       .offerTo(exporter, ModId("item_magnet_upgrade"))
   }

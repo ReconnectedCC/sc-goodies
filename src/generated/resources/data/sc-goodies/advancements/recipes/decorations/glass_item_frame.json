@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_leather",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_leather"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:glass_item_frame"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

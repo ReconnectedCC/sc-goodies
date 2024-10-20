@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_barrel",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_barrel"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:diamond_barrel_with_iron_barrel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

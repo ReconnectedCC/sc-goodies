@@ -3,7 +3,7 @@ package io.sc3.goodies.datagen.recipes.handlers
 import io.sc3.goodies.shark.DyedSharkItem
 import io.sc3.goodies.shark.SpecialSharkType
 import io.sc3.library.recipe.RecipeHandler
-import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromTag
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Item
@@ -13,13 +13,13 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
-import java.util.function.Consumer
 
 object SharkRecipes : RecipeHandler {
   // TODO: is this the right way to get the wool item?
+  // yeah it is bro -soph
   private fun colorToWool(color: DyeColor): Item = Registries.ITEM.get(Identifier("${color.getName()}_wool"))
 
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // For the dyed sharks, the recipe will be as follows:
     //  X
     // XXX

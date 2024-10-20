@@ -1,7 +1,9 @@
 package io.sc3.goodies.enderstorage
 
+import com.mojang.serialization.MapCodec
 import io.sc3.goodies.Registration.ModBlockEntities
 import io.sc3.goodies.Registration.ModItems
+import io.sc3.goodies.ScGoodies.checkTypeForTicker
 import io.sc3.goodies.enderstorage.EnderStorageBlock.HitShape.HitShapeType.BUTTON
 import io.sc3.goodies.enderstorage.EnderStorageBlock.HitShape.HitShapeType.LATCH
 import io.sc3.goodies.util.BaseBlockWithEntity
@@ -50,6 +52,8 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
+import net.minecraft.world.WorldView
+
 
 // Raycasts hit the very edge of the shape so the .contains() check will fail without a slight expansion. This is half
 // of a voxel.
@@ -92,10 +96,9 @@ class EnderStorageBlock(
   override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity =
     EnderStorageBlockEntity(pos, state)
 
-  override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity) {
+  override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity): BlockState {
     val be = world.getBlockEntity(pos) as? EnderStorageBlockEntity ?: run {
-      super.onBreak(world, pos, state, player)
-      return
+      return super.onBreak(world, pos, state, player)
     }
 
     if (!world.isClient && !player.isCreative) {
@@ -107,15 +110,16 @@ class EnderStorageBlock(
       world.spawnEntity(itemEntity)
     }
 
-    super.onBreak(world, pos, state, player)
+    return super.onBreak(world, pos, state, player)
   }
 
-  override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
+  override fun getPickStack(world: WorldView, pos: BlockPos?, state: BlockState?): ItemStack? {
     val stack = super.getPickStack(world, pos, state)
     world.getBlockEntity(pos, ModBlockEntities.enderStorage).ifPresent { it.setStackNbt(stack) }
     return stack
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,
                      hit: BlockHitResult): ActionResult {
     if (world.isClient) return ActionResult.SUCCESS
@@ -247,7 +251,7 @@ class EnderStorageBlock(
     type: BlockEntityType<T>
   ): BlockEntityTicker<T>? {
     if (!world.isClient) return null
-    return checkType(type, ModBlockEntities.enderStorage, EnderStorageBlockEntity.Companion::clientTick)
+    return checkTypeForTicker(type, ModBlockEntities.enderStorage, EnderStorageBlockEntity.Companion::clientTick)
   }
 
   override fun hasComparatorOutput(state: BlockState) = true
@@ -264,6 +268,15 @@ class EnderStorageBlock(
   override fun getRaycastShape(state: BlockState, world: BlockView, pos: BlockPos): VoxelShape {
     val facing = state.get(facing)
     return shapes[facing] ?: super.getRaycastShape(state, world, pos)
+  }
+
+  val CODEC: MapCodec<EnderStorageBlock> = createCodec { settings: Settings ->
+    EnderStorageBlock(
+      settings
+    )
+  }
+  override fun getCodec(): MapCodec<out BlockWithEntity> {
+    return CODEC
   }
 
   override fun getRenderType(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED

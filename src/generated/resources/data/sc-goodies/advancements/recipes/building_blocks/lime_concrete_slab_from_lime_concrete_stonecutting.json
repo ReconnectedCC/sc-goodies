@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_lime_concrete",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lime_concrete"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:lime_concrete_slab_from_lime_concrete_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

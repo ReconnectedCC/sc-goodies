@@ -6,7 +6,7 @@ import io.sc3.goodies.datagen.ScGoodiesDatagen
 import io.sc3.library.recipe.IngredientBrew
 import io.sc3.library.recipe.IngredientEnchanted
 import io.sc3.library.recipe.RecipeHandler
-import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
@@ -18,12 +18,11 @@ import net.minecraft.potion.Potions
 import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.util.DyeColor
-import java.util.function.Consumer
 
 object HoverBootsRecipes : RecipeHandler {
   private val log by ScGoodiesDatagen::log
 
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.TOOLS, ModItems.hoverBoots[DyeColor.WHITE]!!)
       .pattern("IDI")

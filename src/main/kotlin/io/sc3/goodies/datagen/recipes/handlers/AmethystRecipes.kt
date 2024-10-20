@@ -2,14 +2,13 @@ package io.sc3.goodies.datagen.recipes.handlers
 
 import io.sc3.goodies.misc.AmethystExtras
 import io.sc3.library.recipe.RecipeHandler
-import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.*
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.RecipeCategory
-import java.util.function.Consumer
 
 object AmethystRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
+  override fun generateRecipes(exporter: RecipeExporter) {
     // Amethyst Slabs and Stairs
     createSlabRecipe(RecipeCategory.BUILDING_BLOCKS, AmethystExtras.slabBlock, Ingredient.ofItems(AmethystExtras.baseBlock))
       .criterion("items", conditionsFromItem(AmethystExtras.baseBlock))

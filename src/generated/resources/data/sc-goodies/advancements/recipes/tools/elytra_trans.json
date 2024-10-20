@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_elytra",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_elytra"
     ]
   ],
   "rewards": {
     "recipes": [
       "sc-goodies:elytra_trans"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

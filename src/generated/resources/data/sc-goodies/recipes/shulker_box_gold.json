@@ -1,5 +1,5 @@
 {
-  "type": "sc-goodies:iron_shulker",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
     "G": {
@@ -16,6 +16,5 @@
   ],
   "result": {
     "item": "sc-goodies:shulker_box_gold"
-  },
-  "show_notification": true
+  }
 }

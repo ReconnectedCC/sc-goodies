@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_icecream_vanilla",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_icecream_vanilla"
     ]
   ],
   "rewards": {
     "recipes": [
       "minecraft:icecream_chocolate_from_vanilla"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

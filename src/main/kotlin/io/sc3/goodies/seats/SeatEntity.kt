@@ -33,8 +33,10 @@ class SeatEntity : Entity {
   /**
    * The player sitting pose is halfway through their height, so subtract a bit more to align them with the SeatEntity.
    */
-  override fun getMountedHeightOffset() = -0.3
-
+  override fun getRidingOffset(vehicle: Entity?): Float {
+    return -0.3f
+  }
+  
   override fun tick() {
     super.tick()
 
