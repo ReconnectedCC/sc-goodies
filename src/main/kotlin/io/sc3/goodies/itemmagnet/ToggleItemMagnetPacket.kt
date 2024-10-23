@@ -1,26 +1,22 @@
 package io.sc3.goodies.itemmagnet
 
-import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.network.ServerPlayNetworkHandler
-import net.minecraft.server.network.ServerPlayerEntity
-import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.library.networking.ScLibraryPacket
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.network.packet.CustomPayload
 
-class ToggleItemMagnetPacket : ScLibraryPacket() {
+class ToggleItemMagnetPacket(override val payload: CustomPayload) : ScLibraryPacket() {
   override val id = ToggleItemMagnetPacket.id
 
   companion object {
-    val id = ModId("toggle_item_magnet")
-    fun fromBytes(buf: PacketByteBuf) = ToggleItemMagnetPacket()
+    val id = CustomPayload.id<CustomPayload>("toggle_item_magnet")
+    fun fromBytes(buf: PacketByteBuf): ToggleItemMagnetPacket {
+      return ToggleItemMagnetPacket(payload)
+    }
   }
 
-  override fun toBytes(buf: PacketByteBuf) {}
-
-  override fun onServerReceive(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler,
-                               responseSender: PacketSender) {
-    super.onServerReceive(server, player, handler, responseSender)
-    ItemMagnetState.onPlayerToggle(player)
+  override fun onServerReceive(payload: CustomPayload, ctx: ServerPlayNetworking.Context) {
+    super.onServerReceive(payload, ctx)
+    ItemMagnetState.onPlayerToggle(ctx.player())
   }
 }

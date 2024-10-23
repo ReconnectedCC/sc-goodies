@@ -2,6 +2,7 @@ package io.sc3.goodies.enderstorage
 
 import net.minecraft.inventory.Inventories
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.PersistentState
 
@@ -9,10 +10,10 @@ class EnderStorageState : PersistentState() {
   val inventories = mutableMapOf<Frequency, EnderStorageProvider.EnderStorageInventory>()
   val states = mutableMapOf<Frequency, FrequencyState>()
 
-  override fun writeNbt(nbt: NbtCompound): NbtCompound {
+  override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup?): NbtCompound {
     inventories.forEach { (frequency, inv) ->
       val freqNbt = NbtCompound()
-      Inventories.writeNbt(freqNbt, inv.items) // Write the items
+      Inventories.writeNbt(freqNbt, inv.items, registryLookup) // Write the items
       nbt.put(frequency.toKey(), freqNbt)
     }
 

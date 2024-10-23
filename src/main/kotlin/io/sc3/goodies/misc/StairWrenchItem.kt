@@ -1,5 +1,6 @@
 package io.sc3.goodies.misc
 
+import io.sc3.goodies.Registration
 import io.sc3.goodies.util.BaseItem
 import io.sc3.library.ext.optString
 import io.sc3.text.color
@@ -7,7 +8,7 @@ import net.minecraft.block.Block.FORCE_STATE
 import net.minecraft.block.Block.NOTIFY_LISTENERS
 import net.minecraft.block.BlockState
 import net.minecraft.block.StairsBlock
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
@@ -29,11 +30,11 @@ class StairWrenchItem(settings: Settings) : BaseItem(settings) {
   private val properties = listOf(StairsBlock.FACING, StairsBlock.HALF, StairsBlock.SHAPE)
   private val fallbackProperty = properties.first()
 
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+  override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
     // For a fresh item (crafting result, REI, etc.), show the first property as the default mode
-    val mode = stack.orCreateNbt.optString("Property") ?: fallbackProperty.name
+    val mode = stack.get(Registration.ModComponents.WRENCH_PROPERTY) ?: fallbackProperty.name
     tooltip.add(translatable("$translationKey.mode", mode).color(GRAY))
-    super.appendTooltip(stack, world, tooltip, context)
+    super.appendTooltip(stack, context, tooltip, type)
   }
 
   override fun useOnBlock(context: ItemUsageContext): ActionResult {
@@ -58,7 +59,7 @@ class StairWrenchItem(settings: Settings) : BaseItem(settings) {
     // TODO: Allow this to work with some other types of blocks
     if (!state.isIn(BlockTags.STAIRS)) return false
 
-    val mode = stack.orCreateNbt.optString("Property") ?: fallbackProperty.name
+    val mode = stack.get(Registration.ModComponents.WRENCH_PROPERTY) ?: fallbackProperty.name
     val property = mode?.let { state.block.stateManager.getProperty(mode) }
     if (property == null || !properties.contains(property)) {
       // Send an 'Invalid property' message to real players (but not fake players, e.g. turtles)
@@ -76,7 +77,7 @@ class StairWrenchItem(settings: Settings) : BaseItem(settings) {
     } else {
       // Shift-right-click - cycle the property mode and save it to the item
       val newProperty = cycle(properties, property)
-      stack.orCreateNbt.putString("Property", newProperty.name)
+      stack.set(Registration.ModComponents.WRENCH_PROPERTY, newProperty.name);
 
       // Inform the player of the new mode in the hotbar (only serverside)
       (player as? ServerPlayerEntity)

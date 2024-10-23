@@ -6,16 +6,18 @@ import io.sc3.goodies.tomes.AncientTomeItem.Companion.stackEnchantment
 import io.sc3.goodies.util.AnvilEvents
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.loot.v2.LootTableSource
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.ItemEnchantmentsComponent
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.EnchantmentLevelEntry
+import net.minecraft.enchantment.Enchantments
 import net.minecraft.enchantment.Enchantments.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.CraftingResultInventory
 import net.minecraft.item.EnchantedBookItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items.ENCHANTED_BOOK
-import net.minecraft.loot.LootManager
 import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootTable
 import net.minecraft.loot.LootTables.*
@@ -24,9 +26,12 @@ import net.minecraft.loot.entry.ItemEntry
 import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.registry.Registries.LOOT_FUNCTION_TYPE
 import net.minecraft.registry.Registry.register
+import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.ResourceManager
 import net.minecraft.screen.AnvilScreenHandler
 import net.minecraft.screen.Property
+import net.minecraft.text.PlainTextContent
+import net.minecraft.text.Text
 import net.minecraft.text.Text.literal
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
@@ -45,7 +50,7 @@ object TomeEnchantments {
     KNOCKBACK,
     FIRE_ASPECT,
     LOOTING,
-    SWEEPING,
+    SWEEPING_EDGE,
     EFFICIENCY,
     UNBREAKING,
     FORTUNE,
@@ -73,11 +78,11 @@ object TomeEnchantments {
 
     register(LOOT_FUNCTION_TYPE, ModId("tome_enchant"), TomeLootFunction.type)
     LootTableEvents.MODIFY.register(::enhanceLootTables)
-  }
 
-  private fun enhanceLootTables(resourceManager: ResourceManager, lootManager: LootManager, id: Identifier,
-                                builder: LootTable.Builder, source: LootTableSource) {
-    val weight = lootWeights[id] ?: return
+  }
+//Required:
+  private fun enhanceLootTables(lootTable: RegistryKey<LootTable>, builder: LootTable.Builder, source: LootTableSource) {
+    val weight = lootWeights[lootTable] ?: return
     val entry = ItemEntry.builder(ModItems.ancientTome)
       .weight(weight)
       .quality(2)
@@ -92,7 +97,7 @@ object TomeEnchantments {
 
   fun applyRandomEnchantment(stack: ItemStack, rand: Random) {
     val ench = validEnchantments[rand.nextInt(validEnchantments.size)]
-    EnchantedBookItem.addEnchantment(stack, EnchantmentLevelEntry(ench, ench.maxLevel))
+    stack.addEnchantment(ench, ench.maxLevel)
   }
 
   private fun onAnvilChange(handler: AnvilScreenHandler, left: ItemStack, right: ItemStack,
@@ -101,9 +106,9 @@ object TomeEnchantments {
     if (left.isEmpty || right.isEmpty) return true
 
     if (right.isOf(ModItems.ancientTome)) {
-      val tomeEnch = stackEnchantment(right) ?: return true
-      val enchants = EnchantmentHelper.get(left)
-      val matched = enchants[tomeEnch] ?: return true
+      val tomeEnch = stackEnchantment(right)
+      val enchants = EnchantmentHelper.getEnchantments(left)
+      val matched = enchants.getLevel(tomeEnch) ?: return true
 
       if (matched <= tomeEnch.maxLevel) {
         val lvl = matched + 1
@@ -115,23 +120,23 @@ object TomeEnchantments {
         return false
       }
     } else if (right.isOf(ENCHANTED_BOOK)) {
-      val currentEnchants = EnchantmentHelper.get(left)
-      val newEnchants = EnchantmentHelper.get(right)
+      val currentEnchants = EnchantmentHelper.getEnchantments(left)
+      val newEnchants = EnchantmentHelper.getEnchantments(right)
 
       var isOver = false
       var isMatched = false
 
-      newEnchants.forEach { (ench, level) ->
-        if (level > ench.maxLevel) {
+      newEnchants.enchantmentsMap.forEach { (ench) ->
+        if (EnchantmentHelper.getLevel(ench.value(), right) > ench.value().maxLevel) {
           isOver = true
 
-          if (ench.isAcceptableItem(left) || left.isOf(ENCHANTED_BOOK)) {
+          if (ench.value().isAcceptableItem(left) || left.isOf(ENCHANTED_BOOK)) {
             isMatched = true
 
             // Remove incompatible enchantments from the target book
             currentEnchants.entries.removeIf { (other) -> isIncompatible(other, ench) }
 
-            currentEnchants[ench] = level
+            currentEnchants[ench.value()] = level
           }
         } else if (ench.isAcceptableItem(left)) {
           // Don't apply incompatible enchantments to the target item
@@ -155,13 +160,13 @@ object TomeEnchantments {
   private fun isIncompatible(otherEnch: Enchantment, ench: Enchantment?) =
     otherEnch != ench && !otherEnch.canCombine(ench)
 
-  private fun applyOutput(name: String?, left: ItemStack, enchants: Map<Enchantment, Int>, cost: Int,
+  private fun applyOutput(name: String?, left: ItemStack, enchants: ItemEnchantmentsComponent, cost: Int,
                           output: CraftingResultInventory, levelCost: Property) {
     val out = left.copy()
-    EnchantmentHelper.set(enchants, out)
+    EnchantmentHelper.set(out, enchants)
 
-    val finalCost = if (!name.isNullOrEmpty() && (!out.hasCustomName() || name != left.name.string)) {
-      out.setCustomName(literal(name))
+    val finalCost = if (!name.isNullOrEmpty() && (out.name.string.isNotEmpty() || name != left.name.string)) {
+      out.set(DataComponentTypes.ITEM_NAME, Text.of(name));
       cost + 1
     } else {
       cost

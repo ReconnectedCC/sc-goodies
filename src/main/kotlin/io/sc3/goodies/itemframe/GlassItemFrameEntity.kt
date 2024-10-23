@@ -36,9 +36,9 @@ class GlassItemFrameEntity : ItemFrameEntity {
   constructor(type: EntityType<out GlassItemFrameEntity>, world: World, pos: BlockPos, facing: Direction) :
     super(type, world, pos, facing)
 
-  override fun initDataTracker() {
-    super.initDataTracker()
-    dataTracker.startTracking(isGlowingFrame, false)
+  override fun initDataTracker(builder: DataTracker.Builder?) {
+    builder!!.add(isGlowingFrame, false)
+    super.initDataTracker(builder)
   }
 
   override fun interact(player: PlayerEntity, hand: Hand): ActionResult {
@@ -50,7 +50,7 @@ class GlassItemFrameEntity : ItemFrameEntity {
 
       if (be != null && be is Inventory) { // TODO: Replace with tag?
         val behindBlock = world.getBlockState(behind)
-        val result = behindBlock.onUse(world, player, hand, BlockHitResult(pos, facing, behind, true))
+        val result = behindBlock.onUse(world, player, BlockHitResult(pos, facing, behind, true))
         if (result.isAccepted) return result
       }
     }

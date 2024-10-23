@@ -12,6 +12,7 @@ import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor
 import net.minecraft.world.World
 
@@ -45,7 +46,7 @@ class DyedIronShulkerRecipe(category: CraftingRecipeCategory) : SpecialCraftingR
     return hasShulker && hasDye
   }
 
-  override fun craft(inventory: RecipeInputInventory, manager: DynamicRegistryManager): ItemStack {
+  override fun craft(inventory: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
     val shulkerStack = shulkerItem(inventory)
     // No shulker found - disallow craft
     if (shulkerStack.isEmpty) return ItemStack.EMPTY
@@ -55,7 +56,7 @@ class DyedIronShulkerRecipe(category: CraftingRecipeCategory) : SpecialCraftingR
     val resultBlock = variant.dyedShulkerBlocks[color]
 
     val result = ItemStack(resultBlock)
-    result.nbt = shulkerStack.nbt?.copy()
+    result.applyComponentsFrom(shulkerStack.components)
     return result
   }
 

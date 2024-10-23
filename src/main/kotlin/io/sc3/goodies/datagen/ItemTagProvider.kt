@@ -69,7 +69,7 @@ class ItemTagProvider(
     }
 
     // Tools
-    getOrCreateTagBuilder(ItemTags.TOOLS)
+    getOrCreateTagBuilder(ItemTags.AXES)
       .add(ModItems.barrelHammer)
 
     // Tomes

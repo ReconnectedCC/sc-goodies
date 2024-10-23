@@ -3,13 +3,14 @@ package io.sc3.goodies.elytra
 import io.sc3.goodies.util.BaseItem
 import net.fabricmc.fabric.api.entity.event.v1.FabricElytraItem
 import net.minecraft.block.DispenserBlock
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Equipment
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
@@ -31,9 +32,9 @@ abstract class BaseElytraItem(settings: Settings) : BaseItem(settings), FabricEl
     return equipAndSwap(this, world, user, hand)
   }
 
-  override fun getEquipSound(): SoundEvent = SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA
+  override fun getEquipSound(): RegistryEntry<SoundEvent>? = SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA
 
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+  override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
     // Don't add any description
   }
 }

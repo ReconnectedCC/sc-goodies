@@ -32,7 +32,7 @@ object HoverBootsRecipes : RecipeHandler {
       .input('D', Items.DIAMOND_BLOCK)
       .input('F', Items.FEATHER)
       .input('f', IngredientEnchanted(Enchantments.FEATHER_FALLING, 1).toVanilla())
-      .input('j', IngredientBrew(StatusEffects.JUMP_BOOST, Potions.LEAPING).toVanilla())
+      .input('j', IngredientBrew(StatusEffects.JUMP_BOOST.value(), Potions.LEAPING.value()).toVanilla())
       .criterion("has_diamond_boots", conditionsFromItem(Items.DIAMOND_BOOTS))
       .offerTo(exporter)
 

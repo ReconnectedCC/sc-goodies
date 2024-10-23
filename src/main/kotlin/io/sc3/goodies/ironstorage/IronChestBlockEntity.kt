@@ -71,9 +71,9 @@ class IronChestBlockEntity(
   override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory) =
     IronChestScreenHandler(variant, syncId, playerInventory, this)
 
-  override fun method_11282() = inv
+  override fun getHeldStacks() = inv
 
-  override fun setInvStackList(list: DefaultedList<ItemStack>) {
+  override fun setHeldStacks(list: DefaultedList<ItemStack>) {
     inv = list
   }
 

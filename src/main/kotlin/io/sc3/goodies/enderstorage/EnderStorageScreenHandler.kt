@@ -1,5 +1,6 @@
 package io.sc3.goodies.enderstorage
 
+import com.mojang.serialization.MapCodec
 import io.sc3.goodies.Registration.ModScreens
 import io.sc3.goodies.util.ChestScreenHandler
 import net.minecraft.entity.player.PlayerEntity

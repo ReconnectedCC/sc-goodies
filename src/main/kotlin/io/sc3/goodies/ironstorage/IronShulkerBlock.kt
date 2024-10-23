@@ -12,13 +12,14 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.ShulkerBoxBlockEntity.AnimationStage.CLOSED
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ShulkerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.BlockItem
+import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContextParameterSet
@@ -133,8 +134,13 @@ class IronShulkerBlock(
     return stack
   }
 
-  override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,
-                     hit: BlockHitResult): ActionResult {
+  override fun onUse(
+    state: BlockState,
+    world: World,
+    pos: BlockPos,
+    player: PlayerEntity,
+    hit: BlockHitResult
+  ): ActionResult {
     // The early-return behaviors here are slightly different to IronChestBlock, but this attempts to be closer to the
     // way vanilla shulker boxes behave, rather than consistent with the rest of this codebase.
     if (world.isClient) return ActionResult.SUCCESS
@@ -176,7 +182,12 @@ class IronShulkerBlock(
   override fun rotate(state: BlockState, rotation: BlockRotation): BlockState =
     state.with(facing, rotation.rotate(state.get(facing)))
 
-  override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: Item.TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
     // Don't call super, we don't want the default .desc implementation
     tooltip.add(translatable("block.${ScGoodies.modId}.storage.desc", variant.size)
       .formatted(Formatting.GRAY))
@@ -222,7 +233,8 @@ class IronShulkerBlock(
       if (be.animationStage != CLOSED) {
         true
       } else {
-        val box = ShulkerEntity.calculateBoundingBox(state.get(facing), 0.0f, 0.5f).offset(pos).contract(1.0e-6)
+        // TODO: the scale is probably wrong here, should be something like 1f? not sure
+        val box = ShulkerEntity.calculateBoundingBox(0.0f, state.get(facing), 0.5f).offset(pos).contract(1.0e-6)
         world.isSpaceEmpty(box)
       }
 

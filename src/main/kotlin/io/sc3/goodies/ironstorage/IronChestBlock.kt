@@ -10,7 +10,6 @@ import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
@@ -79,8 +78,13 @@ class IronChestBlock(
     super.onStateReplaced(state, world, pos, newState, moved)
   }
 
-  override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,
-                     hit: BlockHitResult): ActionResult {
+  override fun onUse(
+    state: BlockState,
+    world: World,
+    pos: BlockPos,
+    player: PlayerEntity,
+    hit: BlockHitResult
+  ): ActionResult {
     if (world.isClient) return ActionResult.SUCCESS
 
     val factory = createScreenHandlerFactory(state, world, pos) ?: return ActionResult.CONSUME

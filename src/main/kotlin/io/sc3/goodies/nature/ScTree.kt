@@ -32,7 +32,7 @@ data class ScTree(
       f.add(TradeOffers.SellItemFactory(sapling.asItem(), 6, 1, 15))
     }
 
-    LootTableEvents.MODIFY.register { _, _, id, builder, _ ->
+    LootTableEvents.MODIFY.register { id, builder, _ ->
       val weight = lootWeights[id] ?: return@register
       val entry = ItemEntry.builder(sapling)
         .weight(weight)

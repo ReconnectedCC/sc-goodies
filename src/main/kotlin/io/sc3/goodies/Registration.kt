@@ -1,5 +1,6 @@
 package io.sc3.goodies
 
+import com.mojang.serialization.Codec
 import io.sc3.goodies.Registration.ModBlockEntities.rBlockEntity
 import io.sc3.goodies.Registration.ModBlocks.autumnGrass
 import io.sc3.goodies.Registration.ModBlocks.barrelSettings
@@ -41,7 +42,6 @@ import io.sc3.goodies.util.BaseItem
 import io.sc3.goodies.util.niceDyeOrder
 import io.sc3.library.networking.registerServerReceiver
 import io.sc3.library.recipe.RecipeHandler
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
@@ -54,23 +54,24 @@ import net.minecraft.block.AbstractBlock.ContextPredicate
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.component.DataComponentType
+import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.damage.DamageType
 import net.minecraft.item.*
-import net.minecraft.registry.Registerable
+import net.minecraft.registry.*
 import net.minecraft.registry.Registries.*
 import net.minecraft.registry.Registry.register
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.RegistryKeys.CONFIGURED_FEATURE
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.sound.BlockSoundGroup.GRASS
 import net.minecraft.text.Text
 import net.minecraft.util.DyeColor
+import net.minecraft.util.Identifier
 import net.minecraft.util.Rarity.EPIC
 import net.minecraft.util.Rarity.UNCOMMON
 import net.minecraft.util.math.BlockPos
@@ -285,7 +286,43 @@ object Registration {
       rBlockEntity(barrelId, barrelBlock) { pos, state -> IronBarrelBlockEntity(this, pos, state) }
     }
   }
-
+  object ModComponents {
+    val WRENCH_PROPERTY: DataComponentType<String> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "wrench_property"),
+      DataComponentType.builder<String>().codec(Codec.STRING).build()
+    );
+    val ITEM_MAGNET_DISABLED: DataComponentType<Boolean> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "item_magnet_disabled"),
+      DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    );
+    val ITEM_MAGNET_BLOCKED_REASON: DataComponentType<String> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "item_magnet_blocked_reason"),
+      DataComponentType.builder<String>().codec(Codec.STRING).build()
+    );
+    val ITEM_MAGNET_LEVEL: DataComponentType<Int> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "item_magnet_level"),
+      DataComponentType.builder<Int>().codec(Codec.INT).build()
+    );
+    val FREQUENCY: DataComponentType<Frequency> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "frequency"),
+      DataComponentType.builder<Frequency>().codec(Frequency.CODEC.codec()).build()
+    );
+    val COMPUTER_CHANGES_ENABLED: DataComponentType<Boolean> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "computer_changes_enabled"),
+      DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    );
+    val TEMP_CRAFTING_PERSONAL: DataComponentType<Boolean> = Registry.register(
+      Registries.DATA_COMPONENT_TYPE,
+      Identifier.of(ScGoodies.modId, "temp_crafting_personal"),
+      DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    );
+  }
   object ModBlocks {
     val enderStorage = rBlock("ender_storage", EnderStorageBlock(AbstractBlock.Settings
       .copy(Blocks.ENDER_CHEST)
@@ -403,12 +440,12 @@ object Registration {
       .rarity(UNCOMMON)))
 
     val salami = rItem("salami", BaseItem(itemSettings().food(FoodComponent.Builder()
-      .hunger(3)
+      .nutrition(3)
       .saturationModifier(1.2f)
       .alwaysEdible()
       .snack()
       .build())))
-    
+
     val popcorn = rItem("popcorn", PopcornItem(itemSettings()
       .food(PopcornItem.foodComponent)
       .maxCount(1)))
@@ -421,7 +458,7 @@ object Registration {
     val iceCreamMelon = rIceCreamItem("icecream_melon")
     val iceCreamBeetroot = rIceCreamItem("icecream_beetroot")
     val iceCreamSundae = rIceCreamItem("icecream_sundae", FoodComponent.Builder()
-      .hunger(7)
+      .nutrition(7)
       .saturationModifier(8.0f)
       .alwaysEdible()
       .build())
@@ -455,9 +492,9 @@ object Registration {
       return item
     }
 
-    fun itemSettings(): FabricItemSettings = FabricItemSettings()
+    fun itemSettings(): Item.Settings = Item.Settings()
 
-    fun elytraSettings(): FabricItemSettings = itemSettings()
+    fun elytraSettings(): Item.Settings = itemSettings()
       .maxDamage(432)
       .rarity(UNCOMMON)
       .equipmentSlot { EquipmentSlot.CHEST }

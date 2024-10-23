@@ -18,10 +18,10 @@ class TomeLootFunction(conditions: List<LootCondition>) : ConditionalLootFunctio
   override fun getType() = TomeLootFunction.type
 
   companion object {
-    val CODEC: MapCodec<TomeLootFunction> =  RecordCodecBuilder.mapCodec {
+    val CODEC: MapCodec<TomeLootFunction> = RecordCodecBuilder.mapCodec {
         instance -> addConditionsField(instance).apply(instance, ::TomeLootFunction)
     }
 
-    val type = LootFunctionType(CODEC.codec())
+    val type = LootFunctionType(CODEC)
   }
 }

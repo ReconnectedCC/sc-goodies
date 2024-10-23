@@ -7,11 +7,12 @@ import net.minecraft.block.cauldron.CauldronBehavior.WATER_CAULDRON_BEHAVIOR
 import net.minecraft.item.ItemStack
 import net.minecraft.stat.Stats
 import net.minecraft.util.ActionResult
+import net.minecraft.util.ItemActionResult
 
 object IronShulkerCauldronBehavior {
   private val cleanShulker = CauldronBehavior { state, world, pos, player, hand, stack ->
     val block = Block.getBlockFromItem(stack.item) as? IronShulkerBlock
-      ?: return@CauldronBehavior ActionResult.PASS
+      ?: return@CauldronBehavior ItemActionResult.CONSUME
 
     if (!world.isClient) {
       val resultStack = ItemStack(block.variant.shulkerBlock)
@@ -22,7 +23,7 @@ object IronShulkerCauldronBehavior {
       LeveledCauldronBlock.decrementFluidLevel(state, world, pos)
     }
 
-    ActionResult.success(world.isClient)
+    ItemActionResult.success(world.isClient)
   }
 
   internal fun registerBehavior() {

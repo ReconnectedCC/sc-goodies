@@ -11,6 +11,7 @@ import net.minecraft.recipe.ShapelessRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.collection.DefaultedList
 
 class ItemMagnetUpgradeRecipe(
@@ -24,7 +25,7 @@ class ItemMagnetUpgradeRecipe(
     ofItems(Items.NETHERITE_INGOT)
   )
 ) {
-  override fun craft(inv: RecipeInputInventory, manager: DynamicRegistryManager): ItemStack {
+  override fun craft(inv: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
     val output = getResult(manager)
 
     for (i in 0 until inv.size()) {

@@ -21,9 +21,13 @@ import net.minecraft.loot.function.CopyNbtLootFunction
 import net.minecraft.loot.function.SetContentsLootFunction
 import net.minecraft.loot.provider.nbt.ContextLootNbtProvider
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor
+import java.util.concurrent.CompletableFuture
 
-class BlockLootTableProvider(out: FabricDataOutput) : FabricBlockLootTableProvider(out) {
+class BlockLootTableProvider(out: FabricDataOutput,
+                             registryLookup: CompletableFuture<RegistryWrapper.WrapperLookup>
+) : FabricBlockLootTableProvider(out, registryLookup) {
   private val saplingDropChance = floatArrayOf(0.05f, 0.0625f, 0.084f, 0.1f)
 
   override fun generate() {

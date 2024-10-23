@@ -3,13 +3,12 @@ package io.sc3.goodies.itemmagnet
 import dev.emi.trinkets.api.SlotReference
 import dev.emi.trinkets.api.TrinketItem
 import dev.emi.trinkets.api.TrinketsApi
+import io.sc3.goodies.Registration
 import io.sc3.goodies.itemmagnet.ItemMagnetHotkey.toggleBinding
 import io.sc3.goodies.itemmagnet.ItemMagnetState.playerMagnetRadius
 import io.sc3.library.Tooltips
-import io.sc3.library.ext.optString
-import io.sc3.library.ext.putOptString
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.decoration.ItemFrameEntity
@@ -20,6 +19,7 @@ import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting.*
 import net.minecraft.util.math.Box
 import net.minecraft.world.World
+import java.util.*
 import kotlin.math.absoluteValue
 
 private const val TICK_FREQ = 3
@@ -36,20 +36,25 @@ const val MAGNET_XP_MULTIPLIER = 16
 class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
   override fun hasGlint(stack: ItemStack) = stackEnabled(stack)
 
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-    super.appendTooltip(stack, world, tooltip, context)
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
+    super.appendTooltip(stack,context,tooltip,type)
     // Show the level and enabled status before the description.
-
     // Only show the enabled status if it is equipped in the trinket slot.
     val enabled = stackEnabled(stack)
-    if (world?.isClient == true) {
+    /* TODO(IIRC  appendTooltip is ONLY called in the logical client side - Sophie)*/
+    //if (context.isClient == true) {
       addEnabledTooltip(stack, tooltip, enabled)
 
       // If the magnet is blocked, add the reason
       stackBlocked(stack)?.let {
         tooltip.add(translatable("$translationKey.${it.tooltipKey}").formatted(RED))
       }
-    }
+    //}
 
     val level = stackLevel(stack)
     if (level >= 0) {
@@ -68,6 +73,13 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
     val color = if (enabled) GREEN else RED
     val keybinding = toggleBinding.boundKeyLocalizedText.copy().formatted(WHITE)
     tooltip.add(translatable("$translationKey.$key", keybinding).formatted(color))
+  }
+  private fun canCombine(stack: ItemStack, otherStack: ItemStack): Boolean {
+    return if (!stack.isOf(otherStack.item)) {
+      false
+    } else {
+      if (stack.isEmpty && otherStack.isEmpty) true else stack.components.equals(otherStack.components)
+    }
   }
 
   override fun tick(magnetStack: ItemStack, slot: SlotReference, player: LivingEntity) {
@@ -109,7 +121,7 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
       }
 
       // Ensure there is space in the inventory for the item
-      if (player.inventory.main.none { it.isEmpty || ItemStack.canCombine(it, stack) && it.count < it.maxCount }) {
+      if (player.inventory.main.none { it.isEmpty || canCombine(it, stack) && it.count < it.maxCount }) {
         continue
       }
 
@@ -166,7 +178,7 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
   companion object {
     fun stackLevel(stack: ItemStack): Int {
       if (stack.isEmpty) return 0
-      return stack.orCreateNbt.getInt("level")
+      return stack.get(Registration.ModComponents.ITEM_MAGNET_LEVEL) ?: return 0;
     }
 
     fun radius(level: Int): Int
@@ -174,22 +186,20 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
     fun stackRadius(stack: ItemStack): Int = radius(stackLevel(stack))
 
     fun stackEnabled(stack: ItemStack): Boolean =
-      !stack.orCreateNbt.getBoolean("disabled")
+      !stack.get(Registration.ModComponents.ITEM_MAGNET_DISABLED)!!
     fun setStackEnabled(stack: ItemStack, enabled: Boolean) =
-      stack.orCreateNbt.putBoolean("disabled", !enabled)
+      stack.set(Registration.ModComponents.ITEM_MAGNET_DISABLED, !enabled)
 
     fun stackBlocked(stack: ItemStack): BlockedReason? =
-      stack.orCreateNbt.optString("blocked_reason")
+      stack.get(Registration.ModComponents.ITEM_MAGNET_BLOCKED_REASON)
         ?.let { BlockedReason.valueOf(it) }
 
     fun setStackBlocked(stack: ItemStack, blocked: BlockedReason?) {
-      stack.orCreateNbt.apply {
-        remove("blocked") // remove legacy boolean key
-
+      stack.apply {
         if (blocked == null) {
-          remove("blocked_reason")
+          remove(Registration.ModComponents.ITEM_MAGNET_BLOCKED_REASON)
         } else {
-          putOptString("blocked_reason", blocked.name)
+          set(Registration.ModComponents.ITEM_MAGNET_BLOCKED_REASON, blocked.name)
         }
       }
     }

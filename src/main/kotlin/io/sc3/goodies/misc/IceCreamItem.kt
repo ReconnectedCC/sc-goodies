@@ -1,10 +1,10 @@
 package io.sc3.goodies.misc
 
 import net.minecraft.entity.LivingEntity
-import net.minecraft.item.FoodComponent
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import io.sc3.goodies.util.BaseItem
+import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
 
@@ -27,7 +27,7 @@ class IceCreamItem(settings: Settings) : BaseItem(settings) {
 
   companion object {
     val foodComponent: FoodComponent = FoodComponent.Builder()
-      .hunger(4)
+      .nutrition(4)
       .saturationModifier(5.0f)
       .alwaysEdible()
       .build()

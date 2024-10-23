@@ -38,7 +38,7 @@ object EnderStorageProvider {
     }
 
     state = server.overworld.persistentStateManager.getOrCreate(
-      PersistentState.Type(this::createState, { nbt -> EnderStorageState.fromNbt(server, nbt) }, DataFixTypes.LEVEL),
+      PersistentState.Type(this::createState, { nbt, _ -> EnderStorageState.fromNbt(server, nbt) }, DataFixTypes.LEVEL),
       "$modId-ender-storage"
     )
 

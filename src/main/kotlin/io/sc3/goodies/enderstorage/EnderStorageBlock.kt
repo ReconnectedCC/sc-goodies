@@ -1,6 +1,7 @@
 package io.sc3.goodies.enderstorage
 
 import com.mojang.serialization.MapCodec
+import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModBlockEntities
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.ScGoodies.checkTypeForTicker
@@ -20,16 +21,13 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.BlockItem
-import net.minecraft.item.DyeItem
-import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
+import net.minecraft.item.*
 import net.minecraft.item.Items.DIAMOND
 import net.minecraft.item.Items.EMERALD
 import net.minecraft.screen.ScreenHandler
@@ -119,15 +117,19 @@ class EnderStorageBlock(
     return stack
   }
 
-  @Deprecated("Deprecated in Java")
-  override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,
-                     hit: BlockHitResult): ActionResult {
+  override fun onUse(
+    state: BlockState,
+    world: World,
+    pos: BlockPos,
+    player: PlayerEntity,
+    hit: BlockHitResult
+  ): ActionResult {
     if (world.isClient) return ActionResult.SUCCESS
 
     val be = world.getBlockEntity(pos) as? EnderStorageBlockEntity ?: return ActionResult.FAIL
     val frequency = be.frequency
 
-    val stack = player.getStackInHand(hand)
+    val stack = player.getStackInHand(player.activeHand)
     val hitShape = checkHitShape(state, pos, hit)
 
     when (hitShape?.type) {
@@ -287,7 +289,7 @@ class EnderStorageBlock(
   override fun rotate(state: BlockState, rotation: BlockRotation): BlockState =
     state.with(facing, rotation.rotate(state.get(facing)))
 
-  override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) =
+  override fun canPathfindThrough(state: BlockState?, type: NavigationType?): Boolean =
     false
 
   override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
@@ -302,28 +304,29 @@ class EnderStorageBlock(
     return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos)
   }
 
-  override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: Item.TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
+    val frequency = stack.get(Registration.ModComponents.FREQUENCY);
     // Add the NBT data prior to the description lines
-    val nbt = BlockItem.getBlockEntityNbt(stack)
-    if (nbt != null) {
-      if (nbt.contains(NBT_FREQUENCY, COMPOUND)) {
-        val frequency = Frequency.fromNbt(nbt.getCompound(NBT_FREQUENCY))
+    if (frequency != null) {
+      // Frequency: White, White, White
+      tooltip.add(frequency.toText())
 
-        // Frequency: White, White, White
-        tooltip.add(frequency.toText())
-
-        // Public, or Owner: <name>
-        if (frequency.personal) {
-          tooltip.add(translatable("$translationKey.owner_name", frequency.ownerName ?: "Unknown"))
-        } else if (nbt.getBoolean(NBT_TEMP_CRAFTING_PERSONAL) && world is ClientWorld) {
-          // Add the local player's name if this is the temporary crafting stage (hovering over the result item in the
-          // workbench, for a chest that was personal)
-          MinecraftClient.getInstance().player?.let { player ->
-            tooltip.add(translatable("$translationKey.owner_name", player.gameProfile.name))
-          }
-        } else {
-          tooltip.add(translatable("$translationKey.public"))
+      // Public, or Owner: <name>
+      if (frequency.personal) {
+        tooltip.add(translatable("$translationKey.owner_name", frequency.ownerName ?: "Unknown"))
+      } else if (stack.get(Registration.ModComponents.TEMP_CRAFTING_PERSONAL) == true/* && world is ClientWorld*/) { // TODO: appendtooltip is only ran in the client side iirc
+        // Add the local player's name if this is the temporary crafting stage (hovering over the result item in the
+        // workbench, for a chest that was personal)
+        MinecraftClient.getInstance().player?.let { player ->
+          tooltip.add(translatable("$translationKey.owner_name", player.gameProfile.name))
         }
+      } else {
+        tooltip.add(translatable("$translationKey.public"))
       }
     }
 
@@ -339,10 +342,6 @@ class EnderStorageBlock(
   }
 
   companion object {
-    const val NBT_FREQUENCY = "frequency"
-    const val NBT_COMPUTER_CHANGES_ENABLED = "computerChangesEnabled"
-    const val NBT_TEMP_CRAFTING_PERSONAL = "tempCraftingPersonal"
-
     val facing: DirectionProperty = HorizontalFacingBlock.FACING
 
     private val chestShape = createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)

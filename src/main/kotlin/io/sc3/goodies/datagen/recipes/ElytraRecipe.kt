@@ -29,7 +29,7 @@ class ElytraRecipe(
       if (stack.isIn(ScGoodiesItemTags.ELYTRA)) {
         // Copy the NBT from the old elytra, this will copy damage, custom name, and enchantments
         val out = output.copy()
-        out.nbt = stack.nbt?.copy()
+        out.applyComponentsFrom(stack.components)
         return out
       }
     }
@@ -57,6 +57,5 @@ object ElytraRecipeSerializer : RecipeSerializer<ElytraRecipe> {
       ).apply(instance, ::ElytraRecipe)
     }
   }
-  override fun read(buf: PacketByteBuf): ElytraRecipe = make(ShapelessRecipeSpec.ofPacket(buf))
-  override fun write(buf: PacketByteBuf, recipe: ElytraRecipe) = ShapelessRecipeSpec.ofRecipe(recipe).write(buf)
+  
 }

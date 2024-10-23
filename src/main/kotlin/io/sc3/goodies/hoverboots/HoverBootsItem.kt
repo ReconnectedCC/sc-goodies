@@ -3,7 +3,6 @@ package io.sc3.goodies.hoverboots
 import dev.emi.trinkets.api.SlotReference
 import dev.emi.trinkets.api.TrinketItem
 import dev.emi.trinkets.api.TrinketsApi
-import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
@@ -11,6 +10,7 @@ import net.minecraft.util.DyeColor
 import net.minecraft.world.World
 import io.sc3.goodies.ScGoodies.modId
 import io.sc3.library.Tooltips.addDescLines
+import net.minecraft.client.item.TooltipType
 
 class HoverBootsItem(
   val color: DyeColor,
@@ -18,8 +18,13 @@ class HoverBootsItem(
 ) : TrinketItem(settings) {
   override fun getTranslationKey() = "item.$modId.hover_boots"
 
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-    super.appendTooltip(stack, world, tooltip, context)
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
+    super.appendTooltip(stack, context,tooltip, type)
     addDescLines(tooltip, getTranslationKey(stack))
   }
 

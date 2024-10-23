@@ -7,19 +7,20 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.stat.Stats
 import net.minecraft.util.ActionResult
+import net.minecraft.util.ItemActionResult
 
 object ElytraCauldronBehavior {
   private val cleanElytra = CauldronBehavior { state, world, pos, player, hand, stack ->
     if (!world.isClient) {
       val resultStack = ItemStack(Items.ELYTRA)
-      resultStack.nbt = stack.nbt?.copy() // Will copy the damage across
 
+      resultStack.applyComponentsFrom(stack.components)
       player.setStackInHand(hand, resultStack)
       player.incrementStat(Stats.CLEAN_ARMOR)
       LeveledCauldronBlock.decrementFluidLevel(state, world, pos)
     }
 
-    ActionResult.success(world.isClient)
+    ItemActionResult.success(world.isClient)
   }
 
   internal fun registerBehavior() {

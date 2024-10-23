@@ -25,6 +25,7 @@ import net.minecraft.item.FilledMapItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ShieldItem
 import net.minecraft.text.Text
+import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.RotationAxis
@@ -91,8 +92,8 @@ class GlassItemFrameEntityRenderer(
                               light: Int, stack: ItemStack) {
     matrices.push()
 
-    val mapId = entity.mapId
-    val mapState = if (mapId.isPresent) FilledMapItem.getMapState(mapId.asInt, entity.world) else null
+    val mapId = entity.mapId;
+    val mapState = if (entity.containsMap()) FilledMapItem.getMapState(mapId, entity.world) else null
     val rotation = if (mapState != null) entity.rotation % 4 * 2 else entity.rotation
     matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation * 360.0f / 8.0f))
 
@@ -111,26 +112,27 @@ class GlassItemFrameEntityRenderer(
       return
     }
 
-    if (mapId.isPresent) {
+    if (entity.containsMap()) {
       matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f))
       matrices.scale(0.0078125f, 0.0078125f, 0.0078125f)
       matrices.translate(-64.0, -64.0, 0.0)
       matrices.translate(0.0, 0.0, -1.0)
 
       if (mapState != null) {
-        mapRenderer.draw(matrices, consumers, mapId.asInt, mapState, true, light)
+        mapRenderer.draw(matrices, consumers, mapId, mapState, true, light)
       }
     } else {
       var scale = ITEM_RENDER_SCALE
       if (stack.item is BannerItem) {
-        bannerEntity.readFrom(stack)
+        val color: DyeColor = (stack.item as BannerItem).color;
+        bannerEntity.readFrom(stack, color)
         val patterns = bannerEntity.patterns
 
         matrices.push()
         matrices.translate(0.0001f, -0.5001f, 0.05f)
         matrices.scale(0.799999f, 0.399999f, 0.5f)
         BannerBlockEntityRenderer.renderCanvas(matrices, consumers, light, DEFAULT_UV, bannerModel,
-          ModelLoader.BANNER_BASE, true, patterns)
+          ModelLoader.BANNER_BASE, true, color, patterns)
         matrices.pop()
       } else {
         if (stack.item is ShieldItem) {
@@ -160,7 +162,7 @@ class GlassItemFrameEntityRenderer(
   override fun hasLabel(entity: GlassItemFrameEntity) =
     if (MinecraftClient.isHudEnabled()
       && !entity.heldItemStack.isEmpty
-      && entity.heldItemStack.hasCustomName()
+      && entity.heldItemStack.getName().string.isNotEmpty()
       && dispatcher.targetedEntity === entity
     ) {
       val d = dispatcher.getSquaredDistanceToCamera(entity)
@@ -170,9 +172,15 @@ class GlassItemFrameEntityRenderer(
       false
     }
 
-  override fun renderLabelIfPresent(entity: GlassItemFrameEntity, text: Text, matrices: MatrixStack,
-                                    consumers: VertexConsumerProvider, light: Int) {
-    super.renderLabelIfPresent(entity, entity.heldItemStack.name, matrices, consumers, light)
+  override fun renderLabelIfPresent(
+    entity: GlassItemFrameEntity?,
+    text: Text?,
+    matrices: MatrixStack?,
+    consumers: VertexConsumerProvider?,
+    light: Int,
+    tickDelta: Float
+  ) {
+    super.renderLabelIfPresent(entity, entity!!.heldItemStack.name, matrices, consumers, light, tickDelta)
   }
 
   companion object {

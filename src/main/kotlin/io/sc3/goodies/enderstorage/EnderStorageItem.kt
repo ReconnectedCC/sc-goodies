@@ -1,7 +1,6 @@
 package io.sc3.goodies.enderstorage
 
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_TEMP_CRAFTING_PERSONAL
+import io.sc3.goodies.Registration
 import net.minecraft.block.Block
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.BlockItem
@@ -22,14 +21,12 @@ class EnderStorageItem(block: Block, settings: Settings) : BlockItem(block, sett
    * @see io.sc3.goodies.datagen.recipes.ModifiedEnderStorageRecipe
    */
   fun craft(stack: ItemStack, world: World, player: PlayerEntity?) {
-    val nbt = getBlockEntityNbt(stack) ?: return
-
-    val wasPersonal = nbt.getBoolean(NBT_TEMP_CRAFTING_PERSONAL)
-    if (wasPersonal && player != null) {
+    val wasPersonal = stack.get(Registration.ModComponents.TEMP_CRAFTING_PERSONAL)
+    if (wasPersonal == true && player != null) {
       val oldFrequency = Frequency.fromStack(stack) ?: Frequency()
       val frequency = oldFrequency.copy(owner = player.uuid, ownerName = player.gameProfile.name)
-      nbt.put(NBT_FREQUENCY, frequency.toNbt())
-      nbt.remove(NBT_TEMP_CRAFTING_PERSONAL)
+      stack.set(Registration.ModComponents.FREQUENCY, frequency)
+      stack.remove(Registration.ModComponents.TEMP_CRAFTING_PERSONAL)
     }
   }
 }

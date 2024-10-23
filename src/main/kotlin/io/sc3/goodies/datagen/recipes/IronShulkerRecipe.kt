@@ -1,6 +1,7 @@
 package io.sc3.goodies.datagen.recipes
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.ironstorage.IronShulkerBlock
 import io.sc3.goodies.ironstorage.IronShulkerItem
@@ -13,8 +14,10 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.RawShapedRecipe
 import net.minecraft.recipe.RecipeSerializer
+import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor
 
 class IronShulkerRecipe(
@@ -24,7 +27,7 @@ class IronShulkerRecipe(
   private val outputItem: ItemStack,
 ) : ExtendedShapedRecipe(group, category, rawShapedRecipe, outputItem) {
 
-  override fun craft(inventory: RecipeInputInventory, manager: DynamicRegistryManager): ItemStack {
+  override fun craft(inventory: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
     val shulkerStack = shulkerItem(inventory)
     // No shulker found - disallow craft
     if (shulkerStack.isEmpty) return ItemStack.EMPTY
@@ -34,7 +37,7 @@ class IronShulkerRecipe(
     val resultBlock = if (color != null) variant.dyedShulkerBlocks[color]!! else variant.shulkerBlock
 
     val result = ItemStack(resultBlock)
-    result.nbt = shulkerStack.nbt?.copy()
+    result.applyComponentsFrom(shulkerStack.components)
     return result
   }
 
@@ -72,16 +75,9 @@ object IronShulkerRecipeSerializer : RecipeSerializer<IronShulkerRecipe> {
   private fun make(spec: ShapedRecipeSpec) = IronShulkerRecipe(
     spec.group, spec.category, spec.rawShapedRecipe, spec.output
   )
-  override fun codec(): Codec<IronShulkerRecipe> {
-    return RecordCodecBuilder.create { instance ->
-      instance.group(
-        Codec.STRING.fieldOf("group").forGetter { r -> r.group },
-        CraftingRecipeCategory.CODEC.fieldOf("category").forGetter { r -> r.category },
-        RawShapedRecipe.CODEC.fieldOf("recipe").forGetter { r -> r.rawShapedRecipe },
-        ItemStack.CODEC.fieldOf("output").forGetter { z -> z.getResult(null) } /*TODO(Pretty damn sure getResult null will crash)*/,
-      ).apply(instance, ::IronShulkerRecipe)
-    }
+  override fun codec(): MapCodec<IronShulkerRecipe>? {
+    return ShapedRecipeSpec.codec(::IronShulkerRecipe);
   }
-  override fun read(buf: PacketByteBuf) = make(ShapedRecipeSpec.ofPacket(buf))
-  override fun write(buf: PacketByteBuf, recipe: IronShulkerRecipe) = ShapedRecipeSpec.ofRecipe(recipe).write(buf)
+  fun read(buf: PacketByteBuf) = make(ShapedRecipeSpec.ofPacket(buf))
+  fun write(buf: PacketByteBuf, recipe: IronShulkerRecipe) = ShapedRecipeSpec.ofRecipe(recipe).write(buf)
 }

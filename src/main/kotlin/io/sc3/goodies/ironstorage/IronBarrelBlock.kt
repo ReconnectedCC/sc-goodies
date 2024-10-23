@@ -8,9 +8,10 @@ import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.NamedScreenHandlerFactory
@@ -84,8 +85,13 @@ class IronBarrelBlock(
     IronBarrelBlockEntity.scheduledTick(world, pos)
   }
 
-  override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,
-                     hit: BlockHitResult): ActionResult {
+  override fun onUse(
+    state: BlockState,
+    world: World,
+    pos: BlockPos,
+    player: PlayerEntity,
+    hit: BlockHitResult
+  ): ActionResult {
     if (world.isClient) return ActionResult.SUCCESS
 
     val factory = createScreenHandlerFactory(state, world, pos) ?: return ActionResult.CONSUME
@@ -118,7 +124,12 @@ class IronBarrelBlock(
     return ScreenHandler.calculateComparatorOutput(be)
   }
 
-  override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: Item.TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
     // Don't call super, we don't want the default .desc implementation
     tooltip.add(
       Text.translatable("block.${ScGoodies.modId}.storage.desc", variant.size)

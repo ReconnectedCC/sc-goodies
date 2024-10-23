@@ -2,9 +2,6 @@ package io.sc3.goodies.datagen.recipes
 
 import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModItems
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_COMPUTER_CHANGES_ENABLED
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_TEMP_CRAFTING_PERSONAL
 import io.sc3.goodies.enderstorage.Frequency
 import io.sc3.library.recipe.itemDyeColor
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.DYES
@@ -19,6 +16,7 @@ import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.world.World
 
 class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraftingRecipe(category) {
@@ -95,15 +93,14 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
     return getDyes(inv) != null || personalState != PersonalState.NOT_PERSONAL
   }
 
-  override fun craft(inv: RecipeInputInventory, registryManager: DynamicRegistryManager): ItemStack {
+  override fun craft(inv: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
     val dyes = getDyes(inv)
     val enderStorage = getEnderStorage(inv) ?: return ItemStack.EMPTY
     val personalState = getPersonalState(inv) ?: return ItemStack.EMPTY
 
     val result = enderStorage.copyWithCount(1)
 
-    val nbt = BlockItem.getBlockEntityNbt(result) ?: NbtCompound()
-    val oldComputerChangesEnabled = nbt.getBoolean(NBT_COMPUTER_CHANGES_ENABLED)
+    val oldComputerChangesEnabled = result.get(Registration.ModComponents.COMPUTER_CHANGES_ENABLED) ?: false
     val oldFrequency = Frequency.fromStack(enderStorage) ?: Frequency()
 
     val frequency = oldFrequency.copy(
@@ -117,25 +114,21 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
       ownerName = null
     )
 
-    nbt.put(NBT_FREQUENCY, frequency.toNbt())
-
-    nbt.putBoolean(
-      NBT_COMPUTER_CHANGES_ENABLED,
+    result.set(Registration.ModComponents.FREQUENCY, frequency)
+    result.set(Registration.ModComponents.COMPUTER_CHANGES_ENABLED,
       if (oldComputerChangesEnabled && personalState == PersonalState.PERSONAL) {
         // If crafting an emerald chest with just a diamond, remove the emerald
         false
       } else {
         oldComputerChangesEnabled || personalState == PersonalState.ALLOW_COMPUTER_CHANGES
-      }
-    )
+      })
 
-    nbt.putBoolean(
-      NBT_TEMP_CRAFTING_PERSONAL, // Temp flag to check in EnderStorageItem.onCraft
+
+    result.set(
+      Registration.ModComponents.TEMP_CRAFTING_PERSONAL, // Temp flag to check in EnderStorageItem.onCraft
       oldFrequency.personal || personalState.isPersonal
     )
 
-    // Write the new NBT to the item
-    BlockItem.setBlockEntityNbt(result, Registration.ModBlockEntities.enderStorage, nbt)
     return result
   }
 

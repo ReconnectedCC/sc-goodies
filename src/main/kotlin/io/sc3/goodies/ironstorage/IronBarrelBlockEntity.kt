@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
@@ -52,16 +53,16 @@ class IronBarrelBlockEntity(
   override fun getContainerName(): Text =
     translatable("block.sc-goodies.${variant.shulkerId}")
 
-  override fun readNbt(nbt: NbtCompound) {
-    super.readNbt(nbt)
+  override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.readNbt(nbt, registryLookup)
     inv = DefaultedList.ofSize(variant.size, ItemStack.EMPTY)
     if (!super.readLootTable(nbt)) {
       Inventories.readNbt(nbt, inv)
     }
   }
 
-  override fun writeNbt(nbt: NbtCompound) {
-    super.writeNbt(nbt)
+  override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.writeNbt(nbt, registryLookup)
     if (!super.writeLootTable(nbt)) {
       Inventories.writeNbt(nbt, inv)
     }
@@ -70,9 +71,9 @@ class IronBarrelBlockEntity(
   override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory) =
     IronChestScreenHandler(variant, syncId, playerInventory, this)
 
-  override fun method_11282() = inv
+  override fun getHeldStacks() = inv
 
-  override fun setInvStackList(list: DefaultedList<ItemStack>) {
+  override fun setHeldStacks(list: DefaultedList<ItemStack>) {
     inv = list
   }
 

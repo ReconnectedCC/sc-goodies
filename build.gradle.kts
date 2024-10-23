@@ -6,7 +6,7 @@ plugins {
   kotlin("jvm").version(kotlinVersion)
   kotlin("plugin.serialization").version(kotlinVersion)
 
-  id("fabric-loom") version "1.6-SNAPSHOT"
+  id("fabric-loom") version "1.7-SNAPSHOT"
   id("maven-publish")
   id("signing")
   id("com.modrinth.minotaur") version "2.+"
@@ -102,7 +102,7 @@ repositories {
   maven("https://maven.ladysnake.org/releases") {
     // Cardinal Components API (dependency of Trinkets)
     content {
-      includeGroup("dev.onyxstudios.cardinal-components-api")
+      includeGroup("org.ladysnake.cardinal-components-api")
     }
   }
 
@@ -146,8 +146,8 @@ dependencies {
 
   modImplementation(include("me.lucko", "fabric-permissions-api", fabricPermissionsApiVersion))
 
-  modImplementation(include("dev.onyxstudios.cardinal-components-api", "cardinal-components-base", cardinalComponentsVersion))
-  modImplementation(include("dev.onyxstudios.cardinal-components-api", "cardinal-components-entity", cardinalComponentsVersion))
+  modImplementation(include("org.ladysnake.cardinal-components-api", "cardinal-components-base", cardinalComponentsVersion))
+  modImplementation(include("org.ladysnake.cardinal-components-api", "cardinal-components-entity", cardinalComponentsVersion))
 
   implementation("org.jetbrains", "annotations", annotationsVersion)
   implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", kotlinSerializationVersion)

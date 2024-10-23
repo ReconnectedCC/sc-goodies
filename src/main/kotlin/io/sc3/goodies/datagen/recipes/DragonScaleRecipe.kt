@@ -1,12 +1,12 @@
 package io.sc3.goodies.datagen.recipes
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.ScGoodiesItemTags
 import io.sc3.library.recipe.ShapelessRecipeSpec
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapelessRecipe
@@ -42,8 +42,8 @@ object DragonScaleRecipeSerializer : RecipeSerializer<DragonScaleRecipe> {
     spec.group, spec.category, spec.output, spec.input
   )
 
-  override fun codec(): Codec<DragonScaleRecipe> {
-    return RecordCodecBuilder.create { instance ->
+  override fun codec(): MapCodec<DragonScaleRecipe>? {
+    return RecordCodecBuilder.mapCodec { instance ->
       instance.group(
         Codec.STRING.fieldOf("group").forGetter { r -> r.group },
         CraftingRecipeCategory.CODEC.fieldOf("category").forGetter { r -> r.category },
@@ -56,6 +56,4 @@ object DragonScaleRecipeSerializer : RecipeSerializer<DragonScaleRecipe> {
     }
   }
 
-  override fun read(buf: PacketByteBuf): DragonScaleRecipe = make(ShapelessRecipeSpec.ofPacket(buf))
-  override fun write(buf: PacketByteBuf, recipe: DragonScaleRecipe) = ShapelessRecipeSpec.ofRecipe(recipe).write(buf)
 }

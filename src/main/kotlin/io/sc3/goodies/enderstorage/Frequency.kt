@@ -3,16 +3,14 @@ package io.sc3.goodies.enderstorage
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ScGoodies.modId
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
 import io.sc3.goodies.util.UuidSerializer
-import io.sc3.library.ext.optCompound
 import io.sc3.library.ext.putOptString
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
@@ -164,10 +162,7 @@ data class Frequency(
     fun fromKey(key: String) = json.decodeFromString<Frequency>(key)
 
     fun fromStack(stack: ItemStack): Frequency? {
-      // Get the frequency either from the item's direct NBT, or its BlockEntity NBT tag (creative pick)
-      val frequencyNbt = stack.getSubNbt(NBT_FREQUENCY)
-        ?: BlockItem.getBlockEntityNbt(stack)?.optCompound(NBT_FREQUENCY)
-      return fromNbt(frequencyNbt ?: return null)
+      return stack.get(Registration.ModComponents.FREQUENCY)
     }
   }
 }

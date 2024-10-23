@@ -4,6 +4,7 @@ import io.sc3.library.ext.optUuid
 import io.sc3.library.ext.putNullableUuid
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.Vec3d
@@ -33,9 +34,10 @@ class SeatEntity : Entity {
   /**
    * The player sitting pose is halfway through their height, so subtract a bit more to align them with the SeatEntity.
    */
+  /* TODO(this is really that needed?)
   override fun getRidingOffset(vehicle: Entity?): Float {
     return -0.3f
-  }
+  }*/
   
   override fun tick() {
     super.tick()
@@ -63,7 +65,7 @@ class SeatEntity : Entity {
     }
   }
 
-  override fun initDataTracker() {}
+  override fun initDataTracker(builder: DataTracker.Builder?) {}
 
   override fun readCustomDataFromNbt(nbt: NbtCompound) {
     ownerUuid = nbt.optUuid("Owner")

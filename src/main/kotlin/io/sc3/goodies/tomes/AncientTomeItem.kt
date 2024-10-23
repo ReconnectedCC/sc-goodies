@@ -1,7 +1,5 @@
 package io.sc3.goodies.tomes
 
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.enchantment.EnchantmentHelper.fromNbt
 import net.minecraft.enchantment.EnchantmentLevelEntry
 import net.minecraft.item.EnchantedBookItem
 import net.minecraft.item.ItemStack
@@ -10,13 +8,18 @@ import net.minecraft.util.Formatting.GRAY
 import net.minecraft.world.World
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.util.BaseItem
+import net.minecraft.client.item.TooltipType
 import net.minecraft.text.Text.translatable as trans
 
 class AncientTomeItem(settings: Settings) : BaseItem(settings) {
   override fun isEnchantable(stack: ItemStack) = false
   override fun hasGlint(stack: ItemStack) = true
-
-  override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
     val ench = stackEnchantment(stack)
     if (ench != null) {
       val lvl = ench.maxLevel + 1
@@ -25,7 +28,7 @@ class AncientTomeItem(settings: Settings) : BaseItem(settings) {
       tooltip.add(text)
     }
 
-    super.appendTooltip(stack, world, tooltip, context)
+    super.appendTooltip(stack, context, tooltip, type)
   }
 
   companion object {
