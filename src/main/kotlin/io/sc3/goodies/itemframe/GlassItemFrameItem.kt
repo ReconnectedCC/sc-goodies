@@ -30,11 +30,6 @@ class GlassItemFrameItem<T : AbstractDecorationEntity>(
     val world = ctx.world
     val entity = entityFactory.invoke(world, blockPos, facing)
 
-    val nbt = stack.nbt
-    if (nbt != null) {
-      EntityType.loadFromEntityNbt(world, player, entity, nbt)
-    }
-
     return if (entity.canStayAttached()) {
       if (!world.isClient) {
         entity.onPlace()

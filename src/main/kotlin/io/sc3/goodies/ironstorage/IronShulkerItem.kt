@@ -18,8 +18,8 @@ class IronShulkerItem(val block: IronShulkerBlock, settings: Settings) : BlockIt
     if (!nbt.contains("Items", LIST)) return
     val items = nbt.getList("Items", COMPOUND)
 
-    ItemUsage.spawnItemContents(entity, items.stream().map {
-      ItemStack.fromNbt(it as NbtCompound)
+    ItemUsage.spawnItemContents(entity, items.stream().map { ->
+      ItemStack.fromNbt(entity.registryManager, it as NbtCompound)
     })
   }
 }

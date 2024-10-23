@@ -3,6 +3,7 @@ package io.sc3.goodies.enderstorage
 import net.minecraft.SharedConstants
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.util.StringHelper
 
 const val MAX_NAME_LENGTH = 48
 const val MAX_DESCRIPTION_LENGTH = 512
@@ -46,6 +47,6 @@ data class FrequencyState(
     /** Strip invalid characters, but allow the section sign. If sc-networking is installed, this will also strip
      * private-use font characters, but let's allow the Krist symbol (U+E000) */
     private fun stripInvalidChars(s: String, allowNewlines: Boolean = false) =
-      s.filter { SharedConstants.isValidChar(it) || it == '§' || it == '\uE000' || (allowNewlines && it == '\n') }
+      s.filter { StringHelper.isValidChar(it) || it == '§' || it == '\uE000' || (allowNewlines && it == '\n') }
   }
 }

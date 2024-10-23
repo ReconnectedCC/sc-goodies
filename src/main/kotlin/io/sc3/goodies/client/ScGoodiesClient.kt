@@ -29,6 +29,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.client.render.RenderLayer
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
 import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.util.DyeColor
 import org.slf4j.LoggerFactory
@@ -86,7 +87,7 @@ object ScGoodiesClient : ClientModInitializer {
 
   private fun registerIronShulkerRenderer(variant: IronStorageVariant) {
     with(variant) {
-      BlockEntityRendererRegistry.register(shulkerBlockEntityType)
+      BlockEntityRendererFactories.register(shulkerBlockEntityType)
         { IronShulkerBlockEntityRenderer(variant) }
 
       BuiltinItemRendererRegistry.INSTANCE.register(shulkerBlock, IronShulkerItemRenderer(this, null))

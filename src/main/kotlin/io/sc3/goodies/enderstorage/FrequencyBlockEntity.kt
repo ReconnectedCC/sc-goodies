@@ -1,7 +1,6 @@
 package io.sc3.goodies.enderstorage
 
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_COMPUTER_CHANGES_ENABLED
-import io.sc3.goodies.enderstorage.EnderStorageBlock.Companion.NBT_FREQUENCY
+import io.sc3.goodies.Registration
 import io.sc3.goodies.util.BaseBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -10,6 +9,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.math.BlockPos
 
 abstract class FrequencyBlockEntity(
@@ -36,19 +36,19 @@ abstract class FrequencyBlockEntity(
       onUpdate()
     }
 
-  override fun readNbt(nbt: NbtCompound) {
-    super.readNbt(nbt)
-    frequency = Frequency.fromNbt(nbt.getCompound(NBT_FREQUENCY), world?.server)
-    computerChangesEnabled = nbt.getBoolean(NBT_COMPUTER_CHANGES_ENABLED)
+  override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.readNbt(nbt, registryLookup)
+    frequency = Frequency.fromNbt(nbt.getCompound("frequency"), world?.server)
+    computerChangesEnabled = nbt.getBoolean("computer_changes_enabled")
   }
 
-  override fun writeNbt(nbt: NbtCompound) {
-    super.writeNbt(nbt)
-    nbt.put(NBT_FREQUENCY, frequency.toNbt())
-    nbt.putBoolean(NBT_COMPUTER_CHANGES_ENABLED, computerChangesEnabled)
+  override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.readNbt(nbt, registryLookup)
+    nbt.put("frequency", frequency.toNbt())
+    nbt.putBoolean("computer_changes_enabled", computerChangesEnabled)
   }
 
-  override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
+  override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup): NbtCompound = createNbt(registryLookup)
 
   override fun toUpdatePacket(): Packet<ClientPlayPacketListener> =
     BlockEntityUpdateS2CPacket.create(this)

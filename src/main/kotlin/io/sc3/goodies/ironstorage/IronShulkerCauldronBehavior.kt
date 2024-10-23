@@ -4,6 +4,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.LeveledCauldronBlock
 import net.minecraft.block.cauldron.CauldronBehavior
 import net.minecraft.block.cauldron.CauldronBehavior.WATER_CAULDRON_BEHAVIOR
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.ItemStack
 import net.minecraft.stat.Stats
 import net.minecraft.util.ActionResult
@@ -16,7 +17,7 @@ object IronShulkerCauldronBehavior {
 
     if (!world.isClient) {
       val resultStack = ItemStack(block.variant.shulkerBlock)
-      resultStack.nbt = stack.nbt?.copy()
+      resultStack.applyComponentsFrom(stack.components)
 
       player.setStackInHand(hand, resultStack)
       player.incrementStat(Stats.CLEAN_SHULKER_BOX)

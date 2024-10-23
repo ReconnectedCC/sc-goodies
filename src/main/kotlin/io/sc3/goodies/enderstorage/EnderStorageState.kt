@@ -36,7 +36,7 @@ class EnderStorageState : PersistentState() {
         val freqNbt = nbt.getCompound(key)
 
         val inv = EnderStorageProvider.EnderStorageInventory(server)
-        Inventories.readNbt(freqNbt, inv.items) // Read the items
+        Inventories.readNbt(freqNbt, inv.items, server.registryManager) // Read the items
         state.inventories[frequency] = inv
         state.states[frequency] = FrequencyState.fromNbt(freqNbt) // Read the name and description
       }

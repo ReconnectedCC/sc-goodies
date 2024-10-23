@@ -1,5 +1,6 @@
 package io.sc3.goodies.datagen.recipes
 
+import com.jcraft.jogg.Packet
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -7,6 +8,10 @@ import io.sc3.goodies.ScGoodiesItemTags
 import io.sc3.library.recipe.ShapelessRecipeSpec
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapelessRecipe
@@ -42,18 +47,11 @@ object DragonScaleRecipeSerializer : RecipeSerializer<DragonScaleRecipe> {
     spec.group, spec.category, spec.output, spec.input
   )
 
-  override fun codec(): MapCodec<DragonScaleRecipe>? {
-    return RecordCodecBuilder.mapCodec { instance ->
-      instance.group(
-        Codec.STRING.fieldOf("group").forGetter { r -> r.group },
-        CraftingRecipeCategory.CODEC.fieldOf("category").forGetter { r -> r.category },
-        ItemStack.CODEC.fieldOf("output").forGetter { z -> z.getResult(null) }, /*TODO(Pretty damn sure getResult null will crash)*/
-        Ingredient.DISALLOW_EMPTY_CODEC.listOf()
-            .xmap({ i -> DefaultedList.copyOf(Ingredient.EMPTY, *i.toTypedArray())}, Function.identity())
-            .fieldOf("ingredient")
-            .forGetter { r -> r.ingredients },
-      ).apply(instance, ::DragonScaleRecipe)
-    }
+  override fun codec(): MapCodec<DragonScaleRecipe> {
+    return ShapelessRecipeSpec.codec(::DragonScaleRecipe)
   }
 
+  override fun packetCodec(): PacketCodec<RegistryByteBuf, DragonScaleRecipe> {
+    return ShapelessRecipeSpec.packetCodec(::DragonScaleRecipe)
+  }
 }

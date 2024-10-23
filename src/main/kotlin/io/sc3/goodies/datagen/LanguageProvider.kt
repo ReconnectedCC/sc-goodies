@@ -17,9 +17,11 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.block.Block
 import net.minecraft.item.Item
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor.*
+import java.util.concurrent.CompletableFuture
 
-class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
+class LanguageProvider(out: FabricDataOutput, idk: CompletableFuture<RegistryWrapper.WrapperLookup>) : FabricLanguageProvider(out, idk) {
   private val colorNames = mapOf(
     WHITE      to "White",
     ORANGE     to "Orange",
@@ -39,7 +41,7 @@ class LanguageProvider(out: FabricDataOutput) : FabricLanguageProvider(out) {
     BLACK      to "Black"
   )
 
-  override fun generateTranslations(builder: TranslationBuilder) {
+  override fun generateTranslations(registryLookup: RegistryWrapper.WrapperLookup, builder: TranslationBuilder) {
     builder.add("itemGroup.$modId.main", "SwitchCraft Goodies")
     builder.add("category.$modId", "SwitchCraft Goodies") // Keybind category
 

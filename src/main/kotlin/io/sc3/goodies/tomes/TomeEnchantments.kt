@@ -106,13 +106,15 @@ object TomeEnchantments {
     if (left.isEmpty || right.isEmpty) return true
 
     if (right.isOf(ModItems.ancientTome)) {
-      val tomeEnch = stackEnchantment(right)
-      val enchants = EnchantmentHelper.getEnchantments(left)
+      val tomeEnch = stackEnchantment(right) ?: return true
+      var enchants = EnchantmentHelper.getEnchantments(left)
       val matched = enchants.getLevel(tomeEnch) ?: return true
 
       if (matched <= tomeEnch.maxLevel) {
         val lvl = matched + 1
-        enchants[tomeEnch] = lvl
+        val b = ItemEnchantmentsComponent.Builder(enchants)
+        b.set(tomeEnch, lvl)
+        enchants = b.build()
 
         val cost = if (lvl > tomeEnch.maxLevel) UPGRADE_COST_MAXED else UPGRADE_COST
 
@@ -120,7 +122,7 @@ object TomeEnchantments {
         return false
       }
     } else if (right.isOf(ENCHANTED_BOOK)) {
-      val currentEnchants = EnchantmentHelper.getEnchantments(left)
+      var currentEnchants = EnchantmentHelper.getEnchantments(left)
       val newEnchants = EnchantmentHelper.getEnchantments(right)
 
       var isOver = false
@@ -134,16 +136,20 @@ object TomeEnchantments {
             isMatched = true
 
             // Remove incompatible enchantments from the target book
-            currentEnchants.entries.removeIf { (other) -> isIncompatible(other, ench) }
+            currentEnchants.enchantmentsMap.removeIf { (other) -> isIncompatible(other.value(), ench.value()) }
 
-            currentEnchants[ench.value()] = level
+            val b = ItemEnchantmentsComponent.Builder(currentEnchants)
+            b.set(ench.value(), EnchantmentHelper.getLevel(ench.value(), right))
+            currentEnchants = b.build()
           }
-        } else if (ench.isAcceptableItem(left)) {
+        } else if (ench.value().isAcceptableItem(left)) {
           // Don't apply incompatible enchantments to the target item
-          val incompatible = currentEnchants.entries.any { (other) -> isIncompatible(other, ench) }
+          val incompatible = currentEnchants.enchantmentsMap.any { (other) -> isIncompatible(other.value(), ench.value()) }
 
           if (!incompatible) {
-            currentEnchants[ench] = level
+            val b = ItemEnchantmentsComponent.Builder(currentEnchants)
+            b.set(ench.value(), EnchantmentHelper.getLevel(ench.value(), right))
+            currentEnchants = b.build()
           }
         }
       }

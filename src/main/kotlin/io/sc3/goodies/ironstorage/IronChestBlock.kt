@@ -10,9 +10,13 @@ import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.item.TooltipType
+import net.minecraft.component.ComponentMap
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.NamedScreenHandlerFactory
@@ -58,9 +62,14 @@ class IronChestBlock(
     .with(waterlogged, placementWaterlogged(ctx))
 
   override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
-    if (stack.hasCustomName()) {
+    if (stack.get(DataComponentTypes.CUSTOM_NAME) != null) {
       val be = world.getBlockEntity(pos) as? IronChestBlockEntity ?: return
-      be.customName = stack.name
+      val components = be.components
+      be.components = ComponentMap.builder()
+        .addAll(components)
+        .add(DataComponentTypes.CUSTOM_NAME, stack.name)
+        .build()
+
     }
   }
 
@@ -138,7 +147,7 @@ class IronChestBlock(
   override fun rotate(state: BlockState, rotation: BlockRotation): BlockState =
     state.with(facing, rotation.rotate(state.get(facing)))
 
-  override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) =
+  override fun canPathfindThrough(state: BlockState, type: NavigationType): Boolean =
     false
 
   override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
@@ -153,7 +162,12 @@ class IronChestBlock(
     return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos)
   }
 
-  override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {
+  override fun appendTooltip(
+    stack: ItemStack,
+    context: Item.TooltipContext,
+    tooltip: MutableList<Text>,
+    type: TooltipType
+  ) {
     // Don't call super, we don't want the default .desc implementation
     tooltip.add(translatable("block.$modId.storage.desc", variant.size)
       .formatted(Formatting.GRAY))

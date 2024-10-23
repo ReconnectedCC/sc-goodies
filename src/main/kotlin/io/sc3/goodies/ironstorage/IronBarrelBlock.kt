@@ -9,6 +9,8 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.item.TooltipType
+import net.minecraft.component.ComponentMap
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -50,9 +52,14 @@ class IronBarrelBlock(
     .with(facing, ctx.playerLookDirection.opposite)
 
   override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
-    if (stack.hasCustomName()) {
+    if (stack.get(DataComponentTypes.CUSTOM_NAME) != null) {
       val be = world.getBlockEntity(pos) as? IronBarrelBlockEntity ?: return
-      be.customName = stack.name
+      val components = be.components
+      be.components = ComponentMap.builder()
+        .addAll(components)
+        .add(DataComponentTypes.CUSTOM_NAME, stack.name)
+        .build()
+
     }
   }
 

@@ -57,14 +57,14 @@ class IronBarrelBlockEntity(
     super.readNbt(nbt, registryLookup)
     inv = DefaultedList.ofSize(variant.size, ItemStack.EMPTY)
     if (!super.readLootTable(nbt)) {
-      Inventories.readNbt(nbt, inv)
+      Inventories.readNbt(nbt, inv, registryLookup)
     }
   }
 
   override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
     super.writeNbt(nbt, registryLookup)
     if (!super.writeLootTable(nbt)) {
-      Inventories.writeNbt(nbt, inv)
+      Inventories.writeNbt(nbt, inv, registryLookup)
     }
   }
 

@@ -101,7 +101,7 @@ class EnderStorageBlock(
 
     if (!world.isClient && !player.isCreative) {
       val stack = ItemStack(ModItems.enderStorage)
-      be.setStackNbt(stack)
+      be.setStackNbt(stack, world.registryManager)
 
       val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
       itemEntity.setToDefaultPickupDelay()
@@ -113,7 +113,7 @@ class EnderStorageBlock(
 
   override fun getPickStack(world: WorldView, pos: BlockPos?, state: BlockState?): ItemStack? {
     val stack = super.getPickStack(world, pos, state)
-    world.getBlockEntity(pos, ModBlockEntities.enderStorage).ifPresent { it.setStackNbt(stack) }
+    world.getBlockEntity(pos, ModBlockEntities.enderStorage).ifPresent { it.setStackNbt(stack, world.registryManager) }
     return stack
   }
 

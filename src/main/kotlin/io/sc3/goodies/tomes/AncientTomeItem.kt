@@ -1,15 +1,17 @@
 package io.sc3.goodies.tomes
 
-import net.minecraft.enchantment.EnchantmentLevelEntry
-import net.minecraft.item.EnchantedBookItem
-import net.minecraft.item.ItemStack
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting.GRAY
-import net.minecraft.world.World
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.util.BaseItem
 import net.minecraft.client.item.TooltipType
+import net.minecraft.command.argument.ItemStackArgumentType.itemStack
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.ItemEnchantmentsComponent
+import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.item.ItemStack
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting.GRAY
 import net.minecraft.text.Text.translatable as trans
+
 
 class AncientTomeItem(settings: Settings) : BaseItem(settings) {
   override fun isEnchantable(stack: ItemStack) = false
@@ -32,11 +34,15 @@ class AncientTomeItem(settings: Settings) : BaseItem(settings) {
   }
 
   companion object {
-    fun stackEnchantment(stack: ItemStack) =
-      EnchantedBookItem.getEnchantmentNbt(stack)?.let { fromNbt(it) }?.keys?.firstOrNull()
+    fun stackEnchantment(stack: ItemStack)
+      = stack.get(DataComponentTypes.STORED_ENCHANTMENTS)?.enchantments?.firstOrNull()?.value()
 
     fun getTomeStacks(): List<ItemStack> =
       TomeEnchantments.validEnchantments.map { ench -> ItemStack(ModItems.ancientTome)
-        .also { EnchantedBookItem.addEnchantment(it, EnchantmentLevelEntry(ench, ench.maxLevel)) } }
+        .also {
+          val b = ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT)
+          b.add(ench, ench.maxLevel)
+          it.set(DataComponentTypes.STORED_ENCHANTMENTS, b.build())
+        } }
   }
 }

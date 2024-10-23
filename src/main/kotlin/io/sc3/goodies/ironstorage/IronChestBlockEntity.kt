@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.sound.SoundEvents.BLOCK_CHEST_CLOSE
 import net.minecraft.sound.SoundEvents.BLOCK_CHEST_OPEN
 import net.minecraft.text.Text
@@ -53,18 +54,18 @@ class IronChestBlockEntity(
   override fun getContainerName(): Text =
     translatable("block.sc-goodies.${variant.chestId}")
 
-  override fun readNbt(nbt: NbtCompound) {
-    super.readNbt(nbt)
+  override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.readNbt(nbt, registryLookup)
     inv = DefaultedList.ofSize(variant.size, ItemStack.EMPTY)
     if (!super.readLootTable(nbt)) {
-      Inventories.readNbt(nbt, inv)
+      Inventories.readNbt(nbt, inv, registryLookup)
     }
   }
 
-  override fun writeNbt(nbt: NbtCompound) {
-    super.writeNbt(nbt)
+  override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.writeNbt(nbt, registryLookup)
     if (!super.writeLootTable(nbt)) {
-      Inventories.writeNbt(nbt, inv)
+      Inventories.writeNbt(nbt, inv, registryLookup)
     }
   }
 

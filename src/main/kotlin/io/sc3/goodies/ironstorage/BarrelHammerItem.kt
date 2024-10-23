@@ -5,6 +5,7 @@ import net.minecraft.advancement.criterion.Criteria
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.entity.LootableContainerBlockEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
@@ -46,7 +47,7 @@ class BarrelHammerItem(settings: Settings) : BaseItem(settings) {
 
     if (player != null) {
       world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 0.65f, 0.8f)
-      stack.damage(1, player) { p -> p.sendToolBreakStatus(ctx.hand) }
+      stack.damage(1, ctx.player, PlayerEntity.getSlotForHand(ctx.hand))
     }
 
     return ActionResult.success(world.isClient)

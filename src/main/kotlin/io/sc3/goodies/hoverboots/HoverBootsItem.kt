@@ -7,10 +7,11 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.util.DyeColor
-import net.minecraft.world.World
 import io.sc3.goodies.ScGoodies.modId
 import io.sc3.library.Tooltips.addDescLines
 import net.minecraft.client.item.TooltipType
+import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.attribute.EntityAttributes
 
 class HoverBootsItem(
   val color: DyeColor,

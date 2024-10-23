@@ -15,6 +15,7 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.sound.SoundEvents.BLOCK_SHULKER_BOX_CLOSE
 import net.minecraft.sound.SoundEvents.BLOCK_SHULKER_BOX_OPEN
 import net.minecraft.text.Text
@@ -51,18 +52,18 @@ class IronShulkerBlockEntity(
 
   override fun getContainerName(): Text = translatable(cachedState.block.translationKey)
 
-  override fun readNbt(nbt: NbtCompound) {
-    super.readNbt(nbt)
+  override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.readNbt(nbt, registryLookup)
     inv = DefaultedList.ofSize(variant.size, ItemStack.EMPTY)
     if (!super.readLootTable(nbt)) {
-      Inventories.readNbt(nbt, inv)
+      Inventories.readNbt(nbt, inv, registryLookup)
     }
   }
 
-  override fun writeNbt(nbt: NbtCompound) {
-    super.writeNbt(nbt)
+  override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    super.writeNbt(nbt, registryLookup)
     if (!super.writeLootTable(nbt)) {
-      Inventories.writeNbt(nbt, inv)
+      Inventories.writeNbt(nbt, inv, registryLookup)
     }
   }
 
@@ -104,7 +105,7 @@ class IronShulkerBlockEntity(
   fun getAnimationProgress(delta: Float) = MathHelper.lerp(delta, prevAnimationProgress, animationProgress)
 
   fun getBoundingBox(state: BlockState): Box =
-    calculateBoundingBox(state.get(facing), 0.5f * getAnimationProgress(1.0f))
+    calculateBoundingBox(1.0f, state.get(facing), 0.5f * getAnimationProgress(1.0f))
 
   override fun onSyncedBlockEvent(type: Int, data: Int): Boolean = when (type) {
     1 -> {

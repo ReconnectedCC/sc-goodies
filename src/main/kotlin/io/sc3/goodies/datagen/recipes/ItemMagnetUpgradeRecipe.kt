@@ -1,5 +1,6 @@
 package io.sc3.goodies.datagen.recipes
 
+import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.itemmagnet.ItemMagnetItem
 import net.minecraft.inventory.RecipeInputInventory
@@ -26,7 +27,7 @@ class ItemMagnetUpgradeRecipe(
   )
 ) {
   override fun craft(inv: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
-    val output = getResult(manager)
+    val output = getResult(lookup)
 
     for (i in 0 until inv.size()) {
       val stack: ItemStack = inv.getStack(i)
@@ -43,8 +44,7 @@ class ItemMagnetUpgradeRecipe(
       if (oldRadius == newRadius) return ItemStack.EMPTY
 
       // Increment the level by updating the NBT of the result item
-      val tag = result.orCreateNbt
-      tag.putInt("level", oldLevel + 1)
+      result.set(Registration.ModComponents.ITEM_MAGNET_LEVEL, oldLevel+1)
       return result
     }
 

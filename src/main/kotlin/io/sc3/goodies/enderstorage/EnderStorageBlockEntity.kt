@@ -22,7 +22,7 @@ import net.minecraft.world.World
 class EnderStorageBlockEntity(
   pos: BlockPos,
   state: BlockState,
-) : FrequencyBlockEntity(ModBlockEntities.enderStorage, pos, state), LidOpenable, ExtendedScreenHandlerFactory,
+) : FrequencyBlockEntity(ModBlockEntities.enderStorage, pos, state), LidOpenable, ExtendedScreenHandlerFactory<EnderStorageBlockEntity.ScreenData>,
   Inventory {
   private val lidAnimator = ChestLidAnimator()
 
@@ -87,11 +87,8 @@ class EnderStorageBlockEntity(
   }
 
   override fun getDisplayName(): Text = cachedState.block.name
-
-  override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-    buf.writeBlockPos(pos)
-    frequency.toPacket(buf)
-    frequencyState.toPacket(buf)
+  override fun getScreenOpeningData(player: ServerPlayerEntity): ScreenData {
+    return ScreenData(pos, frequency, frequencyState)
   }
 
   fun removeViewer(player: PlayerEntity) {
@@ -160,4 +157,5 @@ class EnderStorageBlockEntity(
       }
     }
   }
+  class ScreenData(val pos: BlockPos, val frequency: Frequency, val frequencyState: FrequencyState) {}
 }

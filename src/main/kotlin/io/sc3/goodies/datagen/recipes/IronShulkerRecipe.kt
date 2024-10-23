@@ -12,6 +12,8 @@ import net.minecraft.block.ShulkerBoxBlock
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.recipe.RawShapedRecipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
@@ -72,12 +74,11 @@ class IronShulkerRecipe(
 }
 
 object IronShulkerRecipeSerializer : RecipeSerializer<IronShulkerRecipe> {
-  private fun make(spec: ShapedRecipeSpec) = IronShulkerRecipe(
-    spec.group, spec.category, spec.rawShapedRecipe, spec.output
-  )
-  override fun codec(): MapCodec<IronShulkerRecipe>? {
+  override fun codec(): MapCodec<IronShulkerRecipe> {
     return ShapedRecipeSpec.codec(::IronShulkerRecipe);
   }
-  fun read(buf: PacketByteBuf) = make(ShapedRecipeSpec.ofPacket(buf))
-  fun write(buf: PacketByteBuf, recipe: IronShulkerRecipe) = ShapedRecipeSpec.ofRecipe(recipe).write(buf)
+
+  override fun packetCodec(): PacketCodec<RegistryByteBuf, IronShulkerRecipe> {
+    return ShapedRecipeSpec.packetCodec(::IronShulkerRecipe)
+  }
 }

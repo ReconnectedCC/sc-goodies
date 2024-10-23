@@ -6,11 +6,11 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.packet.CustomPayload
 
 class ToggleItemMagnetPacket(override val payload: CustomPayload) : ScLibraryPacket() {
-  override val id = ToggleItemMagnetPacket.id
+  override val id: CustomPayload.Id<CustomPayload> = ToggleItemMagnetPacket.id
 
   companion object {
-    val id = CustomPayload.id<CustomPayload>("toggle_item_magnet")
-    fun fromBytes(buf: PacketByteBuf): ToggleItemMagnetPacket {
+    val id: CustomPayload.Id<CustomPayload> = CustomPayload.id<CustomPayload>("toggle_item_magnet")
+    fun fromBytes(payload: CustomPayload): ToggleItemMagnetPacket {
       return ToggleItemMagnetPacket(payload)
     }
   }

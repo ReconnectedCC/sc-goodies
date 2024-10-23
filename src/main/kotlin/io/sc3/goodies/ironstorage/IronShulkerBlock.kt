@@ -13,6 +13,8 @@ import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.ShulkerBoxBlockEntity.AnimationStage.CLOSED
 import net.minecraft.client.item.TooltipType
+import net.minecraft.component.ComponentMap
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ShulkerEntity
@@ -68,9 +70,14 @@ class IronShulkerBlock(
     IronShulkerBlockEntity(variant, pos, state)
 
   override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
-    if (stack.hasCustomName()) {
+    if (stack.get(DataComponentTypes.CUSTOM_NAME) != null) {
       val be = world.getBlockEntity(pos) as? IronShulkerBlockEntity ?: return
-      be.customName = stack.name
+      val components = be.components
+      be.components = ComponentMap.builder()
+        .addAll(components)
+        .add(DataComponentTypes.CUSTOM_NAME, stack.name)
+        .build()
+
     }
   }
 
@@ -102,8 +109,8 @@ class IronShulkerBlock(
 
     if (!world.isClient && player.isCreative && !be.isEmpty) {
       val stack = getItemStack(variant, color)
-      be.setStackNbt(stack)
-      if (be.hasCustomName()) stack.setCustomName(be.customName)
+      be.setStackNbt(stack, world.registryManager)
+      if (be.hasCustomName()) stack.set(DataComponentTypes.CUSTOM_NAME, be.customName)
 
       val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
       itemEntity.setToDefaultPickupDelay()
@@ -130,7 +137,7 @@ class IronShulkerBlock(
 
   override fun getPickStack(world: WorldView, pos: BlockPos?, state: BlockState?): ItemStack? {
     val stack = super.getPickStack(world, pos, state)
-    world.getBlockEntity(pos, variant.shulkerBlockEntityType).ifPresent { it.setStackNbt(stack) }
+    world.getBlockEntity(pos, variant.shulkerBlockEntityType).ifPresent { it.setStackNbt(stack, world.registryManager) }
     return stack
   }
 
@@ -192,15 +199,13 @@ class IronShulkerBlock(
     tooltip.add(translatable("block.${ScGoodies.modId}.storage.desc", variant.size)
       .formatted(Formatting.GRAY))
 
-    val nbt = BlockItem.getBlockEntityNbt(stack) ?: return
-
-    if (nbt.contains("LootTable", STRING)) {
+    if (stack.components.get(DataComponentTypes.CONTAINER_LOOT) != null) {
       tooltip.add(Text.literal("???????"))
     }
 
-    if (nbt.contains("Items", LIST)) {
-      val inv = DefaultedList.ofSize(this.variant.size, ItemStack.EMPTY)
-      Inventories.readNbt(nbt, inv)
+    if (stack.components.get(DataComponentTypes.CONTAINER) != null) {
+      val containerComponent = stack.components.get(DataComponentTypes.CONTAINER) ?: return
+      val inv = containerComponent.iterateNonEmpty().toMutableList()
 
       var shownStacks = 0
       var stacks = 0
@@ -233,8 +238,7 @@ class IronShulkerBlock(
       if (be.animationStage != CLOSED) {
         true
       } else {
-        // TODO: the scale is probably wrong here, should be something like 1f? not sure
-        val box = ShulkerEntity.calculateBoundingBox(0.0f, state.get(facing), 0.5f).offset(pos).contract(1.0e-6)
+        val box = ShulkerEntity.calculateBoundingBox(1.0f, state.get(facing), 0.5f).offset(pos).contract(1.0e-6)
         world.isSpaceEmpty(box)
       }
 
