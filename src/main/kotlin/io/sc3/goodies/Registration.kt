@@ -512,7 +512,7 @@ object Registration {
 
   object ModScreens {
     val enderStorage: ScreenHandlerType<EnderStorageScreenHandler> =
-      register(SCREEN_HANDLER, ModId("ender_storage"), ExtendedScreenHandlerType(::EnderStorageScreenHandler))
+      register(SCREEN_HANDLER, ModId("ender_storage"), ExtendedScreenHandlerType(::EnderStorageScreenHandler, EnderStorageBlockEntity.ScreenData.PACKET_CODEC))
   }
 
   object ModEntities {

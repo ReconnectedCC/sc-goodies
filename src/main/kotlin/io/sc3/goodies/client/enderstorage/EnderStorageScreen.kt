@@ -29,8 +29,8 @@ class EnderStorageScreen(
     titleY = 23
     playerInventoryTitleY = MAIN_BG_HEIGHT - 94
 
-    val freq = handler.frequency
-    val state = handler.state
+    val freq = handler.screenData.frequency
+    val state = handler.screenData.frequencyState
 
     val name = state.name?.let { of(it) } ?: freq.ownerText
     val description = state.description?.let { of(it) } ?: of("")
@@ -67,7 +67,7 @@ class EnderStorageScreen(
   override fun drawForeground(ctx: DrawContext, mouseX: Int, mouseY: Int) {
     super.drawForeground(ctx, mouseX, mouseY)
 
-    val freq = handler.frequency
+    val freq = handler.screenData.frequency
 
     drawFrequencyWool(ctx, 0, freq.left)
     drawFrequencyWool(ctx, 1, freq.middle)

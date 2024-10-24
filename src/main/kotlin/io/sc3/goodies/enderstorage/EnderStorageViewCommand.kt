@@ -2,6 +2,7 @@ package io.sc3.goodies.enderstorage
 
 import com.mojang.brigadier.Command.SINGLE_SUCCESS
 import com.mojang.brigadier.context.CommandContext
+import io.sc3.goodies.enderstorage.EnderStorageBlockEntity.ScreenData
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -19,18 +20,15 @@ class EnderStorageViewCommand(target: EnderStorageTargetType) : EnderStorageBase
     val (inv, frequency) = getInventory(ctx)
     val (state) = getState(ctx)
 
-    player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+    player.openHandledScreen(object : ExtendedScreenHandlerFactory<EnderStorageBlockEntity.ScreenData> {
       // Don't add viewingPlayers here
       override fun createMenu(syncId: Int, playerInv: PlayerInventory, player: PlayerEntity): ScreenHandler {
-        return EnderStorageScreenHandler(syncId, playerInv, inv, BlockPos.ORIGIN, frequency, state)
+        return EnderStorageScreenHandler(syncId, playerInv, ScreenData(BlockPos.ORIGIN, frequency, state))
       }
 
       override fun getDisplayName(): Text = translatable(TL_KEY)
-
-      override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-        buf.writeBlockPos(BlockPos.ORIGIN)
-        frequency.toPacket(buf)
-        state.toPacket(buf)
+      override fun getScreenOpeningData(player: ServerPlayerEntity): ScreenData {
+        return ScreenData(BlockPos.ORIGIN, frequency, state)
       }
     })
 

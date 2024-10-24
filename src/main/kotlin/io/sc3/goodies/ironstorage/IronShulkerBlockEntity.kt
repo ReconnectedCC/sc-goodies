@@ -133,7 +133,7 @@ class IronShulkerBlockEntity(
     if (state.block !is IronShulkerBlock) return
 
     val direction = state.get(facing)
-    val box = calculateBoundingBox(direction, prevAnimationProgress, animationProgress).offset(pos)
+    val box = calculateBoundingBox(1.0f, direction, prevAnimationProgress, animationProgress).offset(pos)
 
     val list = world.getOtherEntities(null, box)
     if (list.isEmpty()) return

@@ -14,6 +14,9 @@ import kotlinx.serialization.json.Json
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.server.MinecraftServer
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
@@ -115,7 +118,9 @@ data class Frequency(
   fun getCodec(): MapCodec<Frequency> {
     return CODEC
   }
-
+  fun getPacketCodec(): PacketCodec<RegistryByteBuf, Frequency> {
+    return PACKET_CODEC
+  }
   companion object {
     val CODEC: MapCodec<Frequency> = RecordCodecBuilder.mapCodec { i ->
       i.group(
@@ -127,6 +132,16 @@ data class Frequency(
       ).apply(i, ::Frequency)
     }
 
+    val PACKET_CODEC: PacketCodec<RegistryByteBuf, Frequency> =
+      PacketCodec.tuple(
+        Uuids.PACKET_CODEC, Frequency::owner,
+        PacketCodecs.STRING, Frequency::ownerName,
+
+        DyeColor.PACKET_CODEC, Frequency::left,
+        DyeColor.PACKET_CODEC, Frequency::middle,
+        DyeColor.PACKET_CODEC, Frequency::right,
+        ::Frequency
+      )
     private val json = Json {
       ignoreUnknownKeys = true
     }

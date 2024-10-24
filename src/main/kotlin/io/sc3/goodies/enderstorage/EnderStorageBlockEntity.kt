@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -82,8 +83,10 @@ class EnderStorageBlockEntity(
 
   override fun createMenu(syncId: Int, playerInv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
     val inv = inv ?: return null
+    val data = ScreenData(pos, frequency, frequencyState)
+
     viewingPlayers.add(player)
-    return EnderStorageScreenHandler(syncId, playerInv, inv, pos, frequency, frequencyState)
+    return EnderStorageScreenHandler(syncId, inv, ScreenData(pos, frequency, frequencyState))
   }
 
   override fun getDisplayName(): Text = cachedState.block.name
@@ -98,7 +101,7 @@ class EnderStorageBlockEntity(
   private fun closeViewers() {
     val screensToClose = viewingPlayers.filter {
       val handler = it.currentScreenHandler as? EnderStorageScreenHandler ?: return@filter false
-      it.world == world && handler.pos == pos
+      it.world == world && handler.screenData.pos == pos
     }
 
     screensToClose.forEach {
@@ -157,5 +160,15 @@ class EnderStorageBlockEntity(
       }
     }
   }
-  class ScreenData(val pos: BlockPos, val frequency: Frequency, val frequencyState: FrequencyState) {}
+
+  class ScreenData(val pos: BlockPos, val frequency: Frequency, val frequencyState: FrequencyState) {
+    companion object {
+      val PACKET_CODEC = PacketCodec.tuple(
+        BlockPos.PACKET_CODEC, ScreenData::pos,
+        Frequency.PACKET_CODEC, ScreenData::frequency,
+        FrequencyState.PACKET_CODEC, ScreenData::frequencyState,
+        ::ScreenData
+      )
+    }
+  }
 }

@@ -6,6 +6,9 @@ import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
 import io.sc3.goodies.ScGoodies.modId
+import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.packet.CustomPayload
+import java.util.function.Function;
 
 object ItemMagnetHotkey {
   lateinit var toggleBinding: KeyBinding
@@ -20,7 +23,7 @@ object ItemMagnetHotkey {
 
     ClientTickEvents.END_CLIENT_TICK.register { client ->
       while (toggleBinding.wasPressed()) {
-        val packet = ToggleItemMagnetPacket().toC2SPacket()
+        val packet = ToggleItemMagnetPacket { ToggleItemMagnetPacket.id }.toC2SPacket()
         client.networkHandler?.sendPacket(packet)
       }
     }

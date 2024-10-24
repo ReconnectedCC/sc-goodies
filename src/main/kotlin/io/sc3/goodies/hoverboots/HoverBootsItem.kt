@@ -9,9 +9,14 @@ import net.minecraft.text.Text
 import net.minecraft.util.DyeColor
 import io.sc3.goodies.ScGoodies.modId
 import io.sc3.library.Tooltips.addDescLines
+import net.fabricmc.fabric.impl.`object`.builder.FabricEntityTypeImpl.Builder.Living
 import net.minecraft.client.item.TooltipType
+import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.entry.RegistryEntry
+import java.util.*
 
 class HoverBootsItem(
   val color: DyeColor,
@@ -38,12 +43,25 @@ class HoverBootsItem(
 
   override fun onEquip(stack: ItemStack, slot: SlotReference, entity: LivingEntity) {
     super.onEquip(stack, slot, entity)
-    entity.stepHeight = 1.0f
+    val uuid: UUID = UUID.fromString("c73b4792-b31e-4ab5-8b8b-5cfe9ab0496e")
+    val attributeInstance = entity.getAttributeInstance(EntityAttributes.GENERIC_STEP_HEIGHT) ?: return;
+    attributeInstance.removeModifier(uuid);
+    attributeInstance.addPersistentModifier(
+      EntityAttributeModifier(
+        uuid,
+        "hover_boots",
+        0.4,
+        EntityAttributeModifier.Operation.ADD_VALUE
+      )
+    )
+    //entity.stepHeight = 1.0f
   }
 
   override fun onUnequip(stack: ItemStack, slot: SlotReference, entity: LivingEntity) {
     super.onUnequip(stack, slot, entity)
-    entity.stepHeight = 0.5f
+    entity.getAttributeInstance(EntityAttributes.GENERIC_STEP_HEIGHT)
+      ?.removeModifier(UUID.fromString("c73b4792-b31e-4ab5-8b8b-5cfe9ab0496e"));
+    //entity.stepHeight = 0.5f
   }
 
   companion object {
