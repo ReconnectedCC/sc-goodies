@@ -17,7 +17,7 @@
               "source": "block_entity"
             },
             {
-              "function": "minecraft:copy_nbt",
+              "function": "minecraft:copy_custom_data",
               "ops": [
                 {
                   "op": "replace",
@@ -38,7 +38,7 @@
               "source": "block_entity"
             },
             {
-              "type": "sc-goodies:shulker_box_diamond",
+              "component": "minecraft:container",
               "entries": [
                 {
                   "type": "minecraft:dynamic",

@@ -43,6 +43,7 @@ import io.sc3.goodies.util.niceDyeOrder
 import io.sc3.library.networking.registerServerReceiver
 import io.sc3.library.recipe.RecipeHandler
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.fabricmc.fabric.api.registry.FlattenableBlockRegistry
@@ -129,6 +130,7 @@ object Registration {
     }
 
     // Item Magnets
+    PayloadTypeRegistry.playC2S().register(ToggleItemMagnetPacket.id, ToggleItemMagnetPacket.CODEC)
     registerServerReceiver(ToggleItemMagnetPacket.id, ToggleItemMagnetPacket::fromBytes)
 
     // Dyed + Special Elytra
@@ -191,6 +193,8 @@ object Registration {
     )
 
     RECIPE_HANDLERS.forEach(RecipeHandler::registerSerializers)
+    ModComponents
+
   }
 
   internal fun bootstrapFeatures(featureRegisterable: Registerable<ConfiguredFeature<*, *>>) {
@@ -322,6 +326,10 @@ object Registration {
       Identifier.of(ScGoodies.modId, "temp_crafting_personal"),
       DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
     );
+
+    init {
+      println("REGISTERING ALL CUSTOM SC-GOODIES COMPONENTS!!!")
+    }
   }
   object ModBlocks {
     val enderStorage = rBlock("ender_storage", EnderStorageBlock(AbstractBlock.Settings

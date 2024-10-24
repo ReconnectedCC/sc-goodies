@@ -19,7 +19,6 @@ import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting.*
 import net.minecraft.util.math.Box
 import net.minecraft.world.World
-import java.util.*
 import kotlin.math.absoluteValue
 
 private const val TICK_FREQ = 3
@@ -185,14 +184,16 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
       = (MIN_RANGE + level).coerceAtMost(MAX_RANGE)
     fun stackRadius(stack: ItemStack): Int = radius(stackLevel(stack))
 
-    fun stackEnabled(stack: ItemStack): Boolean =
-      !stack.get(Registration.ModComponents.ITEM_MAGNET_DISABLED)!!
+    fun stackEnabled(stack: ItemStack): Boolean {
+      val data = stack.get(Registration.ModComponents.ITEM_MAGNET_DISABLED)
+      return data ?: true
+    }
     fun setStackEnabled(stack: ItemStack, enabled: Boolean) =
       stack.set(Registration.ModComponents.ITEM_MAGNET_DISABLED, !enabled)
 
-    fun stackBlocked(stack: ItemStack): BlockedReason? =
-      stack.get(Registration.ModComponents.ITEM_MAGNET_BLOCKED_REASON)
-        ?.let { BlockedReason.valueOf(it) }
+    fun stackBlocked(stack: ItemStack): BlockedReason? {
+      return stack.get(Registration.ModComponents.ITEM_MAGNET_BLOCKED_REASON)?.let { BlockedReason.valueOf(it) }
+    }
 
     fun setStackBlocked(stack: ItemStack, blocked: BlockedReason?) {
       stack.apply {

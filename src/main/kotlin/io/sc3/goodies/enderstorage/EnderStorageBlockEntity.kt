@@ -86,7 +86,7 @@ class EnderStorageBlockEntity(
     val data = ScreenData(pos, frequency, frequencyState)
 
     viewingPlayers.add(player)
-    return EnderStorageScreenHandler(syncId, inv, ScreenData(pos, frequency, frequencyState))
+    return EnderStorageScreenHandler(syncId, playerInv, inv, data)
   }
 
   override fun getDisplayName(): Text = cachedState.block.name

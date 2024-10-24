@@ -11,6 +11,7 @@ import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting.GREEN
 import net.minecraft.util.Formatting.YELLOW
+import kotlin.jvm.optionals.getOrNull
 
 class EnderStorageNameCommand(
   target: EnderStorageTargetType,
@@ -37,14 +38,14 @@ class EnderStorageNameCommand(
           OWN -> base + translatable("$TL_KEY.cleared_name_own", *freqText)
           PUBLIC -> base + translatable("$TL_KEY.cleared_name_public", *freqText)
           PRIVATE -> base + translatable("$TL_KEY.cleared_name_private",
-            of(freq.ownerName ?: freq.owner?.toString() ?: "Unknown", YELLOW), *freqText)
+            of(freq.ownerName.getOrNull() ?: freq.owner.getOrNull()?.toString() ?: "Unknown", YELLOW), *freqText)
         }
       } else {
         when (target) {
           OWN -> base + translatable("$TL_KEY.changed_name_own", *freqText, nameText)
           PUBLIC -> base + translatable("$TL_KEY.changed_name_public", *freqText, nameText)
           PRIVATE -> base + translatable("$TL_KEY.changed_name_private",
-            of(freq.ownerName ?: freq.owner?.toString() ?: "Unknown", YELLOW), *freqText, nameText)
+            of(freq.ownerName.getOrNull() ?: freq.owner.getOrNull()?.toString() ?: "Unknown", YELLOW), *freqText, nameText)
         }
       }
     }, true)

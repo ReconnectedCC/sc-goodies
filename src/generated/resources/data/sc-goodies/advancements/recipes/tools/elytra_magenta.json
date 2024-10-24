@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "sc-goodies:elytra"
+            "items": "#sc-goodies:elytra"
           }
         ]
       },

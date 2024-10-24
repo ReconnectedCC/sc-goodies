@@ -1,16 +1,16 @@
 package io.sc3.goodies.enderstorage
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import com.google.gson.JsonSerializer
 import com.mojang.serialization.Codec
+import com.mojang.serialization.JsonOps
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ScGoodies.modId
-import io.sc3.goodies.util.UuidSerializer
-import io.sc3.library.ext.putOptString
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
@@ -23,28 +23,28 @@ import net.minecraft.text.Text.translatable
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Formatting
 import net.minecraft.util.Uuids
+import net.minecraft.util.math.BlockPos
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
-@Serializable
+
 data class Frequency(
-  @Serializable(with = UuidSerializer::class)
-  val owner: UUID? = null,
+  val owner: Optional<UUID> = Optional.empty(),
 
-  val ownerName: String? = null, // Not used for identification, just for rendering
+  val ownerName: Optional<String> = Optional.empty(),
 
   val left  : DyeColor = DyeColor.WHITE,
   val middle: DyeColor = DyeColor.WHITE,
   val right : DyeColor = DyeColor.WHITE
 ) {
-
   val personal
-    get() = owner != null
+    get() = !owner.isEmpty
 
   @delegate:Transient
   val ownerText: Text by lazy {
     val key = ModBlocks.enderStorage.translationKey
     if (personal) {
-      translatable("$key.owner_name", ownerName ?: "Unknown")
+      translatable("$key.owner_name", ownerName.getOrNull())
     } else {
       translatable("$key.public")
     }
@@ -52,9 +52,9 @@ data class Frequency(
 
   fun toNbt(): NbtCompound {
     val nbt = NbtCompound()
-    if (owner != null) {
-      nbt.putUuid("owner", owner)
-      nbt.putOptString("ownerName", ownerName)
+    if (!owner.isEmpty) {
+      nbt.putUuid("owner", owner.get())
+      ownerName.getOrNull()?.let { nbt.putString("ownerName", it) }
     }
     nbt.putByte("left", left.id.toByte())
     nbt.putByte("middle", middle.id.toByte())
@@ -63,14 +63,12 @@ data class Frequency(
   }
 
   fun toPacket(buf: PacketByteBuf) {
-    buf.writeNullable(owner, PacketByteBuf::writeUuid)
-    buf.writeNullable(ownerName, PacketByteBuf::writeString)
+    buf.writeNullable(owner.get(), PacketByteBuf::writeUuid)
+    buf.writeNullable(ownerName.get(), PacketByteBuf::writeString)
     buf.writeEnumConstant(left)
     buf.writeEnumConstant(middle)
     buf.writeEnumConstant(right)
   }
-
-  fun toKey() = json.encodeToString(this)
 
   fun toTextParts(vararg formatting: Formatting): Array<Text> {
     val key = "block.$modId.ender_storage.frequency"
@@ -108,7 +106,7 @@ data class Frequency(
   }
 
   override fun hashCode(): Int {
-    var result = owner?.hashCode() ?: 0
+    var result = owner.getOrNull().hashCode()
     result = 31 * result + left.hashCode()
     result = 31 * result + middle.hashCode()
     result = 31 * result + right.hashCode()
@@ -121,11 +119,28 @@ data class Frequency(
   fun getPacketCodec(): PacketCodec<RegistryByteBuf, Frequency> {
     return PACKET_CODEC
   }
+  fun toJson(): String? {
+    val result = CODEC.codec().encodeStart(JsonOps.INSTANCE, this).result();
+    if(result.isEmpty) {
+      return null;
+    }
+
+    return Gson().toJson(result.get())
+  }
+
   companion object {
+    fun fromJson(str: String): Frequency? {
+      val result = CODEC.codec().decode(JsonOps.INSTANCE, JsonParser().parse(str)).result();
+      if(result.isEmpty) {
+        return null;
+      }
+
+      return result.get().first
+    }
     val CODEC: MapCodec<Frequency> = RecordCodecBuilder.mapCodec { i ->
       i.group(
-        Uuids.CODEC.optionalFieldOf("owner", null).forGetter(Frequency::owner),
-        Codec.STRING.optionalFieldOf("ownerName", null).forGetter(Frequency::ownerName),
+        Uuids.CODEC.optionalFieldOf("owner").forGetter(Frequency::owner),
+        Codec.STRING.optionalFieldOf("ownerName").forGetter(Frequency::ownerName),
         DyeColor.CODEC.fieldOf("left").forGetter(Frequency::left),
         DyeColor.CODEC.fieldOf("middle").forGetter(Frequency::middle),
         DyeColor.CODEC.fieldOf("right").forGetter(Frequency::right)
@@ -134,18 +149,14 @@ data class Frequency(
 
     val PACKET_CODEC: PacketCodec<RegistryByteBuf, Frequency> =
       PacketCodec.tuple(
-        Uuids.PACKET_CODEC, Frequency::owner,
-        PacketCodecs.STRING, Frequency::ownerName,
+        PacketCodecs.optional(Uuids.PACKET_CODEC), Frequency::owner,
+        PacketCodecs.optional(PacketCodecs.STRING), Frequency::ownerName,
 
         DyeColor.PACKET_CODEC, Frequency::left,
         DyeColor.PACKET_CODEC, Frequency::middle,
         DyeColor.PACKET_CODEC, Frequency::right,
         ::Frequency
       )
-    private val json = Json {
-      ignoreUnknownKeys = true
-    }
-
     fun fromNbt(nbt: NbtCompound, server: MinecraftServer? = null): Frequency {
       val owner = if (nbt.containsUuid("owner")) nbt.getUuid("owner") else null
 
@@ -158,8 +169,8 @@ data class Frequency(
       }
 
       return Frequency(
-        owner,
-        ownerName,
+        Optional.ofNullable(owner),
+        Optional.ofNullable(ownerName),
         DyeColor.byId(nbt.getByte("left").toInt()),
         DyeColor.byId(nbt.getByte("middle").toInt()),
         DyeColor.byId(nbt.getByte("right").toInt())
@@ -167,14 +178,13 @@ data class Frequency(
     }
 
     fun fromPacket(buf: PacketByteBuf) = Frequency(
-      owner     = buf.readNullable(PacketByteBuf::readUuid),
-      ownerName = buf.readNullable(PacketByteBuf::readString),
+      owner     = Optional.ofNullable(buf.readNullable(PacketByteBuf::readUuid)),
+      ownerName = Optional.ofNullable(buf.readNullable(PacketByteBuf::readString)),
       left      = buf.readEnumConstant(DyeColor::class.java),
       middle    = buf.readEnumConstant(DyeColor::class.java),
       right     = buf.readEnumConstant(DyeColor::class.java)
     )
 
-    fun fromKey(key: String) = json.decodeFromString<Frequency>(key)
 
     fun fromStack(stack: ItemStack): Frequency? {
       return stack.get(Registration.ModComponents.FREQUENCY)

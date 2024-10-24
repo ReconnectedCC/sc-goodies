@@ -1,30 +1,34 @@
 package io.sc3.goodies.enderstorage
 
-import com.mojang.serialization.MapCodec
 import io.sc3.goodies.Registration.ModScreens
 import io.sc3.goodies.enderstorage.EnderStorageBlockEntity.ScreenData
 import io.sc3.goodies.util.ChestScreenHandler
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.network.codec.PacketCodec
-import net.minecraft.util.math.BlockPos
 
-class EnderStorageScreenHandler(
-  syncId: Int,
-  playerInv: PlayerInventory,
+class EnderStorageScreenHandler : ChestScreenHandler {
   val screenData: ScreenData
-) : ChestScreenHandler(syncId, playerInv, inv, ModScreens.enderStorage, rows = 3, yStart = 35, playerYStart = 49) {
-  constructor(  syncId: Int,
-                playerInv: PlayerInventory,
-                inventory: Inventory,
-                screenData: ScreenData) :
-    this(
-      syncId, playerInv, screenData, inv
-    )
+
+  // Logical client
+  constructor(
+    syncId: Int,
+    playerInv: PlayerInventory,
+    screenData: ScreenData
+  ) : super(syncId, playerInv, SimpleInventory(3 * 9), ModScreens.enderStorage, rows = 3, yStart = 35, playerYStart = 49) {
+    this.screenData = screenData
+  }
+
+  // Logical server
+  constructor(
+    syncId: Int,
+    playerInv: PlayerInventory,
+    inventory: Inventory,
+    screenData: ScreenData
+  ) : super(syncId, playerInv, inventory, ModScreens.enderStorage, rows = 3, yStart = 35, playerYStart = 49) {
+    this.screenData = screenData
+  }
 
   override fun onClosed(player: PlayerEntity) {
     super.onClosed(player)

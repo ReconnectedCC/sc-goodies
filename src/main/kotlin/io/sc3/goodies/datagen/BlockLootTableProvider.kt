@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.loot.ContainerComponentModifiers
 import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootTable
 import net.minecraft.loot.entry.DynamicEntry
@@ -81,7 +82,7 @@ class BlockLootTableProvider(out: FabricDataOutput,
               .withOperation("Lock", "BlockEntityTag.Lock")
               .withOperation("LootTable", "BlockEntityTag.LootTable")
               .withOperation("LootTableSeed", "BlockEntityTag.LootTableSeed"))
-            .apply(SetContentsLootFunction.builder(type)
+            .apply(SetContentsLootFunction.builder(ContainerComponentModifiers.CONTAINER) // TODO: type no longer works here for some reason
               .withEntry(DynamicEntry.builder(IronShulkerBlock.contents)))
           )
       ))

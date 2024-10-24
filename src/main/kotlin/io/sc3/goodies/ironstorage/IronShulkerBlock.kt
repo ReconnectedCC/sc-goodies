@@ -154,10 +154,12 @@ class IronShulkerBlock(
     if (player.isSpectator) return ActionResult.CONSUME
 
     val be = world.getBlockEntity(pos) as? IronShulkerBlockEntity ?: return ActionResult.PASS
+
     if (!canOpen(state, world, pos, be)) return ActionResult.CONSUME
 
     player.openHandledScreen(be)
     player.incrementStat(openStat)
+
     return ActionResult.CONSUME
   }
 
@@ -238,7 +240,7 @@ class IronShulkerBlock(
       if (be.animationStage != CLOSED) {
         true
       } else {
-        val box = ShulkerEntity.calculateBoundingBox(1.0f, state.get(facing), 0.5f).offset(pos).contract(1.0e-6)
+        val box = ShulkerEntity.calculateBoundingBox(1.0f, state.get(facing), 0.0f, 0.5f).offset(pos).contract(1.0e-6)
         world.isSpaceEmpty(box)
       }
 

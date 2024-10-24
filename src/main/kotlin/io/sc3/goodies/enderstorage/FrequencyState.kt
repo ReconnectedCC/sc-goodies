@@ -12,6 +12,8 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.util.StringHelper
+import java.util.*
+import kotlin.jvm.optionals.getOrElse
 
 const val MAX_NAME_LENGTH = 48
 const val MAX_DESCRIPTION_LENGTH = 512
@@ -41,8 +43,14 @@ data class FrequencyState(
 
   companion object {
     val PACKET_CODEC: PacketCodec<RegistryByteBuf, FrequencyState> = PacketCodec.tuple(
-      PacketCodecs.STRING, FrequencyState::name,
-      PacketCodecs.STRING, FrequencyState::description,
+      PacketCodecs.optional(PacketCodecs.STRING).xmap(
+        { z -> z.getOrElse { null } },
+        { z -> Optional.ofNullable(z) }
+      ), FrequencyState::name,
+      PacketCodecs.optional(PacketCodecs.STRING).xmap(
+        { z -> z.getOrElse { null } },
+        { z -> Optional.ofNullable(z) }
+      ), FrequencyState::description,
       ::FrequencyState
     )
     val CODEC: MapCodec<FrequencyState> = RecordCodecBuilder.mapCodec { i ->

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "sc-goodies:item_magnet"
-            ]
+            "items": "sc-goodies:item_magnet"
           }
         ]
       },

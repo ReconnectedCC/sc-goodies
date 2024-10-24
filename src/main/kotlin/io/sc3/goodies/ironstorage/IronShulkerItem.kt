@@ -2,6 +2,7 @@ package io.sc3.goodies.ironstorage
 
 import net.fabricmc.fabric.api.util.NbtType.COMPOUND
 import net.fabricmc.fabric.api.util.NbtType.LIST
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
@@ -13,13 +14,10 @@ class IronShulkerItem(val block: IronShulkerBlock, settings: Settings) : BlockIt
 
   override fun onItemEntityDestroyed(entity: ItemEntity) {
     val stack = entity.stack
-    val nbt = getBlockEntityNbt(stack) ?: return
 
-    if (!nbt.contains("Items", LIST)) return
-    val items = nbt.getList("Items", COMPOUND)
+    if (stack.components.get(DataComponentTypes.CONTAINER) == null) return
+    val items = stack.components.get(DataComponentTypes.CONTAINER)!!
 
-    ItemUsage.spawnItemContents(entity, items.stream().map { ->
-      ItemStack.fromNbt(entity.registryManager, it as NbtCompound)
-    })
+    ItemUsage.spawnItemContents(entity, items.iterateNonEmpty())
   }
 }

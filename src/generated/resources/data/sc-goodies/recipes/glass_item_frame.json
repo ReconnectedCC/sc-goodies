@@ -15,6 +15,7 @@
     "GGG"
   ],
   "result": {
-    "item": "sc-goodies:glass_item_frame"
+    "count": 1,
+    "id": "sc-goodies:glass_item_frame"
   }
 }

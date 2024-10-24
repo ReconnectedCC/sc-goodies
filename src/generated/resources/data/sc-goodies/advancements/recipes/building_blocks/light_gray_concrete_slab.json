@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "sc-goodies:concrete"
+            "items": "#sc-goodies:concrete"
           }
         ]
       },

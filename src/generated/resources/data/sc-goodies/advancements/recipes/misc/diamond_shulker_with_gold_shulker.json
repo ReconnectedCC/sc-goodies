@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:shulker_boxes"
+            "items": "#c:shulker_boxes"
           }
         ]
       },

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:grass_block"
-            ]
+            "items": "minecraft:grass_block"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "sc-goodies:blue_sapling"
-            ]
+            "items": "sc-goodies:blue_sapling"
           }
         ]
       },

@@ -11,6 +11,7 @@ import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting.GREEN
 import net.minecraft.util.Formatting.YELLOW
+import kotlin.jvm.optionals.getOrNull
 
 class EnderStorageDescriptionCommand(
   target: EnderStorageTargetType,
@@ -37,14 +38,14 @@ class EnderStorageDescriptionCommand(
           OWN -> base + translatable("$TL_KEY.cleared_description_own", *freqText)
           PUBLIC -> base + translatable("$TL_KEY.cleared_description_public", *freqText)
           PRIVATE -> base + translatable("$TL_KEY.cleared_description_private",
-            of(freq.ownerName ?: freq.owner?.toString() ?: "Unknown", YELLOW), *freqText)
+            of(freq.ownerName.getOrNull() ?: freq.owner.getOrNull()?.toString() ?: "Unknown", YELLOW), *freqText)
         }
       } else {
         when (target) {
           OWN -> base + translatable("$TL_KEY.changed_description_own", *freqText, descText)
           PUBLIC -> base + translatable("$TL_KEY.changed_description_public", *freqText, descText)
           PRIVATE -> base + translatable("$TL_KEY.changed_description_private",
-            of(freq.ownerName ?: freq.owner?.toString() ?: "Unknown", YELLOW), *freqText, descText)
+            of(freq.ownerName.getOrNull() ?: freq.owner.getOrNull()?.toString() ?: "Unknown", YELLOW), *freqText, descText)
         }
       }
     }, true)

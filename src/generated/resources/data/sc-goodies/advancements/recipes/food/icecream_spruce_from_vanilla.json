@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "sc-goodies:icecream_vanilla"
-            ]
+            "items": "sc-goodies:icecream_vanilla"
           }
         ]
       },

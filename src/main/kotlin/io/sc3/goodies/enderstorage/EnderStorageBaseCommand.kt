@@ -11,6 +11,7 @@ import io.sc3.goodies.util.parseDyeArg
 import io.sc3.goodies.util.parseUserArg
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text.translatable
+import java.util.*
 
 enum class EnderStorageTargetType {
   OWN,
@@ -29,8 +30,8 @@ abstract class EnderStorageBaseCommand(
     }
 
     return Frequency(
-      owner     = user?.id,
-      ownerName = user?.name,
+      owner     = Optional.ofNullable(user?.id),
+      ownerName = Optional.ofNullable(user?.name),
       left      = parseDyeArg(ctx, "left"),
       middle    = parseDyeArg(ctx, "middle"),
       right     = parseDyeArg(ctx, "right")

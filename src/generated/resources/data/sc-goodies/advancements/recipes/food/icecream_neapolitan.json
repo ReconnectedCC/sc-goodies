@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "sc-goodies:icecream_chocolate"
-            ]
+            "items": "sc-goodies:icecream_chocolate"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "sc-goodies:icecream_sweetberry"
-            ]
+            "items": "sc-goodies:icecream_sweetberry"
           }
         ]
       },
@@ -29,9 +25,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "sc-goodies:icecream_vanilla"
-            ]
+            "items": "sc-goodies:icecream_vanilla"
           }
         ]
       },

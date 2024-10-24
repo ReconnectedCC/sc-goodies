@@ -18,6 +18,7 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.world.World
+import java.util.*
 
 class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraftingRecipe(category) {
   private val enderStorage = ofItems(ModItems.enderStorage)
@@ -110,8 +111,8 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
 
       // Remove the owner. It will be added back later in EnderStorageItem.onCraft(), overwritten with the player that
       // crafted the item
-      owner = null,
-      ownerName = null
+      owner = Optional.empty(),
+      ownerName = Optional.empty()
     )
 
     result.set(Registration.ModComponents.FREQUENCY, frequency)

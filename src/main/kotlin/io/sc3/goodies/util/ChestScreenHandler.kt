@@ -50,7 +50,9 @@ abstract class ChestScreenHandler(
     }
   }
 
-  override fun canUse(player: PlayerEntity) = inv.canPlayerUse(player)
+  override fun canUse(player: PlayerEntity): Boolean {
+    return inv.canPlayerUse(player) ?: return false
+  }
 
   override fun quickMove(player: PlayerEntity, index: Int): ItemStack {
     val slot = slots[index]

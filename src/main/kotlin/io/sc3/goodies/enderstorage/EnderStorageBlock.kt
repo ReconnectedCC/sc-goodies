@@ -51,6 +51,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 import net.minecraft.world.WorldView
+import java.util.*
 
 
 // Raycasts hit the very edge of the shape so the .contains() check will fail without a slight expansion. This is half
@@ -146,7 +147,7 @@ class EnderStorageBlock(
             return ActionResult.FAIL
           }
 
-          be.frequency = frequency.copy(owner = null, ownerName = null)
+          be.frequency = frequency.copy(owner = Optional.empty(), ownerName = Optional.empty())
           be.computerChangesEnabled = false
           return ActionResult.SUCCESS
         } else if (!stack.isEmpty && stack.isOf(DIAMOND)) {
@@ -156,7 +157,7 @@ class EnderStorageBlock(
 
           // Use a diamond to make the chest personal
           if (!frequency.personal) {
-            be.frequency = frequency.copy(owner = player.gameProfile.id, ownerName = player.gameProfile.name)
+            be.frequency = frequency.copy(owner = Optional.of(player.gameProfile.id), ownerName = Optional.of(player.gameProfile.name))
 
             // Consume the diamond if the player isn't in creative
             if (!player.isCreative) {
@@ -225,7 +226,7 @@ class EnderStorageBlock(
   }
 
   private fun checkOwner(player: PlayerEntity, frequency: Frequency): Boolean =
-    if (frequency.personal && !player.isCreativeLevelTwoOp && frequency.owner != player.uuid) {
+    if (frequency.personal && !player.isCreativeLevelTwoOp && frequency.owner.get() != player.uuid) {
       player.sendMessage(translatable("$translationKey.not_owner").formatted(RED))
       false
     } else {

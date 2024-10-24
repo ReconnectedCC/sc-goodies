@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
+import kotlin.jvm.optionals.getOrNull
 
 private const val MAIN_BG_WIDTH = 176
 private const val MAIN_BG_HEIGHT = 185
@@ -37,7 +38,7 @@ class EnderStorageScreen(
 
     addDrawableChild(EnderStorageNameWidget(tr, 30, 6, name)
       .also { nameWidget = it })
-    addDrawableChild(EnderStoragePersonalWidget(157, 5, freq.personal, freq.ownerName)
+    addDrawableChild(EnderStoragePersonalWidget(157, 5, freq.personal, freq.ownerName.getOrNull())
       .also { personalWidget = it })
     addDrawableChild(EnderStorageDescriptionWidget(tr, 4, 4, description)
       .also { descriptionWidget = it })
