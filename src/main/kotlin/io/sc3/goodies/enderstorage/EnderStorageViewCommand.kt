@@ -6,7 +6,6 @@ import io.sc3.goodies.enderstorage.EnderStorageBlockEntity.ScreenData
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -20,7 +19,7 @@ class EnderStorageViewCommand(target: EnderStorageTargetType) : EnderStorageBase
     val (inv, frequency) = getInventory(ctx)
     val (state) = getState(ctx)
 
-    player.openHandledScreen(object : ExtendedScreenHandlerFactory<EnderStorageBlockEntity.ScreenData> {
+    player.openHandledScreen(object : ExtendedScreenHandlerFactory<ScreenData> {
       // Don't add viewingPlayers here
       override fun createMenu(syncId: Int, playerInv: PlayerInventory, player: PlayerEntity): ScreenHandler {
         return EnderStorageScreenHandler(syncId, playerInv, ScreenData(BlockPos.ORIGIN, frequency, state))

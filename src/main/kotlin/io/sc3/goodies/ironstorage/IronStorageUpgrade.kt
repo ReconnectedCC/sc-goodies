@@ -4,7 +4,6 @@ import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ironstorage.IronStorageVariant.*
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.LootableContainerBlockEntity
-import net.minecraft.component.Component
 import net.minecraft.component.ComponentMap
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.ItemStack
@@ -12,7 +11,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder
 
 enum class IronStorageUpgrade(
   val itemName: String,

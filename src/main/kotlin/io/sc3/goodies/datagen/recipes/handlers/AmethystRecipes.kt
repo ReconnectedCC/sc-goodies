@@ -6,9 +6,10 @@ import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.*
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.RegistryWrapper
 
 object AmethystRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Amethyst Slabs and Stairs
     createSlabRecipe(RecipeCategory.BUILDING_BLOCKS, AmethystExtras.slabBlock, Ingredient.ofItems(AmethystExtras.baseBlock))
       .criterion("items", conditionsFromItem(AmethystExtras.baseBlock))

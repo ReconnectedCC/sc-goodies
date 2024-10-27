@@ -13,6 +13,7 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries.RECIPE_SERIALIZER
 import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryWrapper
 
 object EnderStorageRecipes : RecipeHandler {
   override fun registerSerializers() {
@@ -20,7 +21,7 @@ object EnderStorageRecipes : RecipeHandler {
     Registry.register(RECIPE_SERIALIZER, ModId("modify_ender_storage"), ModifiedEnderStorageRecipe.recipeSerializer)
   }
 
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Ender Storage
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, ModItems.enderStorage)

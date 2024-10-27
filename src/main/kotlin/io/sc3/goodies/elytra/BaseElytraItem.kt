@@ -3,13 +3,13 @@ package io.sc3.goodies.elytra
 import io.sc3.goodies.util.BaseItem
 import net.fabricmc.fabric.api.entity.event.v1.FabricElytraItem
 import net.minecraft.block.DispenserBlock
-import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Equipment
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents

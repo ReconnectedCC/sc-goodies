@@ -10,11 +10,12 @@ import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromTag
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.ItemTags.PLANKS
 import net.minecraft.registry.tag.ItemTags.WOODEN_SLABS
 
 object IronStorageUpgradeRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Wood to Iron Storage Upgrade
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, IronStorageUpgrade.VANILLA_IRON.upgradeItem)

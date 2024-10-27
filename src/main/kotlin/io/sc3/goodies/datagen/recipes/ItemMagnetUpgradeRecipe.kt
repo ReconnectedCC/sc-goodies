@@ -3,7 +3,6 @@ package io.sc3.goodies.datagen.recipes
 import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.itemmagnet.ItemMagnetItem
-import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
@@ -11,7 +10,7 @@ import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.ShapelessRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.recipe.input.CraftingRecipeInput
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.collection.DefaultedList
 
@@ -26,11 +25,11 @@ class ItemMagnetUpgradeRecipe(
     ofItems(Items.NETHERITE_INGOT)
   )
 ) {
-  override fun craft(inv: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
+  override fun craft(input: CraftingRecipeInput, lookup: RegistryWrapper.WrapperLookup?): ItemStack? {
     val output = getResult(lookup)
 
-    for (i in 0 until inv.size()) {
-      val stack: ItemStack = inv.getStack(i)
+    for (i in 0 until input.stackCount) {
+      val stack = input.getStackInSlot(i)
       if (stack.item !is ItemMagnetItem) {
         continue
       }

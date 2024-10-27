@@ -10,6 +10,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
@@ -17,9 +18,9 @@ import net.minecraft.util.Identifier
 object SharkRecipes : RecipeHandler {
   // TODO: is this the right way to get the wool item?
   // yeah it is bro -soph
-  private fun colorToWool(color: DyeColor): Item = Registries.ITEM.get(Identifier("${color.getName()}_wool"))
+  private fun colorToWool(color: DyeColor): Item = Registries.ITEM.get(Identifier.of("${color.getName()}_wool"))
 
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // For the dyed sharks, the recipe will be as follows:
     //  X
     // XXX

@@ -6,7 +6,6 @@ import net.minecraft.block.cauldron.CauldronBehavior.WATER_CAULDRON_BEHAVIOR
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.stat.Stats
-import net.minecraft.util.ActionResult
 import net.minecraft.util.ItemActionResult
 
 object ElytraCauldronBehavior {

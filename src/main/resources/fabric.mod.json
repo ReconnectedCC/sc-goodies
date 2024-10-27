@@ -58,7 +58,7 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_target_version}",
-    "java": ">=17",
+    "java": ">=21",
     "fabric-language-kotlin": ">=${fabric_kotlin_version}",
     "fabric-permissions-api-v0": "*",
     "sc-library": "1.x",

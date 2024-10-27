@@ -1,6 +1,5 @@
 package io.sc3.goodies.enderstorage
 
-import io.sc3.goodies.Registration
 import io.sc3.goodies.util.BaseBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState

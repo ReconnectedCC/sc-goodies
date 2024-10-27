@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "inventory": { "model": "block/glass_item_frame_back" }
+  }
+}

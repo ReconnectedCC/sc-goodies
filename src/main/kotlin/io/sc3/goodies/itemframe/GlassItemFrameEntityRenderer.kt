@@ -1,6 +1,7 @@
 package io.sc3.goodies.itemframe
 
 import dan200.computercraft.client.ClientHooks
+import io.sc3.goodies.ScGoodies
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.library.ext.ItemFrameEvents
 import net.fabricmc.loader.api.FabricLoader
@@ -20,6 +21,7 @@ import net.minecraft.client.render.model.json.ModelTransformationMode
 import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.BannerItem
 import net.minecraft.item.FilledMapItem
 import net.minecraft.item.ItemStack
@@ -92,7 +94,7 @@ class GlassItemFrameEntityRenderer(
                               light: Int, stack: ItemStack) {
     matrices.push()
 
-    val mapId = entity.mapId;
+    val mapId = entity.heldItemStack.get(DataComponentTypes.MAP_ID);
     val mapState = if (entity.containsMap()) FilledMapItem.getMapState(mapId, entity.world) else null
     val rotation = if (mapState != null) entity.rotation % 4 * 2 else entity.rotation
     matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation * 360.0f / 8.0f))
@@ -162,7 +164,7 @@ class GlassItemFrameEntityRenderer(
   override fun hasLabel(entity: GlassItemFrameEntity) =
     if (MinecraftClient.isHudEnabled()
       && !entity.heldItemStack.isEmpty
-      && entity.heldItemStack.getName().string.isNotEmpty()
+      && entity.heldItemStack.name.string.isNotEmpty()
       && dispatcher.targetedEntity === entity
     ) {
       val d = dispatcher.getSquaredDistanceToCamera(entity)
@@ -184,7 +186,7 @@ class GlassItemFrameEntityRenderer(
   }
 
   companion object {
-    val modelId = ModelIdentifier(ModId("glass_item_frame_back"), "inventory")
+    val modelId = Identifier.of(ScGoodies.modId, "block/glass_item_frame_back")
     val ccLoaded by lazy { FabricLoader.getInstance().isModLoaded("computercraft") }
   }
 }

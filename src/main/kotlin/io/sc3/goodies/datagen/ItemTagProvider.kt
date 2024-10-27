@@ -27,7 +27,7 @@ class ItemTagProvider(
   override fun configure(arg: RegistryWrapper.WrapperLookup) {
     // Concrete
     getOrCreateTagBuilder(CONCRETE)
-      .add(*DyeColor.entries.map { Identifier("${it.getName()}_concrete") }.toTypedArray())
+      .add(*DyeColor.entries.map { Identifier.of("${it.getName()}_concrete") }.toTypedArray())
 
     // Elytra
     getOrCreateTagBuilder(ScGoodiesItemTags.ELYTRA)

@@ -8,7 +8,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import io.sc3.library.Tooltips.addDescLines
-import net.minecraft.client.item.TooltipType
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.item.Item.TooltipContext
 
 abstract class BaseBlockWithEntity(settings: Settings) : BlockWithEntity(settings) {

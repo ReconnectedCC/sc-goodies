@@ -4,14 +4,13 @@ import io.sc3.goodies.ScGoodiesItemTags
 import io.sc3.goodies.datagen.recipes.IronShulkerRecipe.Companion.shulkerItem
 import io.sc3.goodies.ironstorage.IronShulkerItem
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.DYES
-import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.DyeItem
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.Ingredient.fromTag
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.recipe.input.CraftingRecipeInput
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor
 import net.minecraft.world.World
@@ -20,12 +19,12 @@ class DyedIronShulkerRecipe(category: CraftingRecipeCategory) : SpecialCraftingR
   private val ironShulker = fromTag(ScGoodiesItemTags.ANY_IRON_SHULKER_BOX)
   private val dye = fromTag(DYES)
 
-  override fun matches(inv: RecipeInputInventory, world: World): Boolean {
+  override fun matches(input: CraftingRecipeInput, world: World?): Boolean {
     var hasShulker = false
     var hasDye = false
 
-    for (i in 0 until inv.size()) {
-      val stack = inv.getStack(i)
+    for (i in 0 until input.stackCount) {
+      val stack = input.getStackInSlot(i)
       if (stack.isEmpty) continue
 
       when {
@@ -46,12 +45,12 @@ class DyedIronShulkerRecipe(category: CraftingRecipeCategory) : SpecialCraftingR
     return hasShulker && hasDye
   }
 
-  override fun craft(inventory: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
-    val shulkerStack = shulkerItem(inventory)
+  override fun craft(input: CraftingRecipeInput, lookup: RegistryWrapper.WrapperLookup?): ItemStack? {
+    val shulkerStack = shulkerItem(input)
     // No shulker found - disallow craft
     if (shulkerStack.isEmpty) return ItemStack.EMPTY
 
-    val color = dyeItem(inventory) ?: return ItemStack.EMPTY
+    val color = dyeItem(input) ?: return ItemStack.EMPTY
     val variant = (shulkerStack.item as IronShulkerItem).block.variant
     val resultBlock = variant.dyedShulkerBlocks[color]
 
@@ -60,9 +59,9 @@ class DyedIronShulkerRecipe(category: CraftingRecipeCategory) : SpecialCraftingR
     return result
   }
 
-  private fun dyeItem(inv: RecipeInputInventory): DyeColor? {
-    for (i in 0 until inv.size()) {
-      val stack = inv.getStack(i)
+  private fun dyeItem(inv: CraftingRecipeInput): DyeColor? {
+    for (i in 0 until inv.stackCount) {
+      val stack = inv.stacks[i]
       if (stack.isEmpty) continue
 
       val item = stack.item

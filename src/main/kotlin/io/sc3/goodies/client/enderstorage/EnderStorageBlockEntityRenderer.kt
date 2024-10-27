@@ -39,7 +39,7 @@ class EnderStorageBlockEntityRenderer(
     private val texture = ModId("textures/entity/chest/ender_storage.png")
     private val layer = RenderLayer.getEntityCutout(texture)
     private val wool = DyeColor.entries.associateWith {
-      Identifier("textures/block/${it.getName()}_wool.png")
+      Identifier.of("textures/block/${it.getName()}_wool.png")
     }
 
     private val defaultState by lazy {
@@ -102,10 +102,10 @@ class EnderStorageBlockEntityRenderer(
       if (progress >= 0.01f) {
         val portalConsumer = vertexConsumers.getBuffer(RenderLayer.getEndPortal())
         val matrix = matrices.peek().positionMatrix
-        portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.8125f).next()
-        portalConsumer.vertex(matrix, 0.8125f, 0.626f, 0.8125f).next()
-        portalConsumer.vertex(matrix, 0.8125f, 0.626f, 0.1875f).next()
-        portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.1875f).next()
+        portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.8125f)
+        portalConsumer.vertex(matrix, 0.8125f, 0.626f, 0.8125f)
+        portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.1875f)
+        portalConsumer.vertex(matrix, 0.8125f, 0.626f, 0.1875f)
       }
 
       // Base chest

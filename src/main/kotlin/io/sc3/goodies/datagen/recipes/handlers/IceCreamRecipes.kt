@@ -8,6 +8,7 @@ import net.minecraft.item.Items.*
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryWrapper
 
 object IceCreamRecipes : RecipeHandler {
   private fun iceCreamRecipe(
@@ -40,7 +41,7 @@ object IceCreamRecipes : RecipeHandler {
       .offerTo(exporter, Registries.ITEM.getId(makes.asItem()).path + "_from_vanilla")
   }
 
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Ice Cream
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.FOOD, ModItems.iceCreamVanilla)

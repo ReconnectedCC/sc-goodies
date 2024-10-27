@@ -10,9 +10,10 @@ import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.recipe.book.RecipeCategory.DECORATIONS
+import net.minecraft.registry.RegistryWrapper
 
 object ColorfulGrassRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     with (exporter) {
       addGrassRecipe(ModBlocks.sakuraSapling, ModItems.pinkGrass)
       addGrassRecipe(ModBlocks.mapleSapling, ModItems.autumnGrass)

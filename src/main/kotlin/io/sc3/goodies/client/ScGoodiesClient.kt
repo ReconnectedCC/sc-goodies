@@ -6,7 +6,7 @@ import io.sc3.goodies.Registration.ModBlockEntities
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.Registration.ModScreens
-import io.sc3.goodies.ScGoodies.ModId
+import io.sc3.goodies.ScGoodies
 import io.sc3.goodies.client.elytra.ElytraClientEvents
 import io.sc3.goodies.client.enderstorage.EnderStorageBlockEntityRenderer
 import io.sc3.goodies.client.enderstorage.EnderStorageItemRenderer
@@ -23,15 +23,14 @@ import io.sc3.goodies.nature.ScTree
 import io.sc3.goodies.seats.SeatEntityRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
-import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.util.DyeColor
+import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 
 object ScGoodiesClient : ClientModInitializer {
@@ -47,7 +46,7 @@ object ScGoodiesClient : ClientModInitializer {
     }
 
     // Ender Storage
-    BlockEntityRendererRegistry.register(ModBlockEntities.enderStorage, ::EnderStorageBlockEntityRenderer)
+    BlockEntityRendererFactories.register(ModBlockEntities.enderStorage, ::EnderStorageBlockEntityRenderer)
     BuiltinItemRendererRegistry.INSTANCE.register(ModItems.enderStorage, EnderStorageItemRenderer)
     HandledScreens.register(ModScreens.enderStorage, ::EnderStorageScreen)
 
@@ -69,16 +68,17 @@ object ScGoodiesClient : ClientModInitializer {
     registerTreeRenderLayers(ModBlocks.mapleSapling)
     registerTreeRenderLayers(ModBlocks.blueSapling)
 
-    ModelLoadingRegistry.INSTANCE.registerModelProvider { _, out ->
-      out.accept(ModelIdentifier(ModId("glass_item_frame_back"), "inventory"))
+    ModelLoadingPlugin.register { ctx ->
+      ctx.addModels(Identifier.of(ScGoodies.modId, "block/glass_item_frame_back"))
     }
+
     EntityRendererRegistry.register(Registration.ModEntities.glassItemFrameEntity, ::GlassItemFrameEntityRenderer)
     EntityRendererRegistry.register(Registration.ModEntities.seatEntity, ::SeatEntityRenderer)
   }
 
   private fun registerIronChestRenderer(variant: IronStorageVariant) {
     with(variant) {
-      BlockEntityRendererRegistry.register(chestBlockEntityType)
+      BlockEntityRendererFactories.register(chestBlockEntityType)
         { IronChestBlockEntityRenderer(chestBlock) }
       BuiltinItemRendererRegistry.INSTANCE.register(chestBlock, IronChestItemRenderer(this))
       HandledScreens.register(chestScreenHandlerType, ::IronChestScreen)

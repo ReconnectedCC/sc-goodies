@@ -4,10 +4,8 @@ import net.minecraft.block.Block
 import net.minecraft.block.LeveledCauldronBlock
 import net.minecraft.block.cauldron.CauldronBehavior
 import net.minecraft.block.cauldron.CauldronBehavior.WATER_CAULDRON_BEHAVIOR
-import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.ItemStack
 import net.minecraft.stat.Stats
-import net.minecraft.util.ActionResult
 import net.minecraft.util.ItemActionResult
 
 object IronShulkerCauldronBehavior {

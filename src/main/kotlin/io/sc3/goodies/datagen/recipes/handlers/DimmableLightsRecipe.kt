@@ -8,9 +8,10 @@ import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.RegistryWrapper
 
 object DimmableLightRecipe : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.REDSTONE, Registration.ModBlocks.dimmableLight)
       .pattern(" Q ")

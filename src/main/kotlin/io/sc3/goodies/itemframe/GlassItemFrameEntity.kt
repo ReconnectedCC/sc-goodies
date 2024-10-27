@@ -16,6 +16,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.server.network.EntityTrackerEntry
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -71,8 +72,8 @@ class GlassItemFrameEntity : ItemFrameEntity {
     nbt.putBoolean("isGlowingFrame", dataTracker.get(isGlowingFrame))
   }
 
-  override fun createSpawnPacket(): Packet<ClientPlayPacketListener> =
-    EntitySpawnS2CPacket(this, facing.id, decorationBlockPos)
+  override fun createSpawnPacket(entityTrackerEntry: EntityTrackerEntry?): Packet<ClientPlayPacketListener> =
+    EntitySpawnS2CPacket(this, facing.id, attachedBlockPos)
 
   override fun getAsItemStack(): ItemStack = if (dataTracker.get(isGlowingFrame)) {
     ItemStack(ModItems.glowGlassItemFrame)

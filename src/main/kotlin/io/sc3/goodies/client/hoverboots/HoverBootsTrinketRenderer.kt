@@ -31,6 +31,6 @@ object HoverBootsTrinketRenderer : TrinketRenderer {
     TrinketRenderer.followBodyRotations(entity, model)
 
     val consumer = vertexConsumers.getBuffer(model.getLayer(textures[color]))
-    model.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f)
+    model.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV)
   }
 }

@@ -3,7 +3,6 @@ package io.sc3.goodies.itemmagnet
 import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
 import io.sc3.library.networking.ScLibraryPacket
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs

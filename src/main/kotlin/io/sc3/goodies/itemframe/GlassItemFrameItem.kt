@@ -1,7 +1,6 @@
 package io.sc3.goodies.itemframe
 
 import io.sc3.goodies.util.BaseItem
-import net.minecraft.entity.EntityType
 import net.minecraft.entity.decoration.AbstractDecorationEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack

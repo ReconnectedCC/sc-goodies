@@ -13,7 +13,7 @@ object ConcreteExtras {
     private val col
       get() = color.getName()
 
-    val baseBlockId = Identifier("${col}_concrete")
+    val baseBlockId = Identifier.of("${col}_concrete")
     val baseBlock by lazy { BLOCK.get(baseBlockId) }
 
     val slabBlockId = ModId("${col}_concrete_slab")
@@ -22,6 +22,6 @@ object ConcreteExtras {
     val stairsBlockId = ModId("${col}_concrete_stairs")
     val stairsBlock by lazy { BLOCK.get(stairsBlockId) }
 
-    val texture = Identifier("block/${col}_concrete")
+    val texture = Identifier.of("block/${col}_concrete")
   }
 }

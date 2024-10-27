@@ -6,6 +6,7 @@ import io.sc3.goodies.itemmagnet.ItemMagnetState
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.render.RenderTickCounter
 import net.minecraft.util.Arm.LEFT
 
 object ItemMagnetHud {
@@ -14,7 +15,7 @@ object ItemMagnetHud {
   private val mc by lazy { MinecraftClient.getInstance() }
   private val textRenderer by mc::textRenderer
 
-  private fun renderHud(ctx: DrawContext, tickDelta: Float) {
+  private fun renderHud(ctx: DrawContext, tickCounter: RenderTickCounter) {
     val player = mc.player ?: return
     if (player.isSpectator || mc.options.hudHidden) return
 

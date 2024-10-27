@@ -1,24 +1,19 @@
 package io.sc3.goodies.datagen.recipes
 
-import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.ironstorage.IronShulkerBlock
 import io.sc3.goodies.ironstorage.IronShulkerItem
 import io.sc3.library.recipe.ExtendedShapedRecipe
 import io.sc3.library.recipe.ShapedRecipeSpec
 import net.minecraft.block.Block
 import net.minecraft.block.ShulkerBoxBlock
-import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.recipe.RawShapedRecipe
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.recipe.input.CraftingRecipeInput
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor
 
@@ -29,8 +24,8 @@ class IronShulkerRecipe(
   private val outputItem: ItemStack,
 ) : ExtendedShapedRecipe(group, category, rawShapedRecipe, outputItem) {
 
-  override fun craft(inventory: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
-    val shulkerStack = shulkerItem(inventory)
+  override fun craft(input: CraftingRecipeInput, lookup: RegistryWrapper.WrapperLookup): ItemStack {
+    val shulkerStack = shulkerItem(input)
     // No shulker found - disallow craft
     if (shulkerStack.isEmpty) return ItemStack.EMPTY
 
@@ -54,11 +49,11 @@ class IronShulkerRecipe(
         else -> null
       }
 
-    fun shulkerItem(inv: RecipeInputInventory): ItemStack {
+    fun shulkerItem(input: CraftingRecipeInput): ItemStack {
       var shulkerStack = ItemStack.EMPTY
 
-      for (i in 0 until inv.size()) {
-        val stack = inv.getStack(i)
+      for (i in 0 until input.stackCount) {
+        val stack = input.stacks[i]
         if (isShulkerItem(stack)) {
           // Crafting with two shulkers (should never happen) - disallow craft
           if (!shulkerStack.isEmpty) return ItemStack.EMPTY

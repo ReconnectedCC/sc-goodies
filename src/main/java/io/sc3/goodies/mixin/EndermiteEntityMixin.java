@@ -19,7 +19,7 @@ import static io.sc3.goodies.ScGoodies.modId;
 @Mixin(EndermiteEntity.class)
 public class EndermiteEntityMixin implements EndermiteEntityOwner {
   @Unique
-  private static final String OWNER_KEY = new Identifier(modId, "endermite_owner").toString();
+  private static final String OWNER_KEY = Identifier.of(modId, "endermite_owner").toString();
 
   @Unique
   @Nullable

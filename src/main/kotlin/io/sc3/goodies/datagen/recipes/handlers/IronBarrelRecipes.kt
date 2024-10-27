@@ -9,9 +9,10 @@ import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items.BARREL
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.RegistryWrapper
 
 object IronBarrelRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Iron Barrel
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, IronStorageVariant.IRON.barrelBlock)

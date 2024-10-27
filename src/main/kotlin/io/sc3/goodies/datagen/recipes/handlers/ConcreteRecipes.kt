@@ -7,9 +7,10 @@ import net.minecraft.recipe.book.RecipeCategory
 import io.sc3.goodies.misc.ConcreteExtras
 import io.sc3.library.recipe.RecipeHandler
 import net.minecraft.data.server.recipe.RecipeExporter
+import net.minecraft.registry.RegistryWrapper
 
 object ConcreteRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Concrete Slabs and Stairs
     ConcreteExtras.colors.values.forEach {
       createSlabRecipe(RecipeCategory.BUILDING_BLOCKS, it.slabBlock, ofItems(it.baseBlock))

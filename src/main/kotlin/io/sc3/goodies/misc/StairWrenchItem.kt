@@ -2,16 +2,15 @@ package io.sc3.goodies.misc
 
 import io.sc3.goodies.Registration
 import io.sc3.goodies.util.BaseItem
-import io.sc3.library.ext.optString
 import io.sc3.text.color
 import net.minecraft.block.Block.FORCE_STATE
 import net.minecraft.block.Block.NOTIFY_LISTENERS
 import net.minecraft.block.BlockState
 import net.minecraft.block.StairsBlock
-import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.property.Property
@@ -23,7 +22,6 @@ import net.minecraft.util.Formatting.RED
 import net.minecraft.util.Util
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
 class StairWrenchItem(settings: Settings) : BaseItem(settings) {

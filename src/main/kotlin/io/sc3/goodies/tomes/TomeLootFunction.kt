@@ -11,7 +11,7 @@ import net.minecraft.loot.function.LootFunctionType
 class TomeLootFunction(conditions: List<LootCondition>) : ConditionalLootFunction(conditions.toMutableList()) {
 
   override fun process(stack: ItemStack, context: LootContext): ItemStack {
-    TomeEnchantments.applyRandomEnchantment(stack, context.random)
+    TomeEnchantments.applyRandomEnchantment(stack, context)
     return stack
   }
 

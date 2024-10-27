@@ -20,11 +20,11 @@ enum class IronStorageVariant(
   val columns: Int = 9
 ) {
   IRON("Iron", "iron_chest", "shulker_box_iron", "iron_barrel",
-    Identifier("block/iron_block"), 6),
+    Identifier.of("block/iron_block"), 6),
   GOLD("Gold", "gold_chest", "shulker_box_gold", "gold_barrel",
-    Identifier("block/gold_block"), 9),
+    Identifier.of("block/gold_block"), 9),
   DIAMOND("Diamond", "diamond_chest", "shulker_box_diamond", "diamond_barrel",
-    Identifier("block/diamond_block"), 9, 12);
+    Identifier.of("block/diamond_block"), 9, 12);
 
   val size = rows * columns
   val screenTex = ModId("textures/gui/container/iron_chest_${columns}x${rows}.png")

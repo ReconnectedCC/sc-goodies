@@ -9,9 +9,10 @@ import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ironstorage.IronStorageVariant
 import io.sc3.library.recipe.RecipeHandler
 import net.minecraft.data.server.recipe.RecipeExporter
+import net.minecraft.registry.RegistryWrapper
 
 object IronChestRecipes : RecipeHandler {
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Iron Chest
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.DECORATIONS, IronStorageVariant.IRON.chestBlock)

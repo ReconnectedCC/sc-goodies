@@ -5,7 +5,6 @@ import io.sc3.goodies.ScGoodiesItemTags
 import io.sc3.goodies.datagen.recipes.DyedIronShulkerRecipe
 import io.sc3.goodies.datagen.recipes.IronShulkerRecipeSerializer
 import io.sc3.library.recipe.RecipeHandler
-import io.sc3.library.recipe.offerTo
 import io.sc3.library.recipe.specialRecipe
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
 import net.minecraft.data.server.recipe.RecipeExporter
@@ -16,6 +15,7 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries.RECIPE_SERIALIZER
 import net.minecraft.registry.Registry.register
+import net.minecraft.registry.RegistryWrapper
 import io.sc3.goodies.ironstorage.IronStorageVariant.DIAMOND as DIAMOND_VARIANT
 import io.sc3.goodies.ironstorage.IronStorageVariant.GOLD as GOLD_VARIANT
 import io.sc3.goodies.ironstorage.IronStorageVariant.IRON as IRON_VARIANT
@@ -27,7 +27,7 @@ object IronShulkerRecipes : RecipeHandler {
     register(RECIPE_SERIALIZER, ModId("dyed_iron_shulker"), DyedIronShulkerRecipe.recipeSerializer)
   }
 
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, IRON_VARIANT.shulkerBlock)
       .pattern("III")
       .pattern("ISI")

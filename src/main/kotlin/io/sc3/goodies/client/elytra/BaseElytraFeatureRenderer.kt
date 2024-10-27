@@ -65,8 +65,8 @@ class BaseElytraFeatureRenderer(
     contextModel.copyStateTo(model)
     model.setAngles(player, limbAngle, limbDistance, animationProgress, headYaw, headPitch)
 
-    val consumer = getArmorGlintConsumer(consumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint())
-    model.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f)
+    val consumer = getArmorGlintConsumer(consumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint())
+    model.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV)
 
     matrices.pop()
   }

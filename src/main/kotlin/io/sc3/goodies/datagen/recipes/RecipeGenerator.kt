@@ -8,9 +8,9 @@ import net.minecraft.registry.RegistryWrapper
 import java.util.concurrent.CompletableFuture
 
 class RecipeGenerator(out: FabricDataOutput,
-                      registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup>
+                      private val registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup>
 ) : FabricRecipeProvider(out, registriesFuture) {
   override fun generate(exporter: RecipeExporter) {
-    RECIPE_HANDLERS.forEach { it.generateRecipes(exporter) }
+    RECIPE_HANDLERS.forEach { it.generateRecipes(exporter, registriesFuture.resultNow()) }
   }
 }

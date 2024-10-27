@@ -13,13 +13,14 @@ import io.sc3.library.recipe.BetterComplexRecipeJsonBuilder
 import io.sc3.library.recipe.RecipeHandler
 import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.recipe.book.CraftingRecipeCategory
+import net.minecraft.registry.RegistryWrapper
 
 object ItemMagnetRecipes : RecipeHandler {
   override fun registerSerializers() {
     register(RECIPE_SERIALIZER, ModId("item_magnet_upgrade"), ItemMagnetUpgradeRecipe.recipeSerializer)
   }
 
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     // Item Magnet
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.TOOLS, ModItems.itemMagnet)

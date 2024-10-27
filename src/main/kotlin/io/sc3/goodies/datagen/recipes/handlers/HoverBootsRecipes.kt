@@ -17,12 +17,13 @@ import net.minecraft.item.Items
 import net.minecraft.potion.Potions
 import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.DyeColor
 
 object HoverBootsRecipes : RecipeHandler {
   private val log by ScGoodiesDatagen::log
 
-  override fun generateRecipes(exporter: RecipeExporter) {
+  override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
     ShapedRecipeJsonBuilder
       .create(RecipeCategory.TOOLS, ModItems.hoverBoots[DyeColor.WHITE]!!)
       .pattern("IDI")
@@ -31,7 +32,7 @@ object HoverBootsRecipes : RecipeHandler {
       .input('I', Items.IRON_BLOCK)
       .input('D', Items.DIAMOND_BLOCK)
       .input('F', Items.FEATHER)
-      .input('f', IngredientEnchanted(Enchantments.FEATHER_FALLING, 1).toVanilla())
+      .input('f', IngredientEnchanted(Enchantments.FEATHER_FALLING, 1, wrapper).toVanilla())
       .input('j', IngredientBrew(StatusEffects.JUMP_BOOST.value(), Potions.LEAPING).toVanilla())
       .criterion("has_diamond_boots", conditionsFromItem(Items.DIAMOND_BOOTS))
       .offerTo(exporter)

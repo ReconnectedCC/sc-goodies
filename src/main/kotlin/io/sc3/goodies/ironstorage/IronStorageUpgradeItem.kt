@@ -4,16 +4,15 @@ import io.sc3.goodies.ScGoodies.modId
 import io.sc3.goodies.util.BaseItem
 import io.sc3.library.Tooltips.addDescLines
 import net.minecraft.block.entity.LootableContainerBlockEntity
-import net.minecraft.client.item.TooltipType
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
 import net.minecraft.util.ActionResult.PASS
 import net.minecraft.util.ActionResult.SUCCESS
 import net.minecraft.util.Formatting.GRAY
-import net.minecraft.world.World
 
 class IronStorageUpgradeItem(
   private val upgrade: IronStorageUpgrade,

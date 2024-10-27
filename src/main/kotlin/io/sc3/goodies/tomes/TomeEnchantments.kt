@@ -4,37 +4,33 @@ import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.tomes.AncientTomeItem.Companion.stackEnchantment
 import io.sc3.goodies.util.AnvilEvents
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents
-import net.fabricmc.fabric.api.loot.v2.LootTableSource
+import io.sc3.library.ext.EnchantmentExt
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents
+import net.fabricmc.fabric.api.loot.v3.LootTableSource
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.ItemEnchantmentsComponent
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.EnchantmentLevelEntry
-import net.minecraft.enchantment.Enchantments
 import net.minecraft.enchantment.Enchantments.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.CraftingResultInventory
-import net.minecraft.item.EnchantedBookItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items.ENCHANTED_BOOK
 import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootTable
 import net.minecraft.loot.LootTables.*
+import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.entry.EmptyEntry
 import net.minecraft.loot.entry.ItemEntry
 import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.registry.Registries.LOOT_FUNCTION_TYPE
 import net.minecraft.registry.Registry.register
 import net.minecraft.registry.RegistryKey
-import net.minecraft.resource.ResourceManager
+import net.minecraft.registry.RegistryWrapper
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.screen.AnvilScreenHandler
 import net.minecraft.screen.Property
-import net.minecraft.text.PlainTextContent
 import net.minecraft.text.Text
-import net.minecraft.text.Text.literal
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.random.Random
 
 private const val UPGRADE_COST = 10
 private const val UPGRADE_COST_MAXED = 30
@@ -81,7 +77,7 @@ object TomeEnchantments {
 
   }
 //Required:
-  private fun enhanceLootTables(lootTable: RegistryKey<LootTable>, builder: LootTable.Builder, source: LootTableSource) {
+  private fun enhanceLootTables(lootTable: RegistryKey<LootTable>, builder: LootTable.Builder, source: LootTableSource, wrapper: RegistryWrapper.WrapperLookup) {
     val weight = lootWeights[lootTable] ?: return
     val entry = ItemEntry.builder(ModItems.ancientTome)
       .weight(weight)
@@ -95,9 +91,10 @@ object TomeEnchantments {
       .with(entry))
   }
 
-  fun applyRandomEnchantment(stack: ItemStack, rand: Random) {
-    val ench = validEnchantments[rand.nextInt(validEnchantments.size)]
-    stack.addEnchantment(ench, ench.maxLevel)
+  fun applyRandomEnchantment(stack: ItemStack, context: LootContext) {
+    val rawEnch = validEnchantments[context.random.nextInt(validEnchantments.size)]
+    val ench = EnchantmentExt.getEnchantment(context.world.registryManager, rawEnch);
+    stack.addEnchantment(ench, ench.value().maxLevel)
   }
 
   private fun onAnvilChange(handler: AnvilScreenHandler, left: ItemStack, right: ItemStack,
@@ -106,17 +103,19 @@ object TomeEnchantments {
     if (left.isEmpty || right.isEmpty) return true
 
     if (right.isOf(ModItems.ancientTome)) {
-      val tomeEnch = stackEnchantment(right) ?: return true
+      val rawTomeEnch = stackEnchantment(right) ?: return true
+      val tomeEnch = EnchantmentExt.getEnchantment(playerEntity.world.registryManager, rawTomeEnch);
+
       var enchants = EnchantmentHelper.getEnchantments(left)
       val matched = enchants.getLevel(tomeEnch) ?: return true
 
-      if (matched <= tomeEnch.maxLevel) {
+      if (matched <= tomeEnch.value().maxLevel) {
         val lvl = matched + 1
         val b = ItemEnchantmentsComponent.Builder(enchants)
         b.set(tomeEnch, lvl)
         enchants = b.build()
 
-        val cost = if (lvl > tomeEnch.maxLevel) UPGRADE_COST_MAXED else UPGRADE_COST
+        val cost = if (lvl > tomeEnch.value().maxLevel) UPGRADE_COST_MAXED else UPGRADE_COST
 
         applyOutput(name, left, enchants, cost, output, levelCost)
         return false
@@ -128,27 +127,27 @@ object TomeEnchantments {
       var isOver = false
       var isMatched = false
 
-      newEnchants.enchantmentsMap.forEach { (ench) ->
-        if (EnchantmentHelper.getLevel(ench.value(), right) > ench.value().maxLevel) {
+      newEnchants.enchantmentEntries.forEach { (ench) ->
+        if (EnchantmentHelper.getLevel(ench, right) > ench.value().maxLevel) {
           isOver = true
 
           if (ench.value().isAcceptableItem(left) || left.isOf(ENCHANTED_BOOK)) {
             isMatched = true
 
             // Remove incompatible enchantments from the target book
-            currentEnchants.enchantmentsMap.removeIf { (other) -> isIncompatible(other.value(), ench.value()) }
+            currentEnchants.enchantmentEntries.removeIf { (other) -> isIncompatible(other, ench) }
 
             val b = ItemEnchantmentsComponent.Builder(currentEnchants)
-            b.set(ench.value(), EnchantmentHelper.getLevel(ench.value(), right))
+            b.set(ench, EnchantmentHelper.getLevel(ench, right))
             currentEnchants = b.build()
           }
         } else if (ench.value().isAcceptableItem(left)) {
           // Don't apply incompatible enchantments to the target item
-          val incompatible = currentEnchants.enchantmentsMap.any { (other) -> isIncompatible(other.value(), ench.value()) }
+          val incompatible = currentEnchants.enchantmentEntries.any { (other) -> isIncompatible(other, ench) }
 
           if (!incompatible) {
             val b = ItemEnchantmentsComponent.Builder(currentEnchants)
-            b.set(ench.value(), EnchantmentHelper.getLevel(ench.value(), right))
+            b.set(ench, EnchantmentHelper.getLevel(ench, right))
             currentEnchants = b.build()
           }
         }
@@ -163,8 +162,8 @@ object TomeEnchantments {
     return true
   }
 
-  private fun isIncompatible(otherEnch: Enchantment, ench: Enchantment?) =
-    otherEnch != ench && !otherEnch.canCombine(ench)
+  private fun isIncompatible(otherEnch: RegistryEntry<Enchantment>, ench: RegistryEntry<Enchantment>) =
+    !Enchantment.canBeCombined(ench, otherEnch)
 
   private fun applyOutput(name: String?, left: ItemStack, enchants: ItemEnchantmentsComponent, cost: Int,
                           output: CraftingResultInventory, levelCost: Property) {

@@ -1,9 +1,7 @@
 package io.sc3.goodies.enderstorage
 
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import com.google.gson.JsonSerializer
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import com.mojang.serialization.MapCodec
@@ -23,7 +21,6 @@ import net.minecraft.text.Text.translatable
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Formatting
 import net.minecraft.util.Uuids
-import net.minecraft.util.math.BlockPos
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 

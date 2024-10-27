@@ -44,8 +44,6 @@ import io.sc3.library.networking.registerServerReceiver
 import io.sc3.library.recipe.RecipeHandler
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
-import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
-import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.fabricmc.fabric.api.registry.FlattenableBlockRegistry
 import net.fabricmc.fabric.api.registry.TillableBlockRegistry
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
@@ -55,9 +53,8 @@ import net.minecraft.block.AbstractBlock.ContextPredicate
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
-import net.minecraft.component.DataComponentType
+import net.minecraft.component.ComponentType
 import net.minecraft.component.type.FoodComponent
-import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
@@ -94,14 +91,14 @@ object Registration {
     register(ITEM_GROUP, itemGroup, FabricItemGroup.builder()
       .displayName(Text.translatable("itemGroup.$modId.main"))
       .icon { ItemStack(Items.AXOLOTL_BUCKET) }
-      .entries { _, entries ->
+      .entries { dpCtx, entries ->
         items.forEach(entries::add)
-        entries.addAll(AncientTomeItem.getTomeStacks())
+        entries.addAll(AncientTomeItem.getTomeStacks(dpCtx.lookup))
       }
       .build())
 
     // Force static initializers to run
-    listOf(ModBlocks, ModItems, ModBlockEntities, ModScreens, ModEntities, ModDamageSources)
+    listOf(ModBlocks, ModItems, ModBlockEntities, ModScreens, ModEntities, ModDamageSources, ModComponents)
 
     // Iron Chests and Shulkers
     IronStorageVariant.entries.forEach { variant ->
@@ -193,8 +190,6 @@ object Registration {
     )
 
     RECIPE_HANDLERS.forEach(RecipeHandler::registerSerializers)
-    ModComponents
-
   }
 
   internal fun bootstrapFeatures(featureRegisterable: Registerable<ConfiguredFeature<*, *>>) {
@@ -291,45 +286,41 @@ object Registration {
     }
   }
   object ModComponents {
-    val WRENCH_PROPERTY: DataComponentType<String> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "wrench_property"),
-      DataComponentType.builder<String>().codec(Codec.STRING).build()
+    val WRENCH_PROPERTY: ComponentType<String> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "wrench_property"),
+      ComponentType.builder<String>().codec(Codec.STRING).build()
     );
-    val ITEM_MAGNET_DISABLED: DataComponentType<Boolean> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "item_magnet_disabled"),
-      DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    val ITEM_MAGNET_DISABLED: ComponentType<Boolean> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "item_magnet_disabled"),
+      ComponentType.builder<Boolean>().codec(Codec.BOOL).build()
     );
-    val ITEM_MAGNET_BLOCKED_REASON: DataComponentType<String> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "item_magnet_blocked_reason"),
-      DataComponentType.builder<String>().codec(Codec.STRING).build()
+    val ITEM_MAGNET_BLOCKED_REASON: ComponentType<String> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "item_magnet_blocked_reason"),
+      ComponentType.builder<String>().codec(Codec.STRING).build()
     );
-    val ITEM_MAGNET_LEVEL: DataComponentType<Int> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "item_magnet_level"),
-      DataComponentType.builder<Int>().codec(Codec.INT).build()
+    val ITEM_MAGNET_LEVEL: ComponentType<Int> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "item_magnet_level"),
+      ComponentType.builder<Int>().codec(Codec.INT).build()
     );
-    val FREQUENCY: DataComponentType<Frequency> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "frequency"),
-      DataComponentType.builder<Frequency>().codec(Frequency.CODEC.codec()).build()
+    val FREQUENCY: ComponentType<Frequency> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "frequency"),
+      ComponentType.builder<Frequency>().codec(Frequency.CODEC.codec()).build()
     );
-    val COMPUTER_CHANGES_ENABLED: DataComponentType<Boolean> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "computer_changes_enabled"),
-      DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    val COMPUTER_CHANGES_ENABLED: ComponentType<Boolean> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "computer_changes_enabled"),
+      ComponentType.builder<Boolean>().codec(Codec.BOOL).build()
     );
-    val TEMP_CRAFTING_PERSONAL: DataComponentType<Boolean> = Registry.register(
-      Registries.DATA_COMPONENT_TYPE,
-      Identifier.of(ScGoodies.modId, "temp_crafting_personal"),
-      DataComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    val TEMP_CRAFTING_PERSONAL: ComponentType<Boolean> = register(
+      DATA_COMPONENT_TYPE,
+      Identifier.of(modId, "temp_crafting_personal"),
+      ComponentType.builder<Boolean>().codec(Codec.BOOL).build()
     );
-
-    init {
-      println("REGISTERING ALL CUSTOM SC-GOODIES COMPONENTS!!!")
-    }
   }
   object ModBlocks {
     val enderStorage = rBlock("ender_storage", EnderStorageBlock(AbstractBlock.Settings
@@ -411,7 +402,8 @@ object Registration {
       val leaves = rBlock("${name}_leaves", LeavesBlock(leavesSettings(mapColor)))
       val potted = rBlock("potted_${name}_sapling", FlowerPotBlock(sapling, potSettings()))
       val saplingItem = rItem(sapling, ::BlockItem, itemSettings())
-      val leavesItem = rItem(leaves, ::BlockItem, itemSettings())
+
+      rItem(leaves, ::BlockItem, itemSettings())
 
       val tree = ScTree(
         sapling,
@@ -505,7 +497,7 @@ object Registration {
     fun elytraSettings(): Item.Settings = itemSettings()
       .maxDamage(432)
       .rarity(UNCOMMON)
-      .equipmentSlot { EquipmentSlot.CHEST }
+      .equipmentSlot { _, _ -> EquipmentSlot.CHEST }
   }
 
   object ModBlockEntities {
@@ -513,7 +505,7 @@ object Registration {
 
     fun <T : BlockEntity> rBlockEntity(name: String, vararg block: Block,
                                        factory: (BlockPos, BlockState) -> T): BlockEntityType<T> {
-      val blockEntityType = FabricBlockEntityTypeBuilder.create(factory, *block).build()
+      val blockEntityType = BlockEntityType.Builder.create(factory, *block).build()
       return register(BLOCK_ENTITY_TYPE, ModId(name), blockEntityType)
     }
   }
@@ -525,19 +517,20 @@ object Registration {
 
   object ModEntities {
     val glassItemFrameEntity: EntityType<GlassItemFrameEntity> = register(ENTITY_TYPE, ModId("glass_item_frame"),
-      FabricEntityTypeBuilder.create(SpawnGroup.MISC, ::GlassItemFrameEntity)
-        .dimensions(EntityDimensions.changing(0.5f, 0.5f))
-        .trackRangeChunks(10)
-        .trackedUpdateRate(Integer.MAX_VALUE)
-        .forceTrackedVelocityUpdates(false)
-        .build())
+      EntityType.Builder.create(::GlassItemFrameEntity, SpawnGroup.MISC)
+        .dimensions(.5f, .5f)
+        .maxTrackingRange(10)
+        .trackingTickInterval(Integer.MAX_VALUE)
+        .alwaysUpdateVelocity(false)
+        .build()
+    )
 
     val seatEntity: EntityType<SeatEntity> = register(ENTITY_TYPE, ModId("seat"),
-      FabricEntityTypeBuilder.create(SpawnGroup.MISC, ::SeatEntity)
-        .dimensions(EntityDimensions.fixed(0.125f, 0.0f))
-        .trackRangeChunks(10)
-        .trackedUpdateRate(Integer.MAX_VALUE)
-        .forceTrackedVelocityUpdates(false)
+      EntityType.Builder.create(::SeatEntity, SpawnGroup.MISC)
+        .dimensions(0.125f, 0.0f)
+        .maxTrackingRange(10)
+        .trackingTickInterval(Integer.MAX_VALUE)
+        .alwaysUpdateVelocity(false)
         .build())
   }
 

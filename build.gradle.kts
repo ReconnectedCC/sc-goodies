@@ -1,4 +1,3 @@
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -9,8 +8,6 @@ plugins {
   id("fabric-loom") version "1.7-SNAPSHOT"
   id("maven-publish")
   id("signing")
-  id("com.modrinth.minotaur") version "2.+"
-  id("net.darkhax.curseforgegradle") version "1.0.11"
 }
 
 val modVersion: String by project
@@ -63,14 +60,14 @@ repositories {
   }
 
   maven {
-    url = uri("https://repo.sad.ovh/releases")
+    url = uri("https://maven.reconnected.cc/releases")
     content {
       includeModule("io.sc3", "sc-library")
       includeModule("io.sc3", "sc-text")
     }
   }
 
-  maven("https://squiddev.cc/maven") {
+  maven("https://maven.squiddev.cc") {
     content {
       includeGroup("cc.tweaked")
       includeModule("org.squiddev", "Cobalt")
@@ -217,51 +214,6 @@ tasks {
   }
 }
 
-modrinth {
-  token.set(findProperty("modrinthApiKey") as String? ?: "")
-  projectId.set("glA8M6fC")
-  versionNumber.set("$minecraftVersion-$modVersion")
-  versionName.set(modVersion)
-  versionType.set("release")
-  uploadFile.set(tasks.remapJar as Any)
-  changelog.set("Release notes can be found on the [GitHub repository](https://github.com/SwitchCraftCC/sc-goodies/commits/$minecraftVersion).")
-  gameVersions.add(minecraftVersion)
-  loaders.add("fabric")
-
-  syncBodyFrom.set(provider {
-    file("README.md").readText()
-      .replace("img/header.png", "https://cdn.modrinth.com/data/glA8M6fC/images/4a678749f05541893dcba84ea92b8740644e57e9.png")
-  })
-
-  dependencies {
-    required.project("fabric-api")
-    required.project("fabric-language-kotlin")
-    required.project("trinkets")
-  }
-}
-
-tasks.modrinth { dependsOn(tasks.modrinthSyncBody) }
-tasks.publish { dependsOn(tasks.modrinth) }
-
-val publishCurseForge by tasks.registering(TaskPublishCurseForge::class) {
-  group = PublishingPlugin.PUBLISH_TASK_GROUP
-  description = "Upload artifacts to CurseForge"
-
-  apiToken = findProperty("curseForgeApiKey") as String? ?: ""
-  enabled = apiToken != ""
-
-  val mainFile = upload("807667", tasks.remapJar.get().archiveFile)
-  dependsOn(tasks.remapJar)
-  mainFile.releaseType = "release"
-  mainFile.changelog = "Release notes can be found on the [GitHub repository](https://github.com/SwitchCraftCC/sc-goodies/commits/$minecraftVersion)."
-  mainFile.changelogType = "markdown"
-  mainFile.addGameVersion(minecraftVersion)
-  mainFile.addRequirement("fabric-api")
-  mainFile.addRequirement("fabric-language-kotlin")
-  mainFile.addRequirement("trinkets")
-}
-
-tasks.publish { dependsOn(publishCurseForge) }
 
 publishing {
   publications {
@@ -272,8 +224,8 @@ publishing {
 
   repositories {
     maven {
-      name = "lemmmyRepo"
-      url = uri("https://repo.lem.sh/releases")
+      name = "reconnectedRepo"
+      url = uri("https://maven.reconnected.cc/releases")
 
       if (!System.getenv("MAVEN_USERNAME").isNullOrEmpty()) {
         credentials {

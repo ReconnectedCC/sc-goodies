@@ -5,17 +5,14 @@ import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.enderstorage.Frequency
 import io.sc3.library.recipe.itemDyeColor
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.DYES
-import net.minecraft.inventory.RecipeInputInventory
-import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.recipe.Ingredient.fromTag
 import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.recipe.input.CraftingRecipeInput
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.world.World
 import java.util.*
@@ -27,11 +24,11 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
   private val emerald = ofItems(Items.EMERALD)
 
   /** Gets the dyes in the top three slots of the inventory, or null if any slot is not a dye. */
-  private fun getDyes(inv: RecipeInputInventory): Array<ItemStack>? {
+  private fun getDyes(inv: CraftingRecipeInput): Array<ItemStack>? {
     var dyes: Array<ItemStack>? = null
 
     for (i in 0 until 3) {
-      val stack = inv.getStack(i)
+      val stack = inv.getStackInSlot(i)
       if (stack.isEmpty || !dye.test(stack)) return null
 
       if (dyes == null) dyes = Array(3) { ItemStack.EMPTY }
@@ -42,11 +39,11 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
   }
 
   /** Gets the single ender storage item in the inventory, or null if one was not found, or there was more than one. */
-  private fun getEnderStorage(inv: RecipeInputInventory): ItemStack? {
+  private fun getEnderStorage(input: CraftingRecipeInput): ItemStack? {
     var foundStorage: ItemStack? = null
 
-    for (i in 0 until inv.size()) {
-      val stack = inv.getStack(i)
+    for (i in 0 until input.stackCount) {
+      val stack = input.stacks[i]
       if (stack.isEmpty || !enderStorage.test(stack)) continue
 
       // Ensure there is only one ender storage item - fail if there is more than one
@@ -58,12 +55,12 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
   }
 
   /** Gets a diamond OR an emerald from the inventory. */
-  private fun getPersonalState(inv: RecipeInputInventory): PersonalState? {
+  private fun getPersonalState(inv: CraftingRecipeInput): PersonalState? {
     var foundDiamond = false
     var foundEmerald = false
 
-    for (i in 0 until inv.size()) {
-      val stack = inv.getStack(i)
+    for (i in 0 until inv.stackCount) {
+      val stack = inv.stacks[i]
       if (stack.isEmpty) continue
 
       if (diamond.test(stack)) {
@@ -84,17 +81,17 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
     }
   }
 
-  override fun matches(inv: RecipeInputInventory, world: World): Boolean {
-    if (getEnderStorage(inv) == null) return false
+  override fun matches(input: CraftingRecipeInput, world: World): Boolean {
+    if (getEnderStorage(input) == null) return false
 
     // Will return null if there is more than one diamond or emerald
-    val personalState = getPersonalState(inv) ?: return false
+    val personalState = getPersonalState(input) ?: return false
 
     // Require either a personal state or three dyes
-    return getDyes(inv) != null || personalState != PersonalState.NOT_PERSONAL
+    return getDyes(input) != null || personalState != PersonalState.NOT_PERSONAL
   }
 
-  override fun craft(inv: RecipeInputInventory, lookup: RegistryWrapper.WrapperLookup): ItemStack? {
+  override fun craft(inv: CraftingRecipeInput, lookup: RegistryWrapper.WrapperLookup): ItemStack {
     val dyes = getDyes(inv)
     val enderStorage = getEnderStorage(inv) ?: return ItemStack.EMPTY
     val personalState = getPersonalState(inv) ?: return ItemStack.EMPTY

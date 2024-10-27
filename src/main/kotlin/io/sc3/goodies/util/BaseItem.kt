@@ -4,7 +4,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import io.sc3.library.Tooltips.addDescLines
-import net.minecraft.client.item.TooltipType
+import net.minecraft.item.tooltip.TooltipType
 
 open class BaseItem(
   settings: Settings

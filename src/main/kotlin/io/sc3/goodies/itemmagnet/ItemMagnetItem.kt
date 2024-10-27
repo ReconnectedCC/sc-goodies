@@ -8,11 +8,11 @@ import io.sc3.goodies.itemmagnet.ItemMagnetHotkey.toggleBinding
 import io.sc3.goodies.itemmagnet.ItemMagnetState.playerMagnetRadius
 import io.sc3.library.Tooltips
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.decoration.ItemFrameEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable

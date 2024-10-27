@@ -46,7 +46,7 @@ object ItemMagnetTrinketRenderer : TrinketRenderer {
       provider.getBuffer(model.getLayer(texture))
     }
 
-    model.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f)
+    model.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV)
 
     matrices.pop()
   }

@@ -4,8 +4,8 @@ import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import io.sc3.library.Tooltips.addDescLines
-import net.minecraft.client.item.TooltipType
 import net.minecraft.item.Item.TooltipContext
+import net.minecraft.item.tooltip.TooltipType
 
 abstract class BaseBlock(settings: Settings) : Block(settings) {
   override fun appendTooltip(

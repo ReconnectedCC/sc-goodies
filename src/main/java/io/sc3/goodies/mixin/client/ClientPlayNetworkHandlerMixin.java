@@ -44,7 +44,7 @@ public class ClientPlayNetworkHandlerMixin {
     index = 0
   )
   private String onEntityPassengersSetModifyArg(String key) {
-    // If we're mounting an sc-goodies Seat entity, change the language key
+    // If we're mounting a sc-goodies Seat entity, change the language key
     if (mountingEntity != null && mountingEntity instanceof SeatEntity) {
       return "block." + ScGoodies.modId + ".seat.mount";
     } else {

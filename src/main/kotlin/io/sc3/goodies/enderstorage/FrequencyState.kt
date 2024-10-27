@@ -3,9 +3,6 @@ package io.sc3.goodies.enderstorage
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import io.netty.buffer.ByteBuf
-import net.minecraft.SharedConstants
-import net.minecraft.client.MinecraftClient
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.RegistryByteBuf
