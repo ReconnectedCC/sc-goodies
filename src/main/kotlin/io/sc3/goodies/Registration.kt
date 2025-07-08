@@ -128,7 +128,7 @@ object Registration {
 
     // Item Magnets
     PayloadTypeRegistry.playC2S().register(ToggleItemMagnetPacket.id, ToggleItemMagnetPacket.CODEC)
-    registerServerReceiver(ToggleItemMagnetPacket.id, ToggleItemMagnetPacket::fromBytes)
+    registerServerReceiver(ToggleItemMagnetPacket.id)
 
     // Dyed + Special Elytra
     niceDyeOrder
