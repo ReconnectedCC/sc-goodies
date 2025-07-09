@@ -5,7 +5,7 @@ import io.sc3.goodies.ScGoodiesItemTags.ANY_IRON_STORAGE
 import io.sc3.goodies.ScGoodiesItemTags.ANY_UPGRADABLE_STORAGE
 import io.sc3.goodies.ironstorage.IronStorageUpgrade
 import io.sc3.library.recipe.RecipeHandler
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.*
 import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromTag
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
@@ -48,7 +48,7 @@ object IronStorageUpgradeRecipes : RecipeHandler {
       .pattern("DDD")
       .input('L', GLASS_BLOCKS)
       .input('I', IRON_INGOTS)
-      .input('D', DIAMONDS)
+      .input('D', DIAMOND_GEMS)
       .criterion("has_chest", conditionsFromTag(ANY_UPGRADABLE_STORAGE))
       .criterion("has_iron_chest", conditionsFromTag(ANY_IRON_STORAGE))
       .offerTo(exporter)
@@ -61,7 +61,7 @@ object IronStorageUpgradeRecipes : RecipeHandler {
       .pattern("LLL")
       .input('L', GLASS_BLOCKS)
       .input('G', GOLD_INGOTS)
-      .input('D', DIAMONDS)
+      .input('D', DIAMOND_GEMS)
       .criterion("has_chest", conditionsFromTag(ANY_UPGRADABLE_STORAGE))
       .criterion("has_iron_chest", conditionsFromTag(ANY_IRON_STORAGE))
       .offerTo(exporter)

@@ -4,7 +4,7 @@ import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.goodies.enderstorage.Frequency
 import io.sc3.library.recipe.itemDyeColor
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.DYES
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.DYES
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient.fromTag

@@ -3,7 +3,7 @@ package io.sc3.goodies.datagen.recipes.handlers
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ironstorage.IronStorageVariant
 import io.sc3.library.recipe.RecipeHandler
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.*
 import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
@@ -42,7 +42,7 @@ object IronBarrelRecipes : RecipeHandler {
       .pattern("GBG")
       .pattern("DDD")
       .input('G', GLASS_BLOCKS)
-      .input('D', DIAMONDS)
+      .input('D', DIAMOND_GEMS)
       .input('B', IronStorageVariant.IRON.barrelBlock)
       .criterion("has_barrel", conditionsFromItem(BARREL))
       .offerTo(exporter, ModId("diamond_barrel_with_iron_barrel"))
@@ -54,7 +54,7 @@ object IronBarrelRecipes : RecipeHandler {
       .pattern("DBD")
       .pattern("GGG")
       .input('G', GLASS_BLOCKS)
-      .input('D', DIAMONDS)
+      .input('D', DIAMOND_GEMS)
       .input('B', IronStorageVariant.GOLD.barrelBlock)
       .criterion("has_barrel", conditionsFromItem(BARREL))
       .offerTo(exporter, ModId("diamond_barrel_with_gold_barrel"))

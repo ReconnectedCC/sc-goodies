@@ -3,7 +3,7 @@ package io.sc3.goodies.datagen.recipes.handlers
 import io.sc3.goodies.Registration.ModItems.glassItemFrame
 import io.sc3.goodies.Registration.ModItems.glowGlassItemFrame
 import io.sc3.library.recipe.RecipeHandler
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder

@@ -6,7 +6,7 @@
       "item": "sc-goodies:iron_barrel"
     },
     "I": {
-      "tag": "c:gold_ingots"
+      "tag": "c:ingots/gold"
     }
   },
   "pattern": [

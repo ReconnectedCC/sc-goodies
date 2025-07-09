@@ -2,7 +2,7 @@ package io.sc3.goodies.datagen.recipes.handlers
 
 import io.sc3.goodies.Registration.ModItems
 import io.sc3.library.recipe.RecipeHandler
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.IRON_INGOTS
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.IRON_INGOTS
 import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromTag
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder

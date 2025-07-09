@@ -1,6 +1,6 @@
 package io.sc3.goodies.datagen.recipes.handlers
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.*
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.*
 import net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.item.Items.CHEST
@@ -42,7 +42,7 @@ object IronChestRecipes : RecipeHandler {
       .pattern("GCG")
       .pattern("DDD")
       .input('G', GLASS_BLOCKS)
-      .input('D', DIAMONDS)
+      .input('D', DIAMOND_GEMS)
       .input('C', IronStorageVariant.IRON.chestBlock)
       .criterion("has_chest", conditionsFromItem(CHEST))
       .offerTo(exporter, ModId("diamond_chest_with_iron_chest"))
@@ -54,7 +54,7 @@ object IronChestRecipes : RecipeHandler {
       .pattern("DCD")
       .pattern("GGG")
       .input('G', GLASS_BLOCKS)
-      .input('D', DIAMONDS)
+      .input('D', DIAMOND_GEMS)
       .input('C', IronStorageVariant.GOLD.chestBlock)
       .criterion("has_chest", conditionsFromItem(CHEST))
       .offerTo(exporter, ModId("diamond_chest_with_gold_chest"))
