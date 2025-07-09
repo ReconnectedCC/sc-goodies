@@ -37,7 +37,8 @@ public abstract class ItemStackMixin {
     at = @At(
       value="INVOKE",
       target="Lcom/google/common/collect/Lists;newArrayList()Ljava/util/ArrayList;"
-    )
+    ),
+    remap = false
   )
   private ArrayList<Text> shareList(
     ArrayList<Text> original, @Share("list") LocalRef<ArrayList<Text>> list

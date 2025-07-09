@@ -177,7 +177,7 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
   companion object {
     fun stackLevel(stack: ItemStack): Int {
       if (stack.isEmpty) return 0
-      return stack.get(Registration.ModComponents.ITEM_MAGNET_LEVEL) ?: return 0;
+      return stack.get(Registration.ModComponents.ITEM_MAGNET_LEVEL) ?: return 0
     }
 
     fun radius(level: Int): Int
@@ -189,7 +189,7 @@ class ItemMagnetItem(settings: Settings) : TrinketItem(settings) {
       return data ?: true
     }
     fun setStackEnabled(stack: ItemStack, enabled: Boolean) =
-      stack.set(Registration.ModComponents.ITEM_MAGNET_DISABLED, !enabled)
+      stack.set(Registration.ModComponents.ITEM_MAGNET_DISABLED, enabled)
 
     fun stackBlocked(stack: ItemStack): BlockedReason? {
       return stack.get(Registration.ModComponents.ITEM_MAGNET_BLOCKED_REASON)?.let { BlockedReason.valueOf(it) }
