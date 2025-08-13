@@ -10,7 +10,7 @@ import io.sc3.library.ext.event
 object AnvilEvents {
   @JvmField
   val CHANGE = event<(handler: AnvilScreenHandler, left: ItemStack, right: ItemStack, output: CraftingResultInventory,
-                      name: String, baseCost: Int, player: PlayerEntity, levelCost: Property) -> Boolean> { cb ->
+                      name: String?, baseCost: Int, player: PlayerEntity, levelCost: Property) -> Boolean> { cb ->
     { handler, left, right, output, name, baseCost, player, levelCost ->
       cb.all { it(handler, left, right, output, name, baseCost, player, levelCost) }
     }

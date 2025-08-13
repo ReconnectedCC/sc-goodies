@@ -1,4 +1,6 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,7 +8,7 @@ plugins {
   kotlin("jvm").version(kotlinVersion)
   kotlin("plugin.serialization").version(kotlinVersion)
 
-  id("fabric-loom") version "1.6-SNAPSHOT"
+  id("fabric-loom") version "1.10-SNAPSHOT"
   id("maven-publish")
   id("signing")
   id("com.modrinth.minotaur") version "2.+"
@@ -47,10 +49,10 @@ version = modVersion
 group = mavenGroup
 
 tasks.withType<KotlinCompile>().configureEach {
-  kotlinOptions {
-    jvmTarget = "17"
-    apiVersion = "1.9"
-    languageVersion = "1.9"
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_17)
+    apiVersion.set(KotlinVersion.KOTLIN_1_9)
+    languageVersion.set(KotlinVersion.KOTLIN_1_9)
   }
 }
 
@@ -69,7 +71,7 @@ repositories {
     }
   }
 
-  maven("https://squiddev.cc/maven") {
+  maven("https://maven.squiddev.cc") {
     content {
       includeGroup("cc.tweaked")
       includeModule("org.squiddev", "Cobalt")

@@ -1,5 +1,6 @@
 package io.sc3.goodies.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.Property;
@@ -20,13 +21,12 @@ public class AnvilScreenHandlerMixin {
   @Shadow @Final private Property levelCost;
 
   @Inject(
-    method="updateResult",
-    at=@At(value="INVOKE", target="Lnet/minecraft/item/ItemStack;isEmpty()Z", ordinal=2),
-    cancellable = true,
-    locals = LocalCapture.CAPTURE_FAILHARD
+    method = "updateResult",
+    at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z", ordinal = 2),
+    cancellable = true
   )
-  private void updateResult(CallbackInfo ci, ItemStack itemStack, int i, int baseCost, int k, ItemStack itemStack2,
-                            ItemStack itemStack3) {
+  private void updateResult(CallbackInfo ci, @Local(ordinal = 0) ItemStack itemStack, @Local(ordinal = 1) int baseCost,
+                            @Local(ordinal = 2) ItemStack itemStack3) {
     AnvilScreenHandler handler = (AnvilScreenHandler) (Object) this;
     ForgingScreenHandlerAccessor forging = (ForgingScreenHandlerAccessor) this;
 
