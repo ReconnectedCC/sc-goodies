@@ -8,7 +8,7 @@ plugins {
   kotlin("jvm").version(kotlinVersion)
   kotlin("plugin.serialization").version(kotlinVersion)
 
-  id("fabric-loom") version "1.10-SNAPSHOT"
+  id("fabric-loom") version "1.11-SNAPSHOT"
   id("maven-publish")
   id("signing")
   id("com.modrinth.minotaur") version "2.+"
@@ -36,6 +36,7 @@ val modMenuVersion: String by project
 
 val trinketsVersion: String by project
 val cardinalComponentsVersion: String by project
+val figuraVersion: String by project
 
 val scLibraryVersion: String by project
 val scTextVersion: String by project
@@ -106,6 +107,8 @@ repositories {
       includeModule("me.lucko", "fabric-permissions-api")
     }
   }
+
+  maven("https://maven.figuramc.org/releases")
 }
 
 dependencies {
@@ -148,6 +151,8 @@ dependencies {
   implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", kotlinSerializationVersion)
 
   modImplementation(include("io.sc3", "sc-text", scTextVersion))
+  // Figura
+  modCompileOnly("org.figuramc","figura-fabric", figuraVersion)
 }
 
 tasks {
@@ -284,4 +289,9 @@ publishing {
       }
     }
   }
+}
+
+kotlin {
+  // hints gradle which ide to use, including for compiling java.
+  jvmToolchain(17)
 }
