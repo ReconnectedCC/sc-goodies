@@ -8,7 +8,7 @@ plugins {
   kotlin("jvm").version(kotlinVersion)
   kotlin("plugin.serialization").version(kotlinVersion)
 
-  id("fabric-loom") version "1.11-SNAPSHOT"
+  id("fabric-loom") version "1.14.+"
   id("maven-publish")
   id("signing")
   id("com.modrinth.minotaur") version "2.+"
@@ -102,9 +102,9 @@ repositories {
     }
   }
 
-  maven("https://oss.sonatype.org/content/repositories/snapshots") {
+  maven("https://api.modrinth.com/maven") {
     content {
-      includeModule("me.lucko", "fabric-permissions-api")
+      includeGroup("maven.modrinth")
     }
   }
 
@@ -132,7 +132,7 @@ dependencies {
   implementation(include("com.electronwill.night-config", "core", nightConfigVersion))
   implementation(include("com.electronwill.night-config", "toml", nightConfigVersion))
 
-  modImplementation("dev.emi:trinkets:${trinketsVersion}")
+  modImplementation("dev.emi:trinkets:${trinketsVersion}") {}
 
   modApi("me.shedaniel.cloth:cloth-config-fabric:$clothConfigVersion") {
     exclude("net.fabricmc.fabric-api")
@@ -142,8 +142,7 @@ dependencies {
 
   modImplementation(include("com.terraformersmc", "modmenu", modMenuVersion))
 
-  modImplementation(include("me.lucko", "fabric-permissions-api", fabricPermissionsApiVersion))
-
+  modImplementation("maven.modrinth:fabric-permissions-api:0.3.1")
   modImplementation(include("dev.onyxstudios.cardinal-components-api", "cardinal-components-base", cardinalComponentsVersion))
   modImplementation(include("dev.onyxstudios.cardinal-components-api", "cardinal-components-entity", cardinalComponentsVersion))
 

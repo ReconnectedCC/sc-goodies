@@ -88,5 +88,6 @@ class BlockLootTableProvider(out: FabricDataOutput) : FabricBlockLootTableProvid
   private fun addTreeDrops(tree: ScTree) {
     addDrop(tree.leaves) { block -> leavesDrops(block, tree.sapling, *saplingDropChance) }
     addDrop(tree.sapling)
+    addPottedPlantDrops(tree.potted)
   }
 }
