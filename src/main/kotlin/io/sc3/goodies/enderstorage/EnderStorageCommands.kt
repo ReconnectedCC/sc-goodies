@@ -1,12 +1,13 @@
 package io.sc3.goodies.enderstorage
 
 import com.mojang.brigadier.arguments.StringArgumentType.greedyString
+import com.mojang.brigadier.builder.LiteralArgumentBuilder.literal
 import io.sc3.goodies.enderstorage.EnderStorageTargetType.*
 import io.sc3.goodies.util.dyeArg
 import io.sc3.goodies.util.userArg
-import me.lucko.fabric.api.permissions.v0.Permissions.require
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.server.command.CommandManager.argument
+import me.lucko.fabric.api.permissions.v0.Permissions.require;
 import net.minecraft.server.command.CommandManager.literal
 
 object EnderStorageCommands {
