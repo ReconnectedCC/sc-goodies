@@ -5,7 +5,7 @@ plugins {
   kotlin("jvm").version(kotlinVersion)
   kotlin("plugin.serialization").version(kotlinVersion)
 
-  id("fabric-loom") version "1.7-SNAPSHOT"
+  id("fabric-loom") version "1.16-SNAPSHOT"
   id("maven-publish")
   id("signing")
 }
@@ -39,15 +39,17 @@ val fabricPermissionsApiVersion: String by project
 val kotlinSerializationVersion: String by project
 val annotationsVersion: String by project
 
+val figuraVersion: String by project
+
 val archivesBaseName = "sc-goodies"
 version = modVersion
 group = mavenGroup
 
 tasks.withType<KotlinCompile>().configureEach {
-  kotlinOptions {
-    jvmTarget = "21"
-    apiVersion = "1.9"
-    languageVersion = "1.9"
+  compilerOptions {
+    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+    languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
   }
 }
 
@@ -108,6 +110,8 @@ repositories {
       includeModule("me.lucko", "fabric-permissions-api")
     }
   }
+
+  maven("https://maven.figuramc.org/releases")
 }
 
 dependencies {
@@ -150,6 +154,8 @@ dependencies {
   implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", kotlinSerializationVersion)
 
   modImplementation(include("io.sc3", "sc-text", scTextVersion))
+  // Figura
+  modCompileOnly("org.figuramc","figura-fabric", figuraVersion)
 }
 
 tasks {
