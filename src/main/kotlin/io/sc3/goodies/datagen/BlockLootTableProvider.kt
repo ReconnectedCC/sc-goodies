@@ -1,5 +1,6 @@
 package io.sc3.goodies.datagen
 
+import dan200.computercraft.shared.recipe.function.CopyComponents
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ironstorage.IronShulkerBlock
 import io.sc3.goodies.ironstorage.IronShulkerBlockEntity
@@ -12,11 +13,13 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.loot.ContainerComponentModifiers
 import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootTable
 import net.minecraft.loot.entry.DynamicEntry
 import net.minecraft.loot.entry.ItemEntry
+import net.minecraft.loot.function.CopyComponentsLootFunction
 import net.minecraft.loot.function.CopyNameLootFunction
 import net.minecraft.loot.function.CopyNbtLootFunction
 import net.minecraft.loot.function.SetContentsLootFunction
@@ -78,10 +81,12 @@ class BlockLootTableProvider(out: FabricDataOutput,
           .rolls(ConstantLootNumberProvider.create(1.0f))
           .with(ItemEntry.builder(block)
             .apply(CopyNameLootFunction.builder(CopyNameLootFunction.Source.BLOCK_ENTITY))
-            .apply(CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
-              .withOperation("Lock", "BlockEntityTag.Lock")
-              .withOperation("LootTable", "BlockEntityTag.LootTable")
-              .withOperation("LootTableSeed", "BlockEntityTag.LootTableSeed"))
+            .apply(CopyComponentsLootFunction.builder(CopyComponentsLootFunction.Source.BLOCK_ENTITY)
+              .include(DataComponentTypes.CONTAINER)
+              .include(DataComponentTypes.CUSTOM_NAME)
+              .include(DataComponentTypes.LOCK)
+              .include(DataComponentTypes.CONTAINER_LOOT)
+            )
             .apply(SetContentsLootFunction.builder(ContainerComponentModifiers.CONTAINER) // TODO: type no longer works here for some reason
               .withEntry(DynamicEntry.builder(IronShulkerBlock.contents)))
           )

@@ -19,7 +19,8 @@
     "PlayerEntityMixin",
     "ShulkerAccessor",
     "ShulkerBoxBlockEntityAccessor",
-    "StairsBlockMixin"
+    "StairsBlockMixin",
+    "schema.Schema1460Mixin"
   ],
   "client": [
     "client.BipedEntityModelMixin",

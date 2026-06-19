@@ -6,3 +6,4 @@ extendable class net/minecraft/recipe/Ingredient$Entry
 accessible field net/minecraft/util/UserCache byName Ljava/util/Map;
 accessible field net/minecraft/util/UserCache byUuid Ljava/util/Map;
 accessible class net/minecraft/util/UserCache$Entry
+accessible class net/minecraft/datafixer/fix/ItemStackComponentizationFix$StackData
