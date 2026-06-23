@@ -7,3 +7,6 @@ accessible field net/minecraft/util/UserCache byName Ljava/util/Map;
 accessible field net/minecraft/util/UserCache byUuid Ljava/util/Map;
 accessible class net/minecraft/util/UserCache$Entry
 accessible class net/minecraft/datafixer/fix/ItemStackComponentizationFix$StackData
+accessible method net/minecraft/datafixer/fix/ItemStackComponentizationFix$StackData itemMatches (Ljava/util/Set;)Z
+accessible method net/minecraft/datafixer/fix/ItemStackComponentizationFix$StackData setComponent (Ljava/lang/String;Lcom/mojang/serialization/Dynamic;)V
+accessible method net/minecraft/datafixer/fix/ItemStackComponentizationFix$StackData getAndRemove (Ljava/lang/String;)Lcom/mojang/serialization/OptionalDynamic;

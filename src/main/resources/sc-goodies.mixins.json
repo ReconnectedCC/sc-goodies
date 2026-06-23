@@ -20,6 +20,7 @@
     "ShulkerAccessor",
     "ShulkerBoxBlockEntityAccessor",
     "StairsBlockMixin",
+    "fix.ItemStackComponentizationFixMixin",
     "schema.Schema1460Mixin"
   ],
   "client": [

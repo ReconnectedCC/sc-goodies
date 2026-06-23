@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.stat.Stats
 import net.minecraft.state.StateManager
@@ -108,11 +107,7 @@ class IronBarrelBlock(
 
   override fun createScreenHandlerFactory(state: BlockState, world: World,
                                           pos: BlockPos): NamedScreenHandlerFactory? {
-    val be = world.getBlockEntity(pos) as? IronBarrelBlockEntity ?: return null
-    val name = be.name
-    return SimpleNamedScreenHandlerFactory({ syncId, playerInv, _ ->
-      IronChestScreenHandler(variant, syncId, playerInv, be, variant.chestScreenHandlerType)
-    }, name)
+    return world.getBlockEntity(pos) as? IronBarrelBlockEntity
   }
 
   override fun getRenderType(state: BlockState) = BlockRenderType.MODEL

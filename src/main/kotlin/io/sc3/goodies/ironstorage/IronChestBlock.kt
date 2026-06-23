@@ -21,7 +21,6 @@ import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.stat.Stat
 import net.minecraft.stat.Stats
@@ -113,11 +112,7 @@ class IronChestBlock(
   }
   override fun createScreenHandlerFactory(state: BlockState, world: World,
                                           pos: BlockPos): NamedScreenHandlerFactory? {
-    val be = world.getBlockEntity(pos) as? IronChestBlockEntity ?: return null
-    val name = be.name
-    return SimpleNamedScreenHandlerFactory({ syncId, playerInv, _ ->
-      IronChestScreenHandler(variant, syncId, playerInv, be, variant.chestScreenHandlerType)
-    }, name)
+    return world.getBlockEntity(pos) as? IronChestBlockEntity
   }
 
   override fun <T : BlockEntity> getTicker(
