@@ -7,6 +7,7 @@ import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.templates.TypeTemplate;
 
+import io.sc3.goodies.ScGoodies;
 import io.sc3.goodies.ironstorage.IronStorageVariant;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.datafixer.schema.Schema1460;
@@ -23,15 +24,21 @@ public class Schema1460Mixin {
     Map<String, Supplier<TypeTemplate>> map = cir.getReturnValue();
 
     for (IronStorageVariant ironStorageVariant : IronStorageVariant.getEntries()) {
-      schema.register(map, String.format("%s:%s", "sc-goodies", ironStorageVariant.getChestId()), () ->
+      schema.register(map, String.format("%s:%s", ScGoodies.modId, ironStorageVariant.getChestId()), () ->
         DSL.optionalFields("Items", DSL.list(TypeReferences.ITEM_STACK.in(schema)))
       );
-      schema.register(map, String.format("%s:%s", "sc-goodies", ironStorageVariant.getShulkerId()), () ->
+      schema.register(map, String.format("%s:%s", ScGoodies.modId, ironStorageVariant.getShulkerId()), () ->
         DSL.optionalFields("Items", DSL.list(TypeReferences.ITEM_STACK.in(schema)))
       );
-      schema.register(map, String.format("%s:%s", "sc-goodies", ironStorageVariant.getBarrelId()), () ->
+      schema.register(map, String.format("%s:%s", ScGoodies.modId, ironStorageVariant.getBarrelId()), () ->
         DSL.optionalFields("Items", DSL.list(TypeReferences.ITEM_STACK.in(schema)))
       );
     }
+
+  }
+  @Inject(at = @At("RETURN"), method = "registerEntities")
+  private static void registerEntities(Schema schema, CallbackInfoReturnable<Map<String, Supplier<TypeTemplate>>> cir) {
+    Map<String, Supplier<TypeTemplate>> map = cir.getReturnValue();
+    schema.register(map, String.format("%s:%s", ScGoodies.modId, "glass_item_frame"), (name) -> DSL.optionalFields("Item", TypeReferences.ITEM_STACK.in(schema)));
   }
 }

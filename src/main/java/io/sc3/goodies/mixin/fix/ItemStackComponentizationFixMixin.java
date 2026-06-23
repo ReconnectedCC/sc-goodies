@@ -5,6 +5,8 @@ import java.util.Set;
 
 import com.mojang.serialization.Dynamic;
 
+import com.mojang.serialization.OptionalDynamic;
+import io.sc3.goodies.ScGoodies;
 import io.sc3.goodies.ironstorage.IronStorageVariant;
 import net.minecraft.datafixer.fix.ItemStackComponentizationFix;
 import net.minecraft.util.DyeColor;
@@ -18,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStackComponentizationFix.class)
 public class ItemStackComponentizationFixMixin {
-  @Unique
-  private static final String MOD_ID = "sc-goodies";
 
   @Inject(at = @At("RETURN"), method = "fixBlockEntityData", cancellable = true)
   private static <T> void fixBlockEntityData(ItemStackComponentizationFix.StackData data, Dynamic<T> dynamic,
@@ -27,14 +27,14 @@ public class ItemStackComponentizationFixMixin {
     Set<String> itemIds = new HashSet<>();
     for (IronStorageVariant variant : IronStorageVariant.getEntries()) {
       // Chests
-      itemIds.add(String.format("%s:%s", MOD_ID, variant.getChestId()));
+      itemIds.add(String.format("%s:%s", ScGoodies.modId, variant.getChestId()));
       // Barrels
-      itemIds.add(String.format("%s:%s", MOD_ID, variant.getBarrelId()));
+      itemIds.add(String.format("%s:%s", ScGoodies.modId, variant.getBarrelId()));
       // Shulkers (undyed)
-      itemIds.add(String.format("%s:%s", MOD_ID, variant.getShulkerId()));
+      itemIds.add(String.format("%s:%s", ScGoodies.modId, variant.getShulkerId()));
       // Shulkers (dyed)
       for (DyeColor color : DyeColor.values()) {
-        itemIds.add(String.format("%s:%s_%s", MOD_ID, variant.getShulkerId(), color.getName()));
+        itemIds.add(String.format("%s:%s_%s", ScGoodies.modId, variant.getShulkerId(), color.getName()));
       }
     }
 
@@ -53,7 +53,19 @@ public class ItemStackComponentizationFixMixin {
   @Inject(at = @At("RETURN"), method = "fixStack")
   private static <T> void fixStack(ItemStackComponentizationFix.StackData data, Dynamic<T> dynamic,
                                    CallbackInfo ci) {
-    if (data.itemMatches(Set.of(MOD_ID + ":ancient_tome"))) {
+    if (data.itemMatches(Set.of(ScGoodies.modId + "glass_item_frame"))) {
+      data.getAndRemove("EntityTag").result().ifPresent(entityTag ->
+        data.setComponent("minecraft:entity_data",entityTag.set("id", dynamic.createString(ScGoodies.modId + ":glass_item_frame"))
+        )
+      );
+    }
+    if (data.itemMatches(Set.of(ScGoodies.modId + "glow_glass_item_frame"))) {
+      data.getAndRemove("EntityTag").result().ifPresent(entityTag ->
+        data.setComponent("minecraft:entity_data",entityTag.set("id", dynamic.createString(ScGoodies.modId + ":glow_glass_item_frame"))
+        )
+      );
+    }
+    if (data.itemMatches(Set.of(ScGoodies.modId + ":ancient_tome"))) {
       // Convert StoredEnchantments NBT tag to minecraft:stored_enchantments component.
       // This mirrors what vanilla does for minecraft:enchanted_book in fixStack.
       // Old format: StoredEnchantments: [{id: "minecraft:sharpness", lvl: 5s}]
