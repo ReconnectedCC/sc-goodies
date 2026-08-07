@@ -21,8 +21,7 @@
     "ShulkerBoxBlockEntityAccessor",
     "StairsBlockMixin",
     "fix.ItemStackComponentizationFixMixin",
-    "schema.Schema1460Mixin",
-    "schema.Schema2688Mixin"
+    "schema.Schema1460Mixin"
   ],
   "client": [
     "client.BipedEntityModelMixin",
