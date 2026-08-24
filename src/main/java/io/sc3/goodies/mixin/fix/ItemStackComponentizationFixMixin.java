@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.mojang.serialization.Dynamic;
 
-import com.mojang.serialization.OptionalDynamic;
 import io.sc3.goodies.ScGoodies;
 import io.sc3.goodies.ironstorage.IronStorageVariant;
 import net.minecraft.datafixer.fix.ItemStackComponentizationFix;
@@ -20,6 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStackComponentizationFix.class)
 public class ItemStackComponentizationFixMixin {
+  @Unique
+  private static final String GLASS_ITEM_FRAME_ID = ScGoodies.modId + ":glass_item_frame";
+  @Unique
+  private static final String GLOW_GLASS_ITEM_FRAME_ID = ScGoodies.modId + ":glow_glass_item_frame";
 
   @Inject(at = @At("RETURN"), method = "fixBlockEntityData", cancellable = true)
   private static <T> void fixBlockEntityData(ItemStackComponentizationFix.StackData data, Dynamic<T> dynamic,
@@ -50,21 +53,28 @@ public class ItemStackComponentizationFixMixin {
     }
   }
 
+  @Inject(at = @At("HEAD"), method = "fixStack")
+  private static <T> void fixItemFrameEntityData(ItemStackComponentizationFix.StackData data, Dynamic<T> dynamic,
+                                                 CallbackInfo ci) {
+    if (data.itemMatches(Set.of(GLASS_ITEM_FRAME_ID))) {
+      data.getAndRemove("EntityTag").result().ifPresent(entityTag ->
+        data.setComponent("minecraft:entity_data",
+          entityTag.set("id", dynamic.createString(GLASS_ITEM_FRAME_ID)))
+      );
+    }
+
+    if (data.itemMatches(Set.of(GLOW_GLASS_ITEM_FRAME_ID))) {
+      data.getAndRemove("EntityTag").result().ifPresent(entityTag ->
+        data.setComponent("minecraft:entity_data", entityTag
+          .set("id", dynamic.createString(GLASS_ITEM_FRAME_ID))
+          .set("isGlowingFrame", dynamic.createBoolean(true)))
+      );
+    }
+  }
+
   @Inject(at = @At("RETURN"), method = "fixStack")
-  private static <T> void fixStack(ItemStackComponentizationFix.StackData data, Dynamic<T> dynamic,
-                                   CallbackInfo ci) {
-    if (data.itemMatches(Set.of(ScGoodies.modId + "glass_item_frame"))) {
-      data.getAndRemove("EntityTag").result().ifPresent(entityTag ->
-        data.setComponent("minecraft:entity_data",entityTag.set("id", dynamic.createString(ScGoodies.modId + ":glass_item_frame"))
-        )
-      );
-    }
-    if (data.itemMatches(Set.of(ScGoodies.modId + "glow_glass_item_frame"))) {
-      data.getAndRemove("EntityTag").result().ifPresent(entityTag ->
-        data.setComponent("minecraft:entity_data",entityTag.set("id", dynamic.createString(ScGoodies.modId + ":glow_glass_item_frame"))
-        )
-      );
-    }
+  private static <T> void fixAncientTome(ItemStackComponentizationFix.StackData data, Dynamic<T> dynamic,
+                                         CallbackInfo ci) {
     if (data.itemMatches(Set.of(ScGoodies.modId + ":ancient_tome"))) {
       // Convert StoredEnchantments NBT tag to minecraft:stored_enchantments component.
       // This mirrors what vanilla does for minecraft:enchanted_book in fixStack.

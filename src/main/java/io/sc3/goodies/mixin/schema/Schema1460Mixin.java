@@ -39,6 +39,10 @@ public class Schema1460Mixin {
   @Inject(at = @At("RETURN"), method = "registerEntities")
   private static void registerEntities(Schema schema, CallbackInfoReturnable<Map<String, Supplier<TypeTemplate>>> cir) {
     Map<String, Supplier<TypeTemplate>> map = cir.getReturnValue();
-    schema.register(map, String.format("%s:%s", ScGoodies.modId, "glass_item_frame"), (name) -> DSL.optionalFields("Item", TypeReferences.ITEM_STACK.in(schema)));
+
+    schema.register(map, ScGoodies.modId + ":glass_item_frame",
+      name -> DSL.optionalFields("Item", TypeReferences.ITEM_STACK.in(schema)));
+    schema.register(map, ScGoodies.modId + ":glow_glass_item_frame",
+      name -> DSL.optionalFields("Item", TypeReferences.ITEM_STACK.in(schema)));
   }
 }
