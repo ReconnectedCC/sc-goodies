@@ -2,6 +2,7 @@ package io.sc3.goodies.client.enderstorage
 
 import io.sc3.goodies.Registration
 import io.sc3.goodies.client.enderstorage.EnderStorageBlockEntityRenderer.Companion.renderChest
+import io.sc3.goodies.enderstorage.EnderStorageStackData
 import io.sc3.goodies.enderstorage.Frequency
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry.DynamicItemRenderer
 import net.minecraft.client.render.VertexConsumerProvider
@@ -17,7 +18,7 @@ object EnderStorageItemRenderer : DynamicItemRenderer {
                       vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
     val frequency = Frequency.fromStack(stack) ?: defaultFrequency
     val personal = frequency.personal || (stack.get(Registration.ModComponents.TEMP_CRAFTING_PERSONAL) ?: false)
-    val changesEnabled = stack.get(Registration.ModComponents.COMPUTER_CHANGES_ENABLED) ?: false
+    val changesEnabled = EnderStorageStackData.computerChangesEnabled(stack)
     renderChest(matrices, vertexConsumers, Direction.NORTH, 0.0f, frequency, changesEnabled, light, overlay, personal)
   }
 }

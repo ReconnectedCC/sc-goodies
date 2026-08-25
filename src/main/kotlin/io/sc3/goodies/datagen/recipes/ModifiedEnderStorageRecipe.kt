@@ -2,6 +2,7 @@ package io.sc3.goodies.datagen.recipes
 
 import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModItems
+import io.sc3.goodies.enderstorage.EnderStorageStackData
 import io.sc3.goodies.enderstorage.Frequency
 import io.sc3.library.recipe.itemDyeColor
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.DYES
@@ -98,7 +99,7 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
 
     val result = enderStorage.copyWithCount(1)
 
-    val oldComputerChangesEnabled = result.get(Registration.ModComponents.COMPUTER_CHANGES_ENABLED) ?: false
+    val oldComputerChangesEnabled = EnderStorageStackData.computerChangesEnabled(result)
     val oldFrequency = Frequency.fromStack(enderStorage) ?: Frequency()
 
     val frequency = oldFrequency.copy(

@@ -315,7 +315,7 @@ class EnderStorageBlock(
     tooltip: MutableList<Text>,
     type: TooltipType
   ) {
-    val frequency = stack.get(Registration.ModComponents.FREQUENCY);
+    val frequency = Frequency.fromStack(stack)
     // Add the NBT data prior to the description lines
     if (frequency != null) {
       // Frequency: White, White, White

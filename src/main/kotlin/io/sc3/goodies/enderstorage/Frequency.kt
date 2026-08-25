@@ -9,8 +9,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.sc3.goodies.Registration
 import io.sc3.goodies.Registration.ModBlocks
 import io.sc3.goodies.ScGoodies.modId
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtElement
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
@@ -24,6 +26,46 @@ import net.minecraft.util.Uuids
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
+
+internal object EnderStorageStackData {
+  const val FREQUENCY_NBT_KEY = "frequency"
+  const val COMPUTER_CHANGES_ENABLED_NBT_KEY = "computer_changes_enabled"
+  const val LEGACY_COMPUTER_CHANGES_ENABLED_NBT_KEY = "computerChangesEnabled"
+
+  fun frequency(stack: ItemStack): Frequency? {
+    stack.get(Registration.ModComponents.FREQUENCY)?.let { return it }
+
+    return legacyNbt(stack)
+      .firstNotNullOfOrNull { nbt ->
+        if (nbt.contains(FREQUENCY_NBT_KEY, NbtElement.COMPOUND_TYPE.toInt())) {
+          Frequency.fromNbt(nbt.getCompound(FREQUENCY_NBT_KEY))
+        } else {
+          null
+        }
+      }
+  }
+
+  fun computerChangesEnabled(stack: ItemStack): Boolean {
+    stack.get(Registration.ModComponents.COMPUTER_CHANGES_ENABLED)?.let { return it }
+
+    return legacyNbt(stack)
+      .firstNotNullOfOrNull { nbt ->
+        when {
+          nbt.contains(COMPUTER_CHANGES_ENABLED_NBT_KEY, NbtElement.NUMBER_TYPE.toInt()) ->
+            nbt.getBoolean(COMPUTER_CHANGES_ENABLED_NBT_KEY)
+          nbt.contains(LEGACY_COMPUTER_CHANGES_ENABLED_NBT_KEY, NbtElement.NUMBER_TYPE.toInt()) ->
+            nbt.getBoolean(LEGACY_COMPUTER_CHANGES_ENABLED_NBT_KEY)
+          else -> null
+        }
+      }
+      ?: false
+  }
+
+  private fun legacyNbt(stack: ItemStack): Sequence<NbtCompound> = sequenceOf(
+    stack.get(DataComponentTypes.CUSTOM_DATA)?.copyNbt(),
+    stack.get(DataComponentTypes.BLOCK_ENTITY_DATA)?.copyNbt()
+  ).filterNotNull()
+}
 
 data class Frequency(
   val owner: Optional<UUID> = Optional.empty(),
@@ -184,7 +226,7 @@ data class Frequency(
 
 
     fun fromStack(stack: ItemStack): Frequency? {
-      return stack.get(Registration.ModComponents.FREQUENCY)
+      return EnderStorageStackData.frequency(stack)
     }
   }
 }
