@@ -25,17 +25,27 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
   private val emerald = ofItems(Items.EMERALD)
 
   /** Gets the dyes in the top three slots of the inventory, or null if any slot is not a dye. */
+
+  /*
+  FIXME: THIS IS SORTA BROKEN
+  1. if you don't leave a dye in the top right corner, it will not craft
+  2. if you leave a dye in the top middle, it will craft if you move the ender storage to the right
+  Almost as if the crafing grid resizes to the smallest rectangle containing all non-empty slots, and then the recipe is applied to that rectangle. So if you leave a dye in the middle, it will resize to 2x2 and then the recipe will match.
+  This is crazy
+  Crazy? I was crazy once...
+  They put me in a room...
+  A rubber room...
+  A rubber room with rats...
+  And those rats? they make me crazy!
+   */
+  //TODO: Add EMI support for this recipe
   private fun getDyes(inv: CraftingRecipeInput): Array<ItemStack>? {
-    var dyes: Array<ItemStack>? = null
-
+    val dyes: Array<ItemStack> = Array(3) { ItemStack.EMPTY }
     for (i in 0 until 3) {
-      val stack = inv.getStackInSlot(i)
-      if (stack.isEmpty || !dye.test(stack)) return null
-
-      if (dyes == null) dyes = Array(3) { ItemStack.EMPTY }
+      val stack = inv.getStackInSlot(i,0)
+      if (!stack.isEmpty && !dye.test(stack)) return null
       dyes[i] = stack
     }
-
     return dyes
   }
 
@@ -43,7 +53,7 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
   private fun getEnderStorage(input: CraftingRecipeInput): ItemStack? {
     var foundStorage: ItemStack? = null
 
-    for (i in 0 until input.stackCount) {
+    for (i in 0 until input.size) {
       val stack = input.stacks[i]
       if (stack.isEmpty || !enderStorage.test(stack)) continue
 
@@ -81,12 +91,27 @@ class ModifiedEnderStorageRecipe(category: CraftingRecipeCategory) : SpecialCraf
       else -> PersonalState.NOT_PERSONAL
     }
   }
+  private fun areUnwantedItemsPresent(inv: CraftingRecipeInput): Boolean {
+    if (inv.stackCount > 4) return true
+    for (stack in inv.stacks) {
+      if (stack.isEmpty) continue
 
+      if (!enderStorage.test(stack) && !dye.test(stack) && !diamond.test(stack) && !emerald.test(stack)) {
+        return true
+      }
+    }
+
+    return false
+  }
   override fun matches(input: CraftingRecipeInput, world: World): Boolean {
     if (getEnderStorage(input) == null) return false
-
+    println("Found ender storage")
     // Will return null if there is more than one diamond or emerald
     val personalState = getPersonalState(input) ?: return false
+    println("Found personal state: $personalState")
+
+    if (areUnwantedItemsPresent(input)) return false
+    println("No unwanted items present")
 
     // Require either a personal state or three dyes
     return getDyes(input) != null || personalState != PersonalState.NOT_PERSONAL

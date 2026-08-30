@@ -12,14 +12,217 @@
       "item": "minecraft:iron_block"
     },
     "f": {
-      "fabric:type": "sc-library:enchantment",
-      "enchantment": "minecraft:feather_falling",
-      "minLevel": 1
+      "fabric:type": "fabric:any",
+      "ingredients": [
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:enchanted_book"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 1
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:enchanted_book"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 2
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:enchanted_book"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 3
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:enchanted_book"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 4
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "tag": "minecraft:enchantable/foot_armor"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 1
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "tag": "minecraft:enchantable/foot_armor"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 2
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "tag": "minecraft:enchantable/foot_armor"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 3
+              }
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "tag": "minecraft:enchantable/foot_armor"
+          },
+          "components": {
+            "minecraft:stored_enchantments": {
+              "levels": {
+                "minecraft:feather_falling": 4
+              }
+            }
+          }
+        }
+      ]
     },
     "j": {
-      "fabric:type": "sc-library:brew",
-      "effect": "minecraft:jump_boost",
-      "potion": "minecraft:leaping"
+      "fabric:type": "fabric:any",
+      "ingredients": [
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:long_leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:strong_leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:splash_potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:splash_potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:long_leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:splash_potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:strong_leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:lingering_potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:lingering_potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:long_leaping"
+            }
+          }
+        },
+        {
+          "fabric:type": "fabric:components",
+          "base": {
+            "item": "minecraft:lingering_potion"
+          },
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:strong_leaping"
+            }
+          }
+        }
+      ]
     }
   },
   "pattern": [
