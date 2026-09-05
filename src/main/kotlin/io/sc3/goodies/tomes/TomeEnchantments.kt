@@ -94,7 +94,11 @@ object TomeEnchantments {
   fun applyRandomEnchantment(stack: ItemStack, context: LootContext) {
     val rawEnch = validEnchantments[context.random.nextInt(validEnchantments.size)]
     val ench = EnchantmentExt.getEnchantment(context.world.registryManager, rawEnch);
-    stack.addEnchantment(ench, ench.value().maxLevel)
+
+    val builder = ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT)
+    builder.add(ench, ench.value().maxLevel)
+
+    stack.set(DataComponentTypes.STORED_ENCHANTMENTS, builder.build().withShowInTooltip(false))
   }
 
   private fun onAnvilChange(handler: AnvilScreenHandler, left: ItemStack, right: ItemStack,
