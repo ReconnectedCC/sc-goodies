@@ -1,24 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "sc-goodies:iron_shulker",
   "category": "misc",
-  "key": {
-    "D": {
-      "item": "minecraft:diamond"
-    },
-    "G": {
-      "tag": "c:glass_blocks"
-    },
-    "S": {
-      "tag": "sc-goodies:iron_shulker/gold"
-    }
-  },
-  "pattern": [
-    "GGG",
-    "DSD",
-    "GGG"
-  ],
-  "result": {
+  "group": "",
+  "output": {
     "count": 1,
     "id": "sc-goodies:shulker_box_diamond"
+  },
+  "recipe": {
+    "key": {
+      "D": {
+        "item": "minecraft:diamond"
+      },
+      "G": {
+        "tag": "c:glass_blocks"
+      },
+      "S": {
+        "tag": "sc-goodies:iron_shulker/gold"
+      }
+    },
+    "pattern": [
+      "GGG",
+      "DSD",
+      "GGG"
+    ]
   }
 }

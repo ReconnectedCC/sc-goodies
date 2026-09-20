@@ -3,7 +3,9 @@ package io.sc3.goodies.datagen.recipes.handlers
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ScGoodiesItemTags
 import io.sc3.goodies.datagen.recipes.DyedIronShulkerRecipe
+import io.sc3.goodies.datagen.recipes.IronShulkerRecipe
 import io.sc3.goodies.datagen.recipes.IronShulkerRecipeSerializer
+import io.sc3.goodies.datagen.recipes.mapShaped
 import io.sc3.library.recipe.RecipeHandler
 import io.sc3.library.recipe.specialRecipe
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.*
@@ -28,6 +30,10 @@ object IronShulkerRecipes : RecipeHandler {
   }
 
   override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
+    // The upgrade recipes need the mod recipe type, so that the contents (and colour) of the shulker box being
+    // upgraded are carried over to the result, instead of being voided.
+    val shulkerExporter = exporter.mapShaped(wrapper, ::IronShulkerRecipe)
+
     ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, IRON_VARIANT.shulkerBlock)
       .pattern("III")
       .pattern("ISI")
@@ -35,7 +41,7 @@ object IronShulkerRecipes : RecipeHandler {
       .input('I', IRON_INGOTS)
       .input('S', SHULKER_BOXES)
       .criterion("has_shulker_box", conditionsFromTag(SHULKER_BOXES))
-      .offerTo(exporter)
+      .offerTo(shulkerExporter)
 
     ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, GOLD_VARIANT.shulkerBlock)
       .pattern("GGG")
@@ -44,7 +50,7 @@ object IronShulkerRecipes : RecipeHandler {
       .input('G', GOLD_INGOTS)
       .input('S', ScGoodiesItemTags.IRON_SHULKER_BOX)
       .criterion("has_shulker_box", conditionsFromTag(SHULKER_BOXES))
-      .offerTo(exporter)
+      .offerTo(shulkerExporter)
 
     ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, DIAMOND_VARIANT.shulkerBlock)
       .pattern("GGG")
@@ -54,7 +60,7 @@ object IronShulkerRecipes : RecipeHandler {
       .input('D', DIAMOND)
       .input('S', ScGoodiesItemTags.IRON_SHULKER_BOX)
       .criterion("has_shulker_box", conditionsFromTag(SHULKER_BOXES))
-      .offerTo(exporter, ModId("diamond_shulker_with_iron_shulker"))
+      .offerTo(shulkerExporter, ModId("diamond_shulker_with_iron_shulker"))
 
     ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, DIAMOND_VARIANT.shulkerBlock)
       .pattern("GGG")
@@ -64,7 +70,7 @@ object IronShulkerRecipes : RecipeHandler {
       .input('D', DIAMOND)
       .input('S', ScGoodiesItemTags.GOLD_SHULKER_BOX)
       .criterion("has_shulker_box", conditionsFromTag(SHULKER_BOXES))
-      .offerTo(exporter, ModId("diamond_shulker_with_gold_shulker"))
+      .offerTo(shulkerExporter, ModId("diamond_shulker_with_gold_shulker"))
 
     // Dyeing recipe
     specialRecipe<DyedIronShulkerRecipe>(exporter, DyedIronShulkerRecipe(CraftingRecipeCategory.MISC))

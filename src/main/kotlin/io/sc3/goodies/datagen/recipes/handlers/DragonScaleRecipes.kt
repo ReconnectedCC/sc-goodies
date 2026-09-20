@@ -3,7 +3,9 @@ package io.sc3.goodies.datagen.recipes.handlers
 import io.sc3.goodies.Registration
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ScGoodiesItemTags
+import io.sc3.goodies.datagen.recipes.DragonScaleRecipe
 import io.sc3.goodies.datagen.recipes.DragonScaleRecipeSerializer
+import io.sc3.goodies.datagen.recipes.mapShapeless
 import io.sc3.goodies.elytra.DyedElytraItem.Companion.dyedElytraItems
 import io.sc3.library.recipe.RecipeHandler
 import net.minecraft.data.server.recipe.RecipeExporter
@@ -26,6 +28,7 @@ object DragonScaleRecipes : RecipeHandler {
       .criterion("has_elytra", conditionsFromItem(Items.ELYTRA))
       .input(Registration.ModItems.dragonScale)
       .input(ScGoodiesItemTags.ELYTRA)
-      .offerTo(exporter, ModId("dragon_scale_elytra"))
+      // The mod recipe type returns the source elytra as a crafting remainder
+      .offerTo(exporter.mapShapeless(wrapper, ::DragonScaleRecipe), ModId("dragon_scale_elytra"))
   }
 }
