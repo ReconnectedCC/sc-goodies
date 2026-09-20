@@ -104,8 +104,8 @@ class EnderStorageBlockEntityRenderer(
         val matrix = matrices.peek().positionMatrix
         portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.8125f)
         portalConsumer.vertex(matrix, 0.8125f, 0.626f, 0.8125f)
-        portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.1875f)
         portalConsumer.vertex(matrix, 0.8125f, 0.626f, 0.1875f)
+        portalConsumer.vertex(matrix, 0.1875f, 0.626f, 0.1875f)
       }
 
       // Base chest
