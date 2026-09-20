@@ -9,6 +9,7 @@ import dan200.computercraft.api.peripheral.PeripheralType
 import io.sc3.goodies.ScGoodies.ModId
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.DyeColor
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.floor
 import kotlin.math.log2
 
@@ -30,7 +31,7 @@ object EnderStorageMethods : GenericPeripheral {
   fun getOwner(be: EnderStorageBlockEntity): MethodResult {
     val freq = be.frequency
     return if (freq.personal) {
-      MethodResult.of(freq.owner?.toString(), freq.ownerName)
+      MethodResult.of(freq.owner.getOrNull()?.toString(), freq.ownerName.getOrNull())
     } else {
       MethodResult.of(null, null)
     }

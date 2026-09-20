@@ -102,8 +102,8 @@ data class Frequency(
   }
 
   fun toPacket(buf: PacketByteBuf) {
-    buf.writeNullable(owner.get(), PacketByteBuf::writeUuid)
-    buf.writeNullable(ownerName.get(), PacketByteBuf::writeString)
+    buf.writeNullable(owner.getOrNull(), PacketByteBuf::writeUuid)
+    buf.writeNullable(ownerName.getOrNull(), PacketByteBuf::writeString)
     buf.writeEnumConstant(left)
     buf.writeEnumConstant(middle)
     buf.writeEnumConstant(right)
