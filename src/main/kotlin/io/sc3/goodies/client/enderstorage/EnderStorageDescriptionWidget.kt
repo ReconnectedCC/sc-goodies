@@ -33,12 +33,15 @@ class EnderStorageDescriptionWidget(
       scroller.update(delta)
     }
 
-    // Draw the background
-    ctx.drawGuiTexture(
-      enderStorageTex,
-      x, y,
-      4, 185
-    )
+    // Draw the background. Nine-slicing was removed from DrawContext in 1.20.5, and the widget is always the width of
+    // the source region, so only the top/middle/bottom slices are needed, with the middle one stretched.
+    val middleHeight = height - (SLICE_SIZE * 2)
+    ctx.drawTexture(enderStorageTex, x, y, BAR_WIDTH, SLICE_SIZE,
+      BAR_U.toFloat(), BAR_V.toFloat(), BAR_WIDTH, SLICE_SIZE, TEX_SIZE, TEX_SIZE)
+    ctx.drawTexture(enderStorageTex, x, y + SLICE_SIZE, BAR_WIDTH, middleHeight,
+      BAR_U.toFloat(), (BAR_V + SLICE_SIZE).toFloat(), BAR_WIDTH, BAR_HEIGHT - (SLICE_SIZE * 2), TEX_SIZE, TEX_SIZE)
+    ctx.drawTexture(enderStorageTex, x, y + height - SLICE_SIZE, BAR_WIDTH, SLICE_SIZE,
+      BAR_U.toFloat(), (BAR_V + BAR_HEIGHT - SLICE_SIZE).toFloat(), BAR_WIDTH, SLICE_SIZE, TEX_SIZE, TEX_SIZE)
 
     // Draw the text, sliced to fit in the widget
     ctx.enableScissor(x + 7, y, x + 7 + TEXT_WIDTH, y + height - SLICE_SIZE)
@@ -63,6 +66,11 @@ class EnderStorageDescriptionWidget(
     private const val BAR_WIDTH = 168
     private const val BAR_HEIGHT = 17
     private const val SLICE_SIZE = 4
+
+    /** Position of the description bar in the container texture. */
+    private const val BAR_U = 4
+    private const val BAR_V = 185
+    private const val TEX_SIZE = 256
 
     private const val TEXT_WIDTH = 156
     private const val MAX_LINES = 3

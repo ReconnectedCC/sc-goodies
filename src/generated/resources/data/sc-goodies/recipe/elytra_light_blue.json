@@ -1,8 +1,8 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "sc-goodies:elytra",
   "category": "equipment",
   "group": "dyedElytra",
-  "ingredients": [
+  "ingredient": [
     {
       "tag": "sc-goodies:elytra"
     },
@@ -10,7 +10,7 @@
       "item": "minecraft:light_blue_dye"
     }
   ],
-  "result": {
+  "output": {
     "count": 1,
     "id": "sc-goodies:elytra_light_blue"
   }

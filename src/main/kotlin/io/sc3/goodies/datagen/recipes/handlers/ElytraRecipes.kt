@@ -2,7 +2,9 @@ package io.sc3.goodies.datagen.recipes.handlers
 
 import io.sc3.goodies.ScGoodies.ModId
 import io.sc3.goodies.ScGoodiesItemTags
+import io.sc3.goodies.datagen.recipes.ElytraRecipe
 import io.sc3.goodies.datagen.recipes.ElytraRecipeSerializer
+import io.sc3.goodies.datagen.recipes.mapShapeless
 import io.sc3.goodies.elytra.DyedElytraItem
 import io.sc3.goodies.elytra.SpecialElytraType
 import io.sc3.library.recipe.RecipeHandler
@@ -23,6 +25,10 @@ object ElytraRecipes : RecipeHandler {
   }
 
   override fun generateRecipes(exporter: RecipeExporter, wrapper: RegistryWrapper.WrapperLookup) {
+    // The elytra recipes need the mod recipe type, so that the components (damage, enchantments, custom name) of the
+    // elytra that was dyed are copied to the result.
+    val elytraExporter = exporter.mapShapeless(wrapper, ::ElytraRecipe)
+
     // Dyed Elytra
     DyeColor.entries.forEach { color ->
       val elytra = DyedElytraItem.dyedElytraItems[color]!!
@@ -30,8 +36,7 @@ object ElytraRecipes : RecipeHandler {
         .input(ScGoodiesItemTags.ELYTRA)
         .input(DyeItem.byColor(color))
         .isElytra()
-        .offerTo(exporter, "elytra_"+color.getName())
-        //.offerTo(exporter, ElytraRecipeSerializer)
+        .offerTo(elytraExporter)
     }
 
     // Special Elytra
@@ -40,8 +45,7 @@ object ElytraRecipes : RecipeHandler {
         .input(ScGoodiesItemTags.ELYTRA)
         .apply { type.recipeColors.forEach { input(DyeItem.byColor(it)) } }
         .isElytra()
-        .offerTo(exporter)
-        //.offerTo(exporter, ElytraRecipeSerializer)
+        .offerTo(elytraExporter)
     }
   }
 

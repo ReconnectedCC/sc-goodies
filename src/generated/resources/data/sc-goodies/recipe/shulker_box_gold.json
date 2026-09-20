@@ -1,21 +1,24 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "sc-goodies:iron_shulker",
   "category": "misc",
-  "key": {
-    "G": {
-      "tag": "c:ingots/gold"
-    },
-    "S": {
-      "tag": "sc-goodies:iron_shulker/iron"
-    }
-  },
-  "pattern": [
-    "GGG",
-    "GSG",
-    "GGG"
-  ],
-  "result": {
+  "group": "",
+  "output": {
     "count": 1,
     "id": "sc-goodies:shulker_box_gold"
+  },
+  "recipe": {
+    "key": {
+      "G": {
+        "tag": "c:ingots/gold"
+      },
+      "S": {
+        "tag": "sc-goodies:iron_shulker/iron"
+      }
+    },
+    "pattern": [
+      "GGG",
+      "GSG",
+      "GGG"
+    ]
   }
 }

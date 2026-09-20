@@ -37,6 +37,13 @@ class ItemTagProvider(
         SpecialElytraType.entries.forEach { add(it.item) }
       }
 
+    // Elytra enchantments - vanilla only puts minecraft:elytra in these tags, so the mod elytra would otherwise not
+    // accept any enchantments (unbreaking, mending, curses) in an anvil.
+    getOrCreateTagBuilder(ItemTags.DURABILITY_ENCHANTABLE)
+      .addTag(ScGoodiesItemTags.ELYTRA)
+    getOrCreateTagBuilder(ItemTags.EQUIPPABLE_ENCHANTABLE)
+      .addTag(ScGoodiesItemTags.ELYTRA)
+
     // Sharks
     getOrCreateTagBuilder(ScGoodiesItemTags.SHARK)
       .apply {

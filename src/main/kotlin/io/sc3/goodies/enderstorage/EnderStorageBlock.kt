@@ -56,6 +56,7 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 import net.minecraft.world.WorldView
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 
 // Raycasts hit the very edge of the shape so the .contains() check will fail without a slight expansion. This is half
@@ -230,7 +231,7 @@ class EnderStorageBlock(
   }
 
   private fun checkOwner(player: PlayerEntity, frequency: Frequency): Boolean =
-    if (frequency.personal && !player.isCreativeLevelTwoOp && frequency.owner.get() != player.uuid) {
+    if (frequency.personal && !player.isCreativeLevelTwoOp && frequency.owner.getOrNull() != player.uuid) {
       player.sendMessage(translatable("$translationKey.not_owner").formatted(RED))
       false
     } else {
@@ -323,7 +324,7 @@ class EnderStorageBlock(
 
       // Public, or Owner: <name>
       if (frequency.personal) {
-        tooltip.add(translatable("$translationKey.owner_name", frequency.ownerName ?: "Unknown"))
+        tooltip.add(translatable("$translationKey.owner_name", frequency.ownerName.getOrNull() ?: "Unknown"))
       } else if (stack.get(Registration.ModComponents.TEMP_CRAFTING_PERSONAL) == true/* && world is ClientWorld*/) { // TODO: appendtooltip is only ran in the client side iirc
         // Add the local player's name if this is the temporary crafting stage (hovering over the result item in the
         // workbench, for a chest that was personal)

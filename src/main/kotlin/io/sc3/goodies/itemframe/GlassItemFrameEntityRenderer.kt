@@ -164,7 +164,7 @@ class GlassItemFrameEntityRenderer(
   override fun hasLabel(entity: GlassItemFrameEntity) =
     if (MinecraftClient.isHudEnabled()
       && !entity.heldItemStack.isEmpty
-      && entity.heldItemStack.name.string.isNotEmpty()
+      && entity.heldItemStack.contains(DataComponentTypes.CUSTOM_NAME)
       && dispatcher.targetedEntity === entity
     ) {
       val d = dispatcher.getSquaredDistanceToCamera(entity)

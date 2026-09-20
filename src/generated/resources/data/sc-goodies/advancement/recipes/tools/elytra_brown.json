@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:elytra_brown"
+        "recipe": "sc-goodies:elytra_brown"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:elytra_brown"
+      "sc-goodies:elytra_brown"
     ]
   }
 }

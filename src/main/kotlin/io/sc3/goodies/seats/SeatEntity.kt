@@ -31,14 +31,8 @@ class SeatEntity : Entity {
     this.ownerUuid = ownerUuid
   }
 
-  /**
-   * The player sitting pose is halfway through their height, so subtract a bit more to align them with the SeatEntity.
-   */
-  /* TODO(this is really that needed?)
-  override fun getRidingOffset(vehicle: Entity?): Float {
-    return -0.3f
-  }*/
-  
+  // The player sitting height offset is now a passenger attachment on the entity type, see Registration.ModEntities.
+
   override fun tick() {
     super.tick()
 
