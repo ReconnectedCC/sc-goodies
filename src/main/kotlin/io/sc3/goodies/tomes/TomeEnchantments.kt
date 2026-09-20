@@ -170,8 +170,9 @@ object TomeEnchantments {
     val out = left.copy()
     EnchantmentHelper.set(out, enchants)
 
-    val finalCost = if (!name.isNullOrEmpty() && (out.name.string.isNotEmpty() || name != left.name.string)) {
-      out.set(DataComponentTypes.ITEM_NAME, Text.of(name));
+    val finalCost = if (!name.isNullOrEmpty()
+      && (!out.contains(DataComponentTypes.CUSTOM_NAME) || name != left.name.string)) {
+      out.set(DataComponentTypes.CUSTOM_NAME, Text.of(name))
       cost + 1
     } else {
       cost
