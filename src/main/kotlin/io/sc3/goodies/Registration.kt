@@ -528,6 +528,8 @@ object Registration {
     val seatEntity: EntityType<SeatEntity> = register(ENTITY_TYPE, ModId("seat"),
       EntityType.Builder.create(::SeatEntity, SpawnGroup.MISC)
         .dimensions(0.125f, 0.0f)
+        // The player sitting pose is halfway through their height, so subtract a bit more to align them with the seat
+        .passengerAttachments(-0.3f)
         .maxTrackingRange(10)
         .trackingTickInterval(Integer.MAX_VALUE)
         .alwaysUpdateVelocity(false)
