@@ -1,6 +1,7 @@
 package io.sc3.goodies.itemframe
 
 import io.sc3.goodies.util.BaseItem
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.decoration.AbstractDecorationEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -8,6 +9,7 @@ import net.minecraft.item.ItemUsageContext
 import net.minecraft.util.ActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.world.World
 import net.minecraft.world.event.GameEvent
 
@@ -31,6 +33,9 @@ class GlassItemFrameItem<T : AbstractDecorationEntity>(
 
     return if (entity.canStayAttached()) {
       if (!world.isClient) {
+        // Apply any entity data stored on the item stack (custom name, item contents, etc.)
+        EntityType.copier<T>(world as ServerWorld, stack, player).accept(entity)
+
         entity.onPlace()
         world.emitGameEvent(player, GameEvent.ENTITY_PLACE, blockPos)
         world.spawnEntity(entity)
